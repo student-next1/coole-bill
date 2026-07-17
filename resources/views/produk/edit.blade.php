@@ -1,21 +1,22 @@
 @extends('layouts.app')
 
-@section('title','Tambah Produk')
-@section('page-title','Tambah Produk')
+@section('title','Edit Produk')
+@section('page-title','Edit Produk')
 
 @section('content')
 
 <div class="max-w-2xl mx-auto">
     <!-- Header -->
     <div class="mb-8">
-        <h3 class="text-2xl font-semibold text-gray-900">Tambah Produk Baru</h3>
-        <p class="text-sm text-gray-600 mt-2">Isi form di bawah untuk menambahkan produk baru ke sistem</p>
+        <h3 class="text-2xl font-semibold text-gray-900">Edit Produk</h3>
+        <p class="text-sm text-gray-600 mt-2">Perbarui informasi produk di bawah</p>
     </div>
 
     <!-- Form -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
-        <form action="{{ route('produk.store') }}" method="POST">
+        <form action="{{ route('produk.update', $produk->id) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <!-- Kode Produk -->
             <div class="mb-6">
@@ -23,7 +24,7 @@
                 <input type="text" 
                        name="kode_produk" 
                        placeholder="Misal: PROD001"
-                       value="{{ old('kode_produk') }}"
+                       value="{{ old('kode_produk', $produk->kode_produk) }}"
                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('kode_produk') border-red-500 @enderror">
                 @error('kode_produk')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -36,7 +37,7 @@
                 <input type="text" 
                        name="nama_produk" 
                        placeholder="Misal: Kopi Espresso"
-                       value="{{ old('nama_produk') }}"
+                       value="{{ old('nama_produk', $produk->nama_produk) }}"
                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('nama_produk') border-red-500 @enderror">
                 @error('nama_produk')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -52,7 +53,7 @@
                             class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('kategori_id') border-red-500 @enderror">
                         <option value="">-- Pilih Kategori --</option>
                         @foreach($kategoris as $kat)
-                            <option value="{{ $kat->id }}" @selected(old('kategori_id') == $kat->id)>{{ $kat->nama_kategori }}</option>
+                            <option value="{{ $kat->id }}" @selected($produk->kategori_id == $kat->id)>{{ $kat->nama_kategori }}</option>
                         @endforeach
                     </select>
                     <button type="button" 
@@ -73,7 +74,7 @@
                     <input type="number" 
                            name="harga" 
                            placeholder="0"
-                           value="{{ old('harga') }}"
+                           value="{{ old('harga', $produk->harga) }}"
                            class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('harga') border-red-500 @enderror"
                            min="0">
                     @error('harga')
@@ -87,7 +88,7 @@
                     <input type="number" 
                            name="stok" 
                            placeholder="0"
-                           value="{{ old('stok') }}"
+                           value="{{ old('stok', $produk->stok) }}"
                            class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('stok') border-red-500 @enderror"
                            min="0">
                     @error('stok')
@@ -102,7 +103,7 @@
                 <textarea name="deskripsi" 
                           placeholder="Deskripsi produk (opsional)"
                           rows="4"
-                          class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">{{ old('deskripsi') }}</textarea>
+                          class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">{{ old('deskripsi', $produk->deskripsi) }}</textarea>
             </div>
 
             <!-- Buttons -->
@@ -113,7 +114,7 @@
                 </a>
                 <button type="submit" 
                         class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
-                    Simpan Produk
+                    Simpan Perubahan
                 </button>
             </div>
         </form>

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
     public function index()
     {
-        return view('kategori.index');
+        $kategoris = Kategori::withCount('produks')->orderBy('created_at', 'desc')->get();
+        return view('kategori.index', compact('kategoris'));
     }
 
     public function create()
@@ -18,24 +20,52 @@ class KategoriController extends Controller
 
     public function store(Request $request)
     {
-        // Logic untuk menyimpan kategori
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|unique:kategoris',
+            'deskripsi' => 'nullable|string',
+        ]);
+
+        Kategori::create($validated);
+
+        // Jika request dari AJAX, return JSON
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Kategori berhasil ditambahkan']);
+        }
+
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan');
     }
 
     public function edit($id)
     {
-        return view('kategori.edit');
+        $kategori = Kategori::findOrFail($id);
+        return view('kategori.edit', compact('kategori'));
     }
 
     public function update(Request $request, $id)
     {
-        // Logic untuk update kategori
+        $kategori = Kategori::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|unique:kategoris,nama_kategori,' . $id,
+            'deskripsi' => 'nullable|string',
+        ]);
+
+        $kategori->update($validated);
+
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diupdate');
     }
 
     public function destroy($id)
     {
-        // Logic untuk hapus kategori
+        $kategori = Kategori::findOrFail($id);
+
+        // Cek apakah kategori memiliki produk
+        if ($kategori->produks()->count() > 0) {
+            return redirect()->route('kategori.index')->with('error', 'Tidak bisa menghapus kategori yang memiliki produk');
+        }
+
+        $kategori->delete();
+
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus');
     }
 }

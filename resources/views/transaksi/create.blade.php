@@ -23,10 +23,18 @@
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Pilih Produk</h3>
             
             <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                <!-- Products will be loaded here -->
-                <div class="col-span-full py-12 text-center text-gray-500">
-                    <p class="text-sm">Memuat produk...</p>
-                </div>
+                @forelse($produks as $produk)
+                    <button onclick="addToCart({{ $produk->id }}, '{{ $produk->nama_produk }}', {{ $produk->harga }}, {{ $produk->stok }})" 
+                            class="bg-slate-50 rounded-lg p-3 md:p-4 hover:bg-orange-50 hover:border-orange-300 border-2 border-transparent transition-all duration-150 text-left">
+                        <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">{{ $produk->nama_produk }}</h4>
+                        <p class="text-orange-600 font-bold text-sm mb-1">Rp{{ number_format($produk->harga, 0, ',', '.') }}</p>
+                        <p class="text-xs text-gray-500">Stok: {{ $produk->stok }}</p>
+                    </button>
+                @empty
+                    <div class="col-span-full py-12 text-center text-gray-500">
+                        <p class="text-sm">Tidak ada produk tersedia. <a href="{{ route('produk.create') }}" class="text-orange-600 font-medium">Tambah produk</a></p>
+                    </div>
+                @endforelse
             </div>
         </div>
 
@@ -67,8 +75,7 @@
                 <select id="paymentMethod" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
                     <option value="tunai">Tunai</option>
                     <option value="transfer">Transfer Bank</option>
-                    <option value="e-wallet">E-Wallet</option>
-                    <option value="kartu">Kartu Kredit/Debit</option>
+                    <option value="kartu_kredit">Kartu Kredit/Debit</option>
                 </select>
             </div>
 
@@ -96,7 +103,7 @@
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
         <div class="p-6 text-center">
             <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-3xl">✓</span>
+                <span class="text-3xl text-green-600">✓</span>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Transaksi Berhasil!</h3>
             <p id="successMessage" class="text-gray-600 mb-6 text-sm">Transaksi telah berhasil diproses</p>
@@ -108,69 +115,73 @@
     </div>
 </div>
 
-<script>
-    // Sample Products Data
-    const products = [
-        { id: 1, name: 'Nasi Goreng', category: 'Makanan', price: 15000, stock: 50 },
-        { id: 2, name: 'Mie Ayam', category: 'Makanan', price: 12000, stock: 30 },
-        { id: 3, name: 'Nasi Uduk', category: 'Makanan', price: 10000, stock: 40 },
-        { id: 4, name: 'Es Teh Manis', category: 'Minuman', price: 5000, stock: 100 },
-        { id: 5, name: 'Kopi Hitam', category: 'Minuman', price: 8000, stock: 80 },
-        { id: 6, name: 'Jus Jeruk', category: 'Minuman', price: 12000, stock: 60 },
-        { id: 7, name: 'Pisang Goreng', category: 'Snack', price: 8000, stock: 35 },
-        { id: 8, name: 'Kentang Goreng', category: 'Snack', price: 10000, stock: 40 },
-        { id: 9, name: 'Popcorn', category: 'Snack', price: 10000, stock: 40 },
-        { id: 10, name: 'Cake Coklat', category: 'Dessert', price: 25000, stock: 15 },
-        { id: 11, name: 'Puding', category: 'Dessert', price: 8000, stock: 25 },
-        { id: 12, name: 'Es Krim', category: 'Dessert', price: 15000, stock: 30 },
-    ];
+<!-- Payment Modal -->
+<div id="paymentModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
+        <div class="p-6 border-b border-slate-200">
+            <h3 class="text-lg font-bold text-gray-900">Konfirmasi Pembayaran</h3>
+        </div>
+        <div class="p-6 space-y-4">
+            <div class="bg-slate-50 rounded-lg p-4">
+                <p class="text-sm text-gray-600">Total Pembayaran</p>
+                <p id="paymentTotal" class="text-2xl font-bold text-gray-900 mt-1">Rp0</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                <p id="paymentMethodDisplay" class="text-sm text-gray-900 font-medium">-</p>
+            </div>
+            <div id="nominalBayarDiv" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Nominal Bayar (Tunai)</label>
+                <input type="number" 
+                       id="nominalBayar"
+                       placeholder="Masukkan nominal"
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                       min="0">
+                <p id="changeDisplay" class="text-sm text-gray-600 mt-2"></p>
+            </div>
+        </div>
+        <div class="p-6 border-t border-slate-200 flex gap-3">
+            <button type="button" 
+                    onclick="closePaymentModal()"
+                    class="flex-1 px-4 py-2 border border-slate-300 text-gray-900 font-medium rounded-lg hover:bg-slate-50 transition-colors text-sm">
+                Batal
+            </button>
+            <button type="button" 
+                    onclick="submitPayment()"
+                    class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
+                Bayar
+            </button>
+        </div>
+    </div>
+</div>
 
+<script>
     let cart = {};
+    let totalAmount = 0;
 
     // Format Currency
     function formatCurrency(amount) {
         return 'Rp' + amount.toLocaleString('id-ID');
     }
 
-    // Load Products
-    function loadProducts(filter = '') {
-        const productGrid = document.getElementById('productGrid');
-        const filtered = products.filter(p => 
-            p.name.toLowerCase().includes(filter.toLowerCase()) ||
-            p.category.toLowerCase().includes(filter.toLowerCase())
-        );
-
-        if (filtered.length === 0) {
-            productGrid.innerHTML = '<div class="col-span-full py-12 text-center text-gray-500"><p class="text-sm">Produk tidak ditemukan</p></div>';
-            return;
-        }
-
-        productGrid.innerHTML = filtered.map(product => `
-            <button onclick="addToCart(${product.id})" 
-                    class="bg-slate-50 rounded-lg p-3 md:p-4 hover:bg-orange-50 hover:border-orange-300 border-2 border-transparent transition-all duration-150 text-left">
-                <h4 class="font-semibold text-gray-900 text-sm mb-1">${product.name}</h4>
-                <p class="text-orange-600 font-bold text-sm mb-1">${formatCurrency(product.price)}</p>
-                <p class="text-xs text-gray-500">Stok: ${product.stock}</p>
-            </button>
-        `).join('');
-    }
-
     // Add to Cart
-    function addToCart(productId) {
-        const product = products.find(p => p.id === productId);
-        if (!product) return;
-
+    function addToCart(productId, name, price, stock) {
         if (cart[productId]) {
-            if (cart[productId].qty < product.stock) {
+            if (cart[productId].qty < stock) {
                 cart[productId].qty++;
             } else {
                 alert('Stok tidak cukup!');
                 return;
             }
         } else {
-            cart[productId] = { ...product, qty: 1 };
+            cart[productId] = { 
+                id: productId,
+                name: name, 
+                price: price, 
+                stock: stock,
+                qty: 1 
+            };
         }
-
         updateCart();
     }
 
@@ -204,7 +215,7 @@
                 <div class="flex items-center gap-2 md:gap-3 p-3 bg-slate-50 rounded-lg">
                     <div class="flex-1 min-w-0">
                         <h4 class="font-medium text-gray-900 text-sm truncate">${item.name}</h4>
-                        <p class="text-xs text-gray-600">${formatCurrency(item.price)}</p>
+                        <p class="text-xs text-gray-600">Rp${item.price.toLocaleString('id-ID')}</p>
                     </div>
                     <div class="flex items-center gap-1">
                         <button onclick="updateQty(${item.id}, -1)" class="w-5 h-5 md:w-6 md:h-6 bg-slate-200 rounded text-xs hover:bg-slate-300">−</button>
@@ -220,11 +231,11 @@
         // Update Summary
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
         const tax = Math.round(subtotal * 0.1);
-        const total = subtotal + tax;
+        totalAmount = subtotal + tax;
 
         document.getElementById('subtotal').textContent = formatCurrency(subtotal);
         document.getElementById('taxAmount').textContent = formatCurrency(tax);
-        document.getElementById('totalAmount').textContent = formatCurrency(total);
+        document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
     }
 
     // Process Payment
@@ -236,40 +247,120 @@
         }
 
         const paymentMethod = document.getElementById('paymentMethod').value;
+        document.getElementById('paymentTotal').textContent = formatCurrency(totalAmount);
+        
+        let methodDisplay = 'Tunai';
+        if (paymentMethod === 'transfer') methodDisplay = 'Transfer Bank';
+        if (paymentMethod === 'kartu_kredit') methodDisplay = 'Kartu Kredit/Debit';
+        
+        document.getElementById('paymentMethodDisplay').textContent = methodDisplay;
+
+        // Show nominal bayar input only for tunai
+        const nominalDiv = document.getElementById('nominalBayarDiv');
+        if (paymentMethod === 'tunai') {
+            nominalDiv.classList.remove('hidden');
+            document.getElementById('nominalBayar').value = '';
+        } else {
+            nominalDiv.classList.add('hidden');
+        }
+
+        document.getElementById('paymentModal').classList.remove('hidden');
+    }
+
+    // Handle nominal bayar change
+    document.getElementById('nominalBayar')?.addEventListener('input', function() {
+        const nominal = parseInt(this.value) || 0;
+        const change = nominal - totalAmount;
+        const changeDisplay = document.getElementById('changeDisplay');
+        
+        if (change >= 0) {
+            changeDisplay.textContent = 'Kembalian: ' + formatCurrency(change);
+            changeDisplay.className = 'text-sm text-green-600 mt-2 font-medium';
+        } else {
+            changeDisplay.textContent = 'Kurang: ' + formatCurrency(Math.abs(change));
+            changeDisplay.className = 'text-sm text-red-600 mt-2 font-medium';
+        }
+    });
+
+    // Submit Payment
+    function submitPayment() {
+        const paymentMethod = document.getElementById('paymentMethod').value;
+        const cartArray = Object.values(cart);
+
+        if (cartArray.length === 0) {
+            alert('Keranjang kosong!');
+            return;
+        }
+
+        let nominalBayar = totalAmount;
+        if (paymentMethod === 'tunai') {
+            nominalBayar = parseInt(document.getElementById('nominalBayar').value) || 0;
+            if (nominalBayar < totalAmount) {
+                alert('Nominal bayar harus >= total transaksi');
+                return;
+            }
+        }
+
+        // Prepare form data
+        const items = cartArray.map(item => ({
+            produk_id: item.id,
+            qty: item.qty
+        }));
+
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const total = Math.round(subtotal * 1.1);
+        const tax = Math.round(subtotal * 0.1);
 
-        // Show success
-        document.getElementById('successMessage').textContent = `Total pembayaran: ${formatCurrency(total)} via ${paymentMethod}`;
-        document.getElementById('successModal').classList.remove('hidden');
+        // Submit via form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("transaksi.store") }}';
+        
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+        
+        form.innerHTML = `
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" name="items" value='${JSON.stringify(items)}'>
+            <input type="hidden" name="subtotal" value="${subtotal}">
+            <input type="hidden" name="pajak" value="${tax}">
+            <input type="hidden" name="total" value="${totalAmount}">
+            <input type="hidden" name="metode_pembayaran" value="${paymentMethod}">
+            <input type="hidden" name="nominal_bayar" value="${nominalBayar}">
+        `;
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
 
-        // Reset cart after 2 seconds
-        setTimeout(() => {
-            resetCart();
-            document.getElementById('successModal').classList.add('hidden');
-        }, 2000);
+    // Close Payment Modal
+    function closePaymentModal() {
+        document.getElementById('paymentModal').classList.add('hidden');
     }
 
     // Reset Cart
     function resetCart() {
         cart = {};
         updateCart();
-        loadProducts();
+        document.getElementById('searchProduct').value = '';
     }
 
     // Close Success Modal
     function closeSuccessModal() {
         document.getElementById('successModal').classList.add('hidden');
-        resetCart();
+        window.location.href = '{{ route("transaksi.index") }}';
     }
 
     // Search
     document.getElementById('searchProduct').addEventListener('input', (e) => {
-        loadProducts(e.target.value);
+        const searchTerm = e.target.value.toLowerCase();
+        const buttons = document.querySelectorAll('#productGrid button');
+        buttons.forEach(btn => {
+            const text = btn.textContent.toLowerCase();
+            btn.style.display = text.includes(searchTerm) ? 'block' : 'none';
+        });
     });
 
     // Initialize
-    loadProducts();
+    updateCart();
 </script>
 
 @endsection

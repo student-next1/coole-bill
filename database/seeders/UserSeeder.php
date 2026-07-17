@@ -13,6 +13,7 @@ class UserSeeder extends Seeder
         // Admin
         User::create([
             'name' => 'Administrator',
+            'email' => 'admin@coole-bill.local',
             'username' => 'admin',
             'password' => Hash::make('1'),
             'role' => 'admin',
@@ -21,6 +22,7 @@ class UserSeeder extends Seeder
         // Kasir
         User::create([
             'name' => 'Kasir',
+            'email' => 'kasir@coole-bill.local',
             'username' => 'kasir',
             'password' => Hash::make('1'),
             'role' => 'kasir',
