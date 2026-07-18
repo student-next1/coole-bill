@@ -7,49 +7,99 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
 
-    <!-- Left Section - Product Selection -->
-    <div class="lg:col-span-2 space-y-6">
-
-        <!-- Search Product -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
-            <input type="text" 
-                   id="searchProduct" 
-                   placeholder="Cari produk atau scan barcode..." 
-                   class="w-full px-4 py-3 text-sm md:text-base border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
-        </div>
-
-        <!-- Product Grid -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Pilih Produk</h3>
+    <!-- Left Section - POS Input Table -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             
-            <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                @forelse($produks as $produk)
-                    <button onclick="addToCart({{ $produk->id }}, '{{ $produk->nama_produk }}', {{ $produk->harga }}, {{ $produk->stok }})" 
-                            class="bg-slate-50 rounded-lg p-3 md:p-4 hover:bg-orange-50 hover:border-orange-300 border-2 border-transparent transition-all duration-150 text-left">
-                        <h4 class="font-semibold text-gray-900 text-sm mb-1 truncate">{{ $produk->nama_produk }}</h4>
-                        <p class="text-orange-600 font-bold text-sm mb-1">Rp{{ number_format($produk->harga, 0, ',', '.') }}</p>
-                        <p class="text-xs text-gray-500">Stok: {{ $produk->stok }}</p>
-                    </button>
-                @empty
-                    <div class="col-span-full py-12 text-center text-gray-500">
-                        <p class="text-sm">Tidak ada produk tersedia. <a href="{{ route('produk.create') }}" class="text-orange-600 font-medium">Tambah produk</a></p>
-                    </div>
-                @endforelse
+            <!-- Header -->
+            <div class="p-4 md:p-6 border-b border-slate-200">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">📦 Input Produk</h3>
+                    <span class="text-xs text-gray-500">Scan barcode atau ketik nama produk</span>
+                </div>
             </div>
-        </div>
 
+            <!-- POS Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-full">Nama Produk / Barcode</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Qty</th>
+                            <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Harga</th>
+                            <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Subtotal</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="posTableBody">
+                        <!-- Initial empty row -->
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 input-row" data-row="0">
+                            <td class="px-4 py-3 text-sm text-gray-600">1</td>
+                            <td class="px-4 py-3">
+                                <input 
+                                    type="text" 
+                                    class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                                    placeholder="Scan barcode atau ketik nama produk..."
+                                    data-row="0"
+                                    autocomplete="off"
+                                >
+                                <!-- Autocomplete dropdown -->
+                                <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <input 
+                                    type="number" 
+                                    class="qty-input w-16 px-2 py-2 text-sm text-center border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                                    value="1" 
+                                    min="1"
+                                    data-row="0"
+                                >
+                            </td>
+                            <td class="px-4 py-3 text-right text-sm font-medium price-display text-gray-900">-</td>
+                            <td class="px-4 py-3 text-right text-sm font-bold subtotal-display text-orange-600">-</td>
+                            <td class="px-4 py-3 text-center">
+                                <button type="button" onclick="removeRow(0)" class="text-red-500 hover:text-red-700 text-sm font-medium opacity-0 remove-btn">
+                                    ✕
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Instructions -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200">
+                <div class="flex items-start gap-3 text-xs text-gray-600">
+                    <div class="flex-shrink-0 w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
+                        i
+                    </div>
+                    <div class="space-y-1">
+                        <p><strong>Cara pakai:</strong></p>
+                        <ul class="list-disc list-inside space-y-0.5 ml-2">
+                            <li>Scan barcode atau ketik nama produk</li>
+                            <li>Setelah produk terpilih, akan otomatis lanjut ke baris baru</li>
+                            <li>Ubah qty jika perlu</li>
+                            <li>Klik ✕ untuk hapus item</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Right Section - Cart -->
+    <!-- Right Section - Cart Summary -->
     <div class="lg:col-span-1">
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 sticky top-24">
             
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Keranjang</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">🛒 Keranjang</h3>
 
             <!-- Cart Items -->
             <div id="cartItems" class="space-y-3 mb-6 max-h-64 overflow-y-auto">
                 <div class="text-center py-8 text-gray-500">
                     <p class="text-sm">Keranjang kosong</p>
+                    <p class="text-xs mt-1">Scan produk untuk mulai</p>
                 </div>
             </div>
 
@@ -68,7 +118,7 @@
             <!-- Status Message -->
             <div id="statusMessage" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p class="text-xs text-blue-700">
-                    <span id="statusText">📝 Pilih produk, lalu pilih metode pembayaran</span>
+                    <span id="statusText">📝 Scan produk untuk memulai</span>
                 </p>
             </div>
 
@@ -107,38 +157,309 @@
 
 </div>
 
-<!-- Success Modal -->
-<div id="successModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
-        <div class="p-6 text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-3xl text-green-600">✓</span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Transaksi Berhasil!</h3>
-            <p id="successMessage" class="text-gray-600 mb-6 text-sm">Transaksi telah berhasil diproses</p>
-            <button onclick="closeSuccessModal()" 
-                    class="w-full px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white rounded-lg">
-                Lanjutkan
-            </button>
-        </div>
-    </div>
-</div>
-
+<!-- Product data for JavaScript -->
 <script>
+    // Product data from backend
+    const products = productsData;
+    
+    // Cart and state
     let cart = {};
     let totalAmount = 0;
     let selectedPaymentMethod = null;
-    let paymentMethodSelected = false;
+    let currentRow = 0;
+    let searchTimeout = null;
 
     // Format Currency
     function formatCurrency(amount) {
         return 'Rp' + amount.toLocaleString('id-ID');
     }
 
+    // Initialize POS Table
+    function initPOSTable() {
+        const firstInput = document.querySelector('.product-search[data-row="0"]');
+        if (firstInput) {
+            firstInput.focus();
+            setupProductSearch(firstInput);
+            setupQtyInput(firstInput.closest('tr').querySelector('.qty-input'));
+        }
+    }
+
+    // Setup Product Search with Autocomplete
+    function setupProductSearch(input) {
+        const row = input.dataset.row;
+        const dropdown = input.nextElementSibling;
+        
+        input.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            
+            clearTimeout(searchTimeout);
+            
+            if (searchTerm.length < 2) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                // Search by name or barcode
+                const results = products.filter(p => 
+                    p.nama_produk.toLowerCase().includes(searchTerm) ||
+                    (p.kode_barcode && p.kode_barcode.toLowerCase() === searchTerm)
+                );
+                
+                if (results.length > 0) {
+                    showSearchResults(dropdown, results, row);
+                } else {
+                    dropdown.innerHTML = '<div class="p-3 text-sm text-gray-500">Produk tidak ditemukan</div>';
+                    dropdown.classList.remove('hidden');
+                }
+            }, 300);
+        });
+        
+        // Close dropdown on click outside
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    }
+
+    // Show Search Results Dropdown
+    function showSearchResults(dropdown, results, row) {
+        dropdown.innerHTML = results.map(product => `
+            <div class="p-3 hover:bg-slate-50 cursor-pointer border-b border-slate-100 last:border-b-0" 
+                 onclick="selectProduct(${product.id}, '${product.nama_produk.replace(/'/g, "\\'")}', ${product.harga}, ${product.stok}, ${row})">
+                <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900">${product.nama_produk}</p>
+                        ${product.kode_barcode ? `<p class="text-xs text-gray-500">Barcode: ${product.kode_barcode}</p>` : ''}
+                    </div>
+                    <div class="text-right ml-3">
+                        <p class="text-sm font-bold text-orange-600">${formatCurrency(product.harga)}</p>
+                        <p class="text-xs text-gray-500">Stok: ${product.stok}</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        dropdown.classList.remove('hidden');
+    }
+
+    // Select Product from Dropdown
+    function selectProduct(productId, name, price, stock, row) {
+        const tr = document.querySelector(`tr[data-row="${row}"]`);
+        const input = tr.querySelector('.product-search');
+        const qtyInput = tr.querySelector('.qty-input');
+        const priceDisplay = tr.querySelector('.price-display');
+        const subtotalDisplay = tr.querySelector('.subtotal-display');
+        const removeBtn = tr.querySelector('.remove-btn');
+        const dropdown = input.nextElementSibling;
+        
+        // Fill in product details
+        input.value = name;
+        input.dataset.productId = productId;
+        input.dataset.price = price;
+        input.dataset.stock = stock;
+        input.readOnly = true;
+        input.classList.add('bg-slate-50');
+        
+        // Show price and subtotal
+        const qty = parseInt(qtyInput.value) || 1;
+        priceDisplay.textContent = formatCurrency(price);
+        subtotalDisplay.textContent = formatCurrency(price * qty);
+        
+        // Show remove button
+        removeBtn.classList.remove('opacity-0');
+        
+        // Hide dropdown
+        dropdown.classList.add('hidden');
+        
+        // Add to cart
+        addToCartFromTable(productId, name, price, stock, qty);
+        
+        // Create new row and focus
+        setTimeout(() => {
+            addNewRow();
+            focusNextRow();
+        }, 100);
+    }
+
+    // Add to Cart from Table
+    function addToCartFromTable(productId, name, price, stock, qty) {
+        if (cart[productId]) {
+            cart[productId].qty += qty;
+        } else {
+            cart[productId] = {
+                id: productId,
+                name: name,
+                price: price,
+                stock: stock,
+                qty: qty
+            };
+        }
+        updateCartDisplay();
+    }
+
+    // Setup Qty Input
+    function setupQtyInput(qtyInput) {
+        qtyInput.addEventListener('change', function() {
+            const row = this.dataset.row;
+            const tr = document.querySelector(`tr[data-row="${row}"]`);
+            const input = tr.querySelector('.product-search');
+            
+            if (input.dataset.productId) {
+                updateRowSubtotal(row);
+                
+                // Update cart
+                const productId = input.dataset.productId;
+                const qty = parseInt(this.value) || 1;
+                if (cart[productId]) {
+                    cart[productId].qty = qty;
+                    updateCartDisplay();
+                }
+            }
+        });
+    }
+
+    // Update Row Subtotal
+    function updateRowSubtotal(row) {
+        const tr = document.querySelector(`tr[data-row="${row}"]`);
+        const input = tr.querySelector('.product-search');
+        const qtyInput = tr.querySelector('.qty-input');
+        const subtotalDisplay = tr.querySelector('.subtotal-display');
+        
+        if (input.dataset.productId) {
+            const price = parseFloat(input.dataset.price);
+            const qty = parseInt(qtyInput.value) || 1;
+            subtotalDisplay.textContent = formatCurrency(price * qty);
+        }
+    }
+
+    // Add New Row
+    function addNewRow() {
+        currentRow++;
+        const tbody = document.getElementById('posTableBody');
+        const newRow = document.createElement('tr');
+        newRow.className = 'border-b border-slate-100 hover:bg-slate-50 input-row';
+        newRow.dataset.row = currentRow;
+        
+        newRow.innerHTML = `
+            <td class="px-4 py-3 text-sm text-gray-600">${currentRow + 1}</td>
+            <td class="px-4 py-3 relative">
+                <input 
+                    type="text" 
+                    class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                    placeholder="Scan barcode atau ketik nama produk..."
+                    data-row="${currentRow}"
+                    autocomplete="off"
+                >
+                <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+            </td>
+            <td class="px-4 py-3">
+                <input 
+                    type="number" 
+                    class="qty-input w-16 px-2 py-2 text-sm text-center border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                    value="1" 
+                    min="1"
+                    data-row="${currentRow}"
+                >
+            </td>
+            <td class="px-4 py-3 text-right text-sm font-medium price-display text-gray-900">-</td>
+            <td class="px-4 py-3 text-right text-sm font-bold subtotal-display text-orange-600">-</td>
+            <td class="px-4 py-3 text-center">
+                <button type="button" onclick="removeRow(${currentRow})" class="text-red-500 hover:text-red-700 text-sm font-medium opacity-0 remove-btn">
+                    ✕
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(newRow);
+        
+        // Setup event listeners for new row
+        const newInput = newRow.querySelector('.product-search');
+        const newQtyInput = newRow.querySelector('.qty-input');
+        setupProductSearch(newInput);
+        setupQtyInput(newQtyInput);
+    }
+
+    // Focus Next Row
+    function focusNextRow() {
+        const nextInput = document.querySelector(`.product-search[data-row="${currentRow}"]`);
+        if (nextInput) {
+            nextInput.focus();
+        }
+    }
+
+    // Remove Row
+    function removeRow(row) {
+        const tr = document.querySelector(`tr[data-row="${row}"]`);
+        const input = tr.querySelector('.product-search');
+        
+        if (input.dataset.productId) {
+            const productId = input.dataset.productId;
+            delete cart[productId];
+            updateCartDisplay();
+        }
+        
+        tr.remove();
+        renumberRows();
+    }
+
+    // Renumber Rows
+    function renumberRows() {
+        const rows = document.querySelectorAll('#posTableBody tr');
+        rows.forEach((row, index) => {
+            const numberCell = row.querySelector('td:first-child');
+            if (numberCell) {
+                numberCell.textContent = index + 1;
+            }
+        });
+    }
+
+    // Update Cart Display
+    function updateCartDisplay() {
+        const cartItems = document.getElementById('cartItems');
+        const cartArray = Object.values(cart);
+        const statusText = document.getElementById('statusText');
+
+        if (cartArray.length === 0) {
+            cartItems.innerHTML = `
+                <div class="text-center py-8 text-gray-500">
+                    <p class="text-sm">Keranjang kosong</p>
+                    <p class="text-xs mt-1">Scan produk untuk mulai</p>
+                </div>
+            `;
+            document.getElementById('checkoutBtn').disabled = true;
+            statusText.textContent = '📝 Scan produk untuk memulai';
+        } else {
+            cartItems.innerHTML = cartArray.map(item => `
+                <div class="flex items-center gap-2 p-3 bg-slate-50 rounded-lg">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-medium text-gray-900 text-sm truncate">${item.name}</h4>
+                        <p class="text-xs text-gray-600">${item.qty} x ${formatCurrency(item.price)}</p>
+                    </div>
+                    <p class="font-bold text-sm text-orange-600">${formatCurrency(item.price * item.qty)}</p>
+                </div>
+            `).join('');
+            
+            if (selectedPaymentMethod) {
+                document.getElementById('checkoutBtn').disabled = false;
+                statusText.textContent = `✅ Siap! Metode: ${selectedPaymentMethod === 'tunai' ? '💵 Tunai' : '🆔 Kartu ID'}`;
+            } else {
+                document.getElementById('checkoutBtn').disabled = true;
+                statusText.textContent = '⚠️ Pilih metode pembayaran';
+            }
+        }
+
+        // Update Summary
+        const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        totalAmount = subtotal;
+
+        document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+        document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+    }
+
     // Select Payment Method
     function selectPaymentMethod(method) {
         selectedPaymentMethod = method;
-        paymentMethodSelected = true;
         console.log('✓ Payment method selected:', method);
         
         // Reset all button styles
@@ -156,119 +477,25 @@
             document.getElementById('btnTunai').innerHTML = '💵 Tunai';
         }
         
-        // Make checkout button more prominent
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        if (cart && Object.keys(cart).length > 0) {
-            checkoutBtn.classList.add('animate-pulse');
-        }
-    }
-
-    // Add to Cart
-    function addToCart(productId, name, price, stock) {
-        if (cart[productId]) {
-            if (cart[productId].qty < stock) {
-                cart[productId].qty++;
-            } else {
-                alert('Stok tidak cukup!');
-                return;
-            }
-        } else {
-            cart[productId] = { 
-                id: productId,
-                name: name, 
-                price: price, 
-                stock: stock,
-                qty: 1 
-            };
-        }
-        updateCart();
-    }
-
-    // Remove from Cart
-    function removeFromCart(productId) {
-        delete cart[productId];
-        updateCart();
-    }
-
-    // Update Quantity
-    function updateQty(productId, change) {
-        if (cart[productId]) {
-            const newQty = cart[productId].qty + change;
-            if (newQty > 0 && newQty <= cart[productId].stock) {
-                cart[productId].qty = newQty;
-                updateCart();
-            }
-        }
-    }
-
-    // Update Cart Display
-    function updateCart() {
-        const cartItems = document.getElementById('cartItems');
-        const cartArray = Object.values(cart);
-        const statusText = document.getElementById('statusText');
-
-        if (cartArray.length === 0) {
-            cartItems.innerHTML = '<div class="text-center py-8 text-gray-500"><p class="text-sm">Keranjang kosong</p></div>';
-            document.getElementById('checkoutBtn').disabled = true;
-            statusText.textContent = '📝 Pilih produk terlebih dahulu';
-        } else {
-            cartItems.innerHTML = cartArray.map(item => `
-                <div class="flex items-center gap-2 md:gap-3 p-3 bg-slate-50 rounded-lg">
-                    <div class="flex-1 min-w-0">
-                        <h4 class="font-medium text-gray-900 text-sm truncate">${item.name}</h4>
-                        <p class="text-xs text-gray-600">Rp${item.price.toLocaleString('id-ID')}</p>
-                    </div>
-                    <div class="flex items-center gap-1">
-                        <button onclick="updateQty(${item.id}, -1)" class="w-5 h-5 md:w-6 md:h-6 bg-slate-200 rounded text-xs hover:bg-slate-300">−</button>
-                        <span class="w-6 md:w-8 text-center text-xs md:text-sm font-medium">${item.qty}</span>
-                        <button onclick="updateQty(${item.id}, 1)" class="w-5 h-5 md:w-6 md:h-6 bg-slate-200 rounded text-xs hover:bg-slate-300">+</button>
-                    </div>
-                    <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 text-sm">✕</button>
-                </div>
-            `).join('');
-            
-            if (selectedPaymentMethod) {
-                document.getElementById('checkoutBtn').disabled = false;
-                statusText.textContent = `✅ Siap! Metode: ${selectedPaymentMethod === 'tunai' ? '💵 Tunai' : '🆔 Kartu ID'} - Klik "Proses Pembayaran"`;
-            } else {
-                document.getElementById('checkoutBtn').disabled = true;
-                statusText.textContent = '⚠️ Pilih metode pembayaran (Tunai atau Kartu ID)';
-            }
-        }
-
-        // Update Summary
-        const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        totalAmount = subtotal;
-
-        document.getElementById('subtotal').textContent = formatCurrency(subtotal);
-        document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
+        updateCartDisplay();
     }
 
     // Process Payment
     function processPayment() {
-        console.log('=== PROSES PEMBAYARAN START ===');
-        console.log('selectedPaymentMethod:', selectedPaymentMethod);
-        
         const cartArray = Object.values(cart);
-        console.log('cartArray length:', cartArray.length);
-        console.log('cartArray:', cartArray);
         
         if (cartArray.length === 0) {
-            alert('❌ Keranjang masih kosong!\n\nSilakan pilih produk terlebih dahulu.');
-            console.log('ABORT: Keranjang kosong');
+            alert('❌ Keranjang masih kosong!\n\nScan produk terlebih dahulu.');
             return;
         }
 
         if (!selectedPaymentMethod) {
-            alert('❌ Pilih metode pembayaran terlebih dahulu!\n\nPilih:\n💵 Tunai\natau\n🆔 Kartu ID');
-            console.log('ABORT: No payment method selected');
+            alert('❌ Pilih metode pembayaran terlebih dahulu!\n\nPilih:\n💵 Tunai atau 🆔 Kartu ID');
             return;
         }
 
         try {
-            console.log('STEP 1: Preparing items...');
-            
-            // Prepare items with harga and subtotal
+            // Prepare items
             const items = cartArray.map(item => ({
                 produk_id: item.id,
                 qty: item.qty,
@@ -276,85 +503,93 @@
                 subtotal: item.price * item.qty
             }));
 
-            console.log('✓ Items prepared:', items);
-
-            console.log('STEP 2: Calculating totals...');
             const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const total = subtotal;
 
-            console.log('✓ Subtotal:', subtotal);
-            console.log('✓ Total:', total);
-            console.log('✓ Method:', selectedPaymentMethod);
-
-            console.log('STEP 3: Getting CSRF token...');
-            const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-            let csrfToken = csrfTokenElement ? csrfTokenElement.content : '{{ csrf_token() }}';
-            console.log('✓ CSRF token found:', csrfToken.substring(0, 10) + '...');
-
-            console.log('STEP 4: Creating form...');
+            // Create and submit form
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '{{ route("transaksi.select-payment") }}';
-            console.log('✓ Form action:', form.action);
             
-            const itemsJson = JSON.stringify(items);
-            console.log('✓ Items JSON:', itemsJson);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
             
             form.innerHTML = `
                 <input type="hidden" name="_token" value="${csrfToken}">
-                <input type="hidden" name="items" value='${itemsJson}'>
+                <input type="hidden" name="items" value='${JSON.stringify(items)}'>
                 <input type="hidden" name="subtotal" value="${subtotal}">
                 <input type="hidden" name="total" value="${total}">
                 <input type="hidden" name="method" value="${selectedPaymentMethod}">
             `;
             
-            console.log('✓ Form HTML created');
-            console.log('Form fields:', form.innerHTML);
-            
-            console.log('STEP 5: Appending form to body...');
             document.body.appendChild(form);
-            console.log('✓ Form appended');
-            
-            console.log('STEP 6: Submitting form...');
-            console.log('Form element:', form);
-            console.log('Form action:', form.action);
-            console.log('Form method:', form.method);
-            
             form.submit();
-            console.log('✓✓✓ FORM SUBMITTED - WAIT FOR REDIRECT ✓✓✓');
             
         } catch (error) {
-            console.error('❌ ERROR IN PROCESSPAYMENT:', error);
-            console.error('Error message:', error.message);
-            console.error('Error stack:', error.stack);
+            console.error('Error:', error);
             alert('❌ Error: ' + error.message);
         }
     }
 
     // Reset Cart
     function resetCart() {
+        if (Object.keys(cart).length > 0) {
+            if (!confirm('Reset transaksi dan hapus semua item?')) {
+                return;
+            }
+        }
+        
         cart = {};
         selectedPaymentMethod = null;
-        updateCart();
-        document.querySelectorAll('[onclick*="selectPaymentMethod"]').forEach(btn => {
-            btn.classList.remove('border-4');
-            btn.classList.add('border-2');
-        });
-        document.getElementById('searchProduct').value = '';
+        currentRow = 0;
+        
+        // Reset payment buttons
+        document.getElementById('btnTunai').classList.remove('ring-2', 'ring-blue-500', 'scale-110');
+        document.getElementById('btnKartuId').classList.remove('ring-2', 'ring-green-500', 'scale-110');
+        document.getElementById('btnTunai').innerHTML = '💵 Tunai';
+        document.getElementById('btnKartuId').innerHTML = '🆔 Kartu ID';
+        
+        // Clear table and add fresh first row
+        document.getElementById('posTableBody').innerHTML = `
+            <tr class="border-b border-slate-100 hover:bg-slate-50 input-row" data-row="0">
+                <td class="px-4 py-3 text-sm text-gray-600">1</td>
+                <td class="px-4 py-3 relative">
+                    <input 
+                        type="text" 
+                        class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                        placeholder="Scan barcode atau ketik nama produk..."
+                        data-row="0"
+                        autocomplete="off"
+                    >
+                    <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                </td>
+                <td class="px-4 py-3">
+                    <input 
+                        type="number" 
+                        class="qty-input w-16 px-2 py-2 text-sm text-center border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" 
+                        value="1" 
+                        min="1"
+                        data-row="0"
+                    >
+                </td>
+                <td class="px-4 py-3 text-right text-sm font-medium price-display text-gray-900">-</td>
+                <td class="px-4 py-3 text-right text-sm font-bold subtotal-display text-orange-600">-</td>
+                <td class="px-4 py-3 text-center">
+                    <button type="button" onclick="removeRow(0)" class="text-red-500 hover:text-red-700 text-sm font-medium opacity-0 remove-btn">
+                        ✕
+                    </button>
+                </td>
+            </tr>
+        `;
+        
+        updateCartDisplay();
+        initPOSTable();
     }
 
-    // Search
-    document.getElementById('searchProduct').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const buttons = document.querySelectorAll('#productGrid button');
-        buttons.forEach(btn => {
-            const text = btn.textContent.toLowerCase();
-            btn.style.display = text.includes(searchTerm) ? 'block' : 'none';
-        });
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        initPOSTable();
+        updateCartDisplay();
     });
-
-    // Initialize
-    updateCart();
 </script>
 
 @endsection
