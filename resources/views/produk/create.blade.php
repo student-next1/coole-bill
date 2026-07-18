@@ -17,17 +17,34 @@
         <form action="{{ route('produk.store') }}" method="POST">
             @csrf
 
-            <!-- Kode Produk -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-900 mb-2">Kode Produk <span class="text-red-500">*</span></label>
-                <input type="text" 
-                       name="kode_produk" 
-                       placeholder="Misal: PROD001"
-                       value="{{ old('kode_produk') }}"
-                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('kode_produk') border-red-500 @enderror">
-                @error('kode_produk')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
+            <!-- Kode Produk & Barcode -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Kode Produk -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-900 mb-2">Kode Produk <span class="text-red-500">*</span></label>
+                    <input type="text" 
+                           name="kode_produk" 
+                           placeholder="Misal: PROD001"
+                           value="{{ old('kode_produk') }}"
+                           class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('kode_produk') border-red-500 @enderror">
+                    @error('kode_produk')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Barcode -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-900 mb-2">Kode Barcode (Opsional)</label>
+                    <input type="text" 
+                           name="kode_barcode" 
+                           placeholder="Scan barcode atau ketik kode barcode"
+                           value="{{ old('kode_barcode') }}"
+                           class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('kode_barcode') border-red-500 @enderror">
+                    <p class="text-xs text-gray-500 mt-1">💡 Gunakan kode barcode dari produk fisik Anda</p>
+                    @error('kode_barcode')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Nama Produk -->
