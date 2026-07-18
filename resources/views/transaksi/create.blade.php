@@ -65,13 +65,18 @@
                 </div>
             </div>
 
-            <!-- Payment Method -->
-            <div class="mt-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
-                <select id="paymentMethod" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-                    <option value="tunai">Tunai</option>
-                    <option value="kartu_id">Kartu ID</option>
-                </select>
+            <!-- Payment Method Selection -->
+            <div class="mt-6 grid grid-cols-2 gap-2">
+                <button type="button"
+                        onclick="selectPaymentMethod('tunai')"
+                        class="px-4 py-3 bg-blue-100 border-2 border-blue-300 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 transition-all duration-150 text-sm">
+                    💵 Tunai
+                </button>
+                <button type="button"
+                        onclick="selectPaymentMethod('kartu_id')"
+                        class="px-4 py-3 bg-green-100 border-2 border-green-300 text-green-700 font-semibold rounded-lg hover:bg-green-200 transition-all duration-150 text-sm">
+                    🆔 Kartu ID
+                </button>
             </div>
 
             <!-- Action Buttons -->
@@ -113,10 +118,23 @@
 <script>
     let cart = {};
     let totalAmount = 0;
+    let selectedPaymentMethod = null;
 
     // Format Currency
     function formatCurrency(amount) {
         return 'Rp' + amount.toLocaleString('id-ID');
+    }
+
+    // Select Payment Method
+    function selectPaymentMethod(method) {
+        selectedPaymentMethod = method;
+        // Update button styling
+        document.querySelectorAll('[onclick*="selectPaymentMethod"]').forEach(btn => {
+            btn.classList.remove('border-4');
+            btn.classList.add('border-2');
+        });
+        event.target.classList.remove('border-2');
+        event.target.classList.add('border-4');
     }
 
     // Add to Cart
@@ -191,15 +209,21 @@
         document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
     }
 
-    // Process Payment - Redirect to payment method selection
+    // Process Payment
     function processPayment() {
         const cartArray = Object.values(cart);
+        
         if (cartArray.length === 0) {
             alert('Keranjang masih kosong!');
             return;
         }
 
-        // Prepare form data
+        if (!selectedPaymentMethod) {
+            alert('Pilih metode pembayaran terlebih dahulu!');
+            return;
+        }
+
+        // Prepare items
         const items = cartArray.map(item => ({
             produk_id: item.id,
             qty: item.qty
@@ -208,7 +232,7 @@
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
         const total = subtotal;
 
-        // Submit to select payment endpoint
+        // Submit to select payment
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '{{ route("transaksi.select-payment") }}';
@@ -220,28 +244,23 @@
             <input type="hidden" name="items" value='${JSON.stringify(items)}'>
             <input type="hidden" name="subtotal" value="${subtotal}">
             <input type="hidden" name="total" value="${total}">
+            <input type="hidden" name="method" value="${selectedPaymentMethod}">
         `;
         
         document.body.appendChild(form);
         form.submit();
     }
 
-    // Handle nominal bayar change - No longer used
-    // (kept reference in case needed later)
-
-    // Close Payment Modal - No longer used
-
     // Reset Cart
     function resetCart() {
         cart = {};
+        selectedPaymentMethod = null;
         updateCart();
+        document.querySelectorAll('[onclick*="selectPaymentMethod"]').forEach(btn => {
+            btn.classList.remove('border-4');
+            btn.classList.add('border-2');
+        });
         document.getElementById('searchProduct').value = '';
-    }
-
-    // Close Success Modal
-    function closeSuccessModal() {
-        document.getElementById('successModal').classList.add('hidden');
-        window.location.href = '{{ route("transaksi.index") }}';
     }
 
     // Search

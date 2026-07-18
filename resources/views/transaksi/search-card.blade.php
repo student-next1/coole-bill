@@ -1,194 +1,172 @@
 @extends('layouts.app')
 
-@section('title','Cari Kartu Pembayaran')
-@section('page-title','Cari Kartu Pembayaran')
-
 @section('content')
-
-<div class="max-w-2xl mx-auto">
-    <!-- Header -->
-    <div class="mb-8">
-        <h3 class="text-2xl font-semibold text-gray-900">Cari Kartu Pembayaran</h3>
-        <p class="text-sm text-gray-600 mt-2">Total: Rp{{ number_format($total, 0, ',', '.') }}</p>
-    </div>
-
-    <!-- Search Form -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-900 mb-2">Scan Barcode atau Cari Card:</label>
-            <input type="text" 
-                   id="cardSearch"
-                   placeholder="Ketik kode kartu, username, atau nama..."
-                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                   autofocus>
-            <p class="text-xs text-gray-600 mt-2">Mulai mengetik untuk mencari kartu pembayaran</p>
+<div class="min-h-screen bg-gray-100 p-4 md:p-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">🆔 Cari Kartu ID</h1>
+            <p class="text-sm text-gray-600 mt-2">Pilih kartu untuk pembayaran</p>
         </div>
-    </div>
 
-    <!-- Search Results -->
-    <div id="searchResults" class="space-y-3">
-        <div class="text-center text-gray-500 py-8">
-            <p class="text-sm">Hasil pencarian akan muncul di sini...</p>
+        <!-- Search Box -->
+        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
+            <div class="flex gap-2">
+                <input type="text" 
+                       id="searchCard" 
+                       placeholder="Cari berdasarkan nama, nomor kartu, atau nomor ID..."
+                       class="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
+                <button onclick="searchCards()" 
+                        class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200">
+                    🔍 Cari
+                </button>
+            </div>
         </div>
-    </div>
 
-    <!-- Back Button -->
-    <div class="mt-8">
-        <a href="{{ route('transaksi.create') }}" 
-           class="w-full px-4 py-3 border border-slate-300 text-gray-900 font-medium rounded-lg hover:bg-slate-50 transition-colors text-center block">
-            Kembali
-        </a>
-    </div>
-</div>
+        <!-- Cards List -->
+        <div id="cardsList" class="space-y-4">
+            <!-- Loading indicator -->
+            <div class="bg-white rounded-xl shadow p-6 text-center text-gray-600">
+                <p class="text-sm">Ketik untuk mencari kartu...</p>
+            </div>
+        </div>
 
-<!-- Card Detail Modal -->
-<div id="cardModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-bold text-gray-900">Konfirmasi Pembayaran</h3>
-        </div>
-        <div id="modalContent" class="p-6 space-y-4">
-            <!-- Content will be filled by JS -->
-        </div>
-        <div class="p-6 border-t border-slate-200 flex gap-3">
-            <button type="button"
-                    onclick="closeModal()"
-                    class="flex-1 px-4 py-2 border border-slate-300 text-gray-900 font-medium rounded-lg hover:bg-slate-50">
-                Batal
-            </button>
-            <button type="button"
-                    id="confirmBtn"
-                    class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg">
-                Lanjutkan
-            </button>
+        <!-- Back Button -->
+        <div class="mt-6">
+            <a href="{{ route('transaksi.create') }}" 
+               class="inline-block px-6 py-3 bg-gray-200 text-gray-900 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200">
+                ↩️ Kembali
+            </a>
         </div>
     </div>
 </div>
 
 <script>
-    const total = {{ $total }};
-    const items = @json($items);
-    const subtotal = {{ $subtotal }};
-
-    let searchTimeout;
-    let selectedCardId;
-
-    document.getElementById('cardSearch').addEventListener('input', function(e) {
-        clearTimeout(searchTimeout);
-        const query = e.target.value.trim();
+    // Search cards via AJAX
+    async function searchCards() {
+        const query = document.getElementById('searchCard').value.trim();
         
-        if (query.length < 2) {
-            document.getElementById('searchResults').innerHTML = '<div class="text-center text-gray-500 py-8"><p class="text-sm">Minimal 2 karakter</p></div>';
+        if (!query || query.length < 1) {
+            alert('Masukkan kata kunci pencarian!');
             return;
         }
 
-        searchTimeout = setTimeout(() => {
-            fetch(`{{ route('transaksi.find-card') }}?q=${encodeURIComponent(query)}`)
-                .then(r => r.json())
-                .then(cards => {
-                    if (cards.length === 0) {
-                        document.getElementById('searchResults').innerHTML = '<div class="text-center text-gray-500 py-8"><p class="text-sm">Kartu tidak ditemukan</p></div>';
-                        return;
-                    }
+        try {
+            const response = await fetch('{{ route("transaksi.find-card") }}?search=' + encodeURIComponent(query));
+            const data = await response.json();
 
-                    document.getElementById('searchResults').innerHTML = cards.map(card => `
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 cursor-pointer hover:border-orange-300 hover:shadow-md transition-all"
-                             onclick="selectCard(${card.id}, '${card.card_code}', '${card.username || '-'}', '${card.holder_name}', ${card.saldo})">
-                            <div class="flex justify-between items-start">
-                                <div class="flex-1">
-                                    <p class="font-semibold text-gray-900">${card.holder_name}</p>
-                                    <p class="text-xs text-gray-600 mt-1">
-                                        Kode: <span class="font-mono">${card.card_code}</span>
-                                    </p>
-                                    @if($username)
-                                        <p class="text-xs text-gray-600">Username: @${card.username}</p>
-                                    @endif
-                                </div>
-                                <div class="text-right">
-                                    <p class="font-bold text-orange-600">Rp${card.saldo.toLocaleString('id-ID')}</p>
-                                    <p class="text-xs ${card.saldo >= ${total} ? 'text-green-600' : 'text-red-600'}">
-                                        ${card.saldo >= ${total} ? '✓ Cukup' : '✗ Kurang'}
-                                    </p>
-                                </div>
-                            </div>
+            if (data.success) {
+                displayCards(data.cards);
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mencari kartu');
+        }
+    }
+
+    // Display search results
+    function displayCards(cards) {
+        const cardsList = document.getElementById('cardsList');
+        
+        if (cards.length === 0) {
+            cardsList.innerHTML = `
+                <div class="bg-white rounded-xl shadow p-6 text-center">
+                    <p class="text-gray-600 text-sm">❌ Kartu tidak ditemukan</p>
+                </div>
+            `;
+            return;
+        }
+
+        cardsList.innerHTML = cards.map(card => `
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-200">
+                <div class="p-6 cursor-pointer" onclick="selectCard(${card.id})">
+                    <!-- Card Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Nama Pemilik</p>
+                            <p class="text-lg font-bold text-gray-900">${card.holder_name}</p>
                         </div>
-                    `).join('');
-                })
-                .catch(e => {
-                    console.error(e);
-                    document.getElementById('searchResults').innerHTML = '<div class="text-center text-red-500 py-8"><p class="text-sm">Error mencari kartu</p></div>';
-                });
-        }, 300);
-    });
-
-    function selectCard(cardId, cardCode, username, holderName, saldo) {
-        selectedCardId = cardId;
-        
-        if (saldo < total) {
-            alert('Saldo kartu tidak cukup untuk transaksi ini');
-            return;
-        }
-
-        const modalContent = document.getElementById('modalContent');
-        modalContent.innerHTML = `
-            <div class="space-y-4">
-                <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-4 text-white">
-                    <p class="text-sm opacity-90">Pemilik Kartu</p>
-                    <p class="text-lg font-bold">${holderName}</p>
-                    <p class="text-xs opacity-90 mt-2">Kode: ${cardCode}</p>
-                </div>
-
-                <div class="border-t border-slate-200 pt-4">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-600">Subtotal</span>
-                        <span class="font-medium">Rp${subtotal.toLocaleString('id-ID')}</span>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Username</p>
+                            <p class="text-lg font-mono text-gray-900">${card.username}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Saldo</p>
+                            <p class="text-lg font-bold text-green-600">Rp${parseInt(card.saldo).toLocaleString('id-ID')}</p>
+                        </div>
                     </div>
-                    <div class="flex justify-between text-lg font-bold border-t border-slate-200 pt-2">
-                        <span>Total Pembayaran</span>
-                        <span class="text-orange-600">Rp${total.toLocaleString('id-ID')}</span>
-                    </div>
-                </div>
 
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p class="text-sm text-blue-900">
-                        Saldo kartu akan dikurangi sebesar <strong>Rp${total.toLocaleString('id-ID')}</strong>
-                    </p>
+                    <!-- Card Number -->
+                    <div class="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg mb-4">
+                        <p class="text-white text-sm font-mono">${maskCardNumber(card.barcode_data)}</p>
+                    </div>
+
+                    <!-- Card Details -->
+                    <div class="grid grid-cols-2 gap-4 text-sm border-t pt-4">
+                        <div>
+                            <p class="text-gray-600 text-xs">Barcode</p>
+                            <p class="font-semibold text-gray-900">${maskId(card.barcode_data)}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 text-xs">Status</p>
+                            <p class="font-semibold ${card.status === 'active' ? 'text-green-600' : 'text-red-600'}">
+                                ${card.status === 'active' ? '✓ Aktif' : '✗ Nonaktif'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Select Button -->
+                    <div class="mt-4 pt-4 border-t">
+                        <button type="button" 
+                                onclick="event.stopPropagation(); selectCard(${card.id})"
+                                class="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 text-sm">
+                            ✓ Pilih Kartu Ini
+                        </button>
+                    </div>
                 </div>
             </div>
-        `;
-
-        document.getElementById('confirmBtn').onclick = () => confirmPayment(cardId);
-        document.getElementById('cardModal').classList.remove('hidden');
+        `).join('');
     }
 
-    function closeModal() {
-        document.getElementById('cardModal').classList.add('hidden');
-    }
-
-    function confirmPayment(cardId) {
+    // Select card and proceed to invoice
+    function selectCard(cardId) {
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '{{ route('transaksi.store') }}';
+        form.action = '{{ route("transaksi.select-card") }}';
         
-        const csrf = '{{ csrf_token() }}';
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
         
         form.innerHTML = `
-            <input type="hidden" name="_token" value="${csrf}">
-            <input type="hidden" name="items" value='${JSON.stringify(items)}'>
-            <input type="hidden" name="subtotal" value="${subtotal}">
-            <input type="hidden" name="pajak" value="${pajak}">
-            <input type="hidden" name="total" value="${total}">
-            <input type="hidden" name="metode_pembayaran" value="tunai">
-            <input type="hidden" name="nominal_bayar" value="${total}">
-            <input type="hidden" name="payment_card_id" value="${cardId}">
+            <input type="hidden" name="_token" value="${csrfToken}">
+            <input type="hidden" name="card_id" value="${cardId}">
         `;
         
         document.body.appendChild(form);
         form.submit();
     }
 
-    // Auto-focus input
-    document.getElementById('cardSearch').focus();
-</script>
+    // Mask card number (show last 4 digits)
+    function maskCardNumber(number) {
+        const str = number.toString();
+        const lastFour = str.slice(-4);
+        return '•••• •••• •••• ' + lastFour;
+    }
 
+    // Mask ID number
+    function maskId(id) {
+        const str = id.toString();
+        if (str.length <= 4) return str;
+        const lastFour = str.slice(-4);
+        return '••••••' + lastFour;
+    }
+
+    // Allow Enter to search
+    document.getElementById('searchCard').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchCards();
+        }
+    });
+</script>
 @endsection

@@ -50,11 +50,12 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::get('/', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('/select-payment', [TransaksiController::class, 'selectPaymentMethod'])->name('transaksi.select-payment');
-    Route::get('/select-card', [TransaksiController::class, 'selectCard'])->name('transaksi.select-card');
+    Route::get('/search-card', [TransaksiController::class, 'searchCard'])->name('transaksi.search-card');
     Route::get('/find-card', [TransaksiController::class, 'findCard'])->name('transaksi.find-card');
-    Route::get('/confirm-payment/{cardId}', [TransaksiController::class, 'confirmPayment'])->name('transaksi.confirm-payment');
+    Route::post('/select-card', [TransaksiController::class, 'selectCard'])->name('transaksi.select-card');
+    Route::get('/invoice', [TransaksiController::class, 'invoice'])->name('transaksi.invoice');
+    Route::post('/confirm', [TransaksiController::class, 'confirmPayment'])->name('transaksi.confirm');
     Route::get('/receipt/{id}', [TransaksiController::class, 'receipt'])->name('transaksi.receipt');
-    Route::post('/', [TransaksiController::class, 'store'])->name('transaksi.store');
     Route::post('/delete-all', [TransaksiController::class, 'deleteAll'])->name('transaksi.delete-all')->middleware('auth');
 });
 

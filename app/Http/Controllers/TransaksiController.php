@@ -35,59 +35,75 @@ class TransaksiController extends Controller
             'total' => 'required|numeric|min:0',
         ]);
 
-        // Store in session for next step
+        // Store in session
         session([
             'cart_items' => $items,
             'subtotal' => $validated['subtotal'],
             'total' => $validated['total'],
         ]);
 
-        return view('transaksi.select-payment', [
-            'items' => $items,
-            'subtotal' => $validated['subtotal'],
-            'total' => $validated['total'],
-        ]);
+        // Get payment method from request
+        $method = $request->input('method');
+        
+        if ($method === 'tunai') {
+            // Tunai: Langsung ke struk
+            return redirect()->route('transaksi.invoice', ['method' => 'tunai']);
+        } elseif ($method === 'kartu_id') {
+            // Kartu ID: Cari kartu dulu
+            return redirect()->route('transaksi.search-card');
+        }
+        
+        return back()->with('error', 'Metode pembayaran tidak valid');
     }
 
-    public function selectCard(Request $request)
+    public function searchCard(Request $request)
     {
-        $method = $request->query('method');
-        
-        if (!in_array($method, ['kartu_id', 'tunai'])) {
-            return back()->with('error', 'Metode pembayaran tidak valid');
-        }
-
-        if ($method === 'tunai') {
-            // Langsung proses untuk tunai
-            return $this->processPayment($request, $method);
-        }
-
-        // Untuk kartu ID, tampilkan form pencarian
+        // Tampilkan form pencarian kartu
         return view('transaksi.search-card', [
-            'method' => $method,
             'items' => session('cart_items'),
             'subtotal' => session('subtotal'),
             'total' => session('total'),
         ]);
     }
 
-    public function findCard(Request $request)
+    public function selectCard(Request $request)
     {
-        $query = $request->query('q');
+        // Setelah pilih kartu, redirect ke invoice dengan payment_card_id
+        $cardId = $request->input('card_id');
         
-        if (!$query || strlen($query) < 2) {
-            return response()->json(['error' => 'Masukkan minimal 2 karakter'], 400);
+        if (!$cardId) {
+            return back()->with('error', 'Silakan pilih kartu');
         }
 
-        $cards = PaymentCard::where('status', 'active')
-            ->where(function($q) use ($query) {
-                $q->where('card_code', 'like', "%{$query}%")
-                  ->orWhere('username', 'like', "%{$query}%")
-                  ->orWhere('holder_name', 'like', "%{$query}%");
-            })
-            ->get(['id', 'card_code', 'username', 'holder_name', 'saldo']);
+        session(['payment_card_id' => $cardId]);
+        return redirect()->route('transaksi.invoice', ['method' => 'kartu_id']);
+    }
 
-        return response()->json($cards);
+    public function findCard(Request $request)
+    {
+        $search = $request->query('search');
+        
+        if (!$search || strlen($search) < 1) {
+            return response()->json(['success' => false, 'message' => 'Masukkan kata kunci pencarian'], 400);
+        }
+
+        try {
+            $cards = PaymentCard::where('status', 'active')
+                ->where(function($q) use ($search) {
+                    $q->where('barcode_data', 'like', "%{$search}%")
+                      ->orWhere('username', 'like', "%{$search}%")
+                      ->orWhere('holder_name', 'like', "%{$search}%");
+                })
+                ->get(['id', 'barcode_data', 'username', 'holder_name', 'saldo', 'status']);
+
+            return response()->json([
+                'success' => true,
+                'cards' => $cards,
+                'count' => $cards->count()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function confirmPayment(Request $request, $cardId)
@@ -250,6 +266,123 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::with('user', 'details.produk', 'paymentCard')
             ->findOrFail($id);
         return view('transaksi.receipt', compact('transaksi'));
+    }
+
+    public function invoice(Request $request)
+    {
+        $method = $request->query('method');
+        $items = session('cart_items', []);
+        $subtotal = session('subtotal', 0);
+        $total = session('total', 0);
+        $paymentCardId = session('payment_card_id');
+
+        if (empty($items)) {
+            return redirect()->route('transaksi.create')->with('error', 'Keranjang kosong');
+        }
+
+        // Load produk details
+        $itemsWithDetails = [];
+        foreach ($items as $item) {
+            $produk = Produk::find($item['produk_id']);
+            if ($produk) {
+                $itemsWithDetails[] = [
+                    'produk_id' => $produk->id,
+                    'nama_produk' => $produk->nama_produk,
+                    'harga' => $produk->harga,
+                    'qty' => $item['qty'],
+                    'subtotal' => $produk->harga * $item['qty'],
+                ];
+            }
+        }
+
+        return view('transaksi.invoice', [
+            'method' => $method,
+            'items' => $itemsWithDetails,
+            'subtotal' => $subtotal,
+            'total' => $total,
+            'paymentCardId' => $paymentCardId,
+        ]);
+    }
+
+    public function confirmPayment(Request $request)
+    {
+        $method = $request->input('method');
+        $items = json_decode($request->input('items'), true);
+        $total = $request->input('total');
+        $paymentCardId = $request->input('payment_card_id');
+
+        try {
+            DB::beginTransaction();
+
+            // Validate cart items
+            if (empty($items)) {
+                throw new \Exception('Keranjang kosong');
+            }
+
+            // Validate payment card if using kartu_id
+            if ($method === 'kartu_id') {
+                if (!$paymentCardId) {
+                    throw new \Exception('Silakan pilih kartu pembayaran');
+                }
+                $card = PaymentCard::findOrFail($paymentCardId);
+                if (!$card->hasEnoughBalance($total)) {
+                    throw new \Exception('Saldo kartu tidak cukup');
+                }
+            }
+
+            // Generate kode transaksi
+            $kode_transaksi = 'TRX-' . date('YmdHis') . rand(100, 999);
+
+            // Create transaksi
+            $transaksi = Transaksi::create([
+                'kode_transaksi' => $kode_transaksi,
+                'user_id' => auth()->id(),
+                'subtotal' => $request->input('subtotal'),
+                'total' => $total,
+                'metode_pembayaran' => $method,
+                'payment_card_id' => $method === 'kartu_id' ? $paymentCardId : null,
+                'status' => 'selesai',
+            ]);
+
+            // Create transaksi details & reduce stock
+            foreach ($items as $item) {
+                $produk = Produk::findOrFail($item['produk_id']);
+
+                // Check stock
+                if ($produk->stok < $item['qty']) {
+                    throw new \Exception("Stok {$produk->nama_produk} tidak cukup");
+                }
+
+                // Create detail
+                TransaksiDetail::create([
+                    'transaksi_id' => $transaksi->id,
+                    'produk_id' => $item['produk_id'],
+                    'harga' => $item['harga'],
+                    'qty' => $item['qty'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+
+                // Reduce stock
+                $produk->decrement('stok', $item['qty']);
+            }
+
+            // Deduct from payment card if used
+            if ($method === 'kartu_id') {
+                $card = PaymentCard::findOrFail($paymentCardId);
+                $card->deductBalance($total, $transaksi->id, "Pembelian - {$kode_transaksi}");
+            }
+
+            DB::commit();
+
+            // Clear session
+            session()->forget(['cart_items', 'subtotal', 'total', 'payment_card_id']);
+
+            // Redirect to transaction list with success
+            return redirect()->route('transaksi.index')->with('success', 'Pembayaran berhasil! Kode: ' . $kode_transaksi);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
     }
 
     public function deleteAll()
