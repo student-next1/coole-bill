@@ -343,7 +343,7 @@ class TransaksiController extends Controller
                     throw new \Exception("Stok {$produk->nama_produk} tidak cukup");
                 }
 
-                // Create detail
+                // Create detail with qty field
                 TransaksiDetail::create([
                     'transaksi_id' => $transaksi->id,
                     'produk_id' => $item['produk_id'],
@@ -352,8 +352,14 @@ class TransaksiController extends Controller
                     'subtotal' => $item['subtotal'],
                 ]);
 
-                // Reduce stock
+                // Reduce stock - THIS IS WHERE STOCK GETS DECREMENTED
                 $produk->decrement('stok', $item['qty']);
+                
+                // Verify stock was reduced
+                $produk->refresh();
+                if ($produk->stok < 0) {
+                    throw new \Exception("Error: Stok tidak boleh negatif untuk {$produk->nama_produk}");
+                }
             }
 
             // Deduct from payment card if used
@@ -367,12 +373,19 @@ class TransaksiController extends Controller
             // Clear session
             session()->forget(['cart_items', 'subtotal', 'total', 'payment_card_id']);
 
-            // Redirect to transaction list with success
-            return redirect()->route('transaksi.index')->with('success', 'Pembayaran berhasil! Kode: ' . $kode_transaksi);
+            // Redirect to confirmation page with struk
+            return redirect()->route('transaksi.confirmation', ['id' => $transaksi->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
+    }
+
+    public function confirmation($id)
+    {
+        $transaksi = Transaksi::with('user', 'details.produk', 'paymentCard')
+            ->findOrFail($id);
+        return view('transaksi.confirmation', compact('transaksi'));
     }
 
     public function deleteAll()

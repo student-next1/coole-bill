@@ -55,6 +55,7 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::post('/select-card', [TransaksiController::class, 'selectCard'])->name('transaksi.select-card');
     Route::get('/invoice', [TransaksiController::class, 'invoice'])->name('transaksi.invoice');
     Route::post('/confirm', [TransaksiController::class, 'confirmPayment'])->name('transaksi.confirm');
+    Route::get('/confirmation/{id}', [TransaksiController::class, 'confirmation'])->name('transaksi.confirmation');
     Route::get('/receipt/{id}', [TransaksiController::class, 'receipt'])->name('transaksi.receipt');
     Route::post('/delete-all', [TransaksiController::class, 'deleteAll'])->name('transaksi.delete-all')->middleware('auth');
 });
