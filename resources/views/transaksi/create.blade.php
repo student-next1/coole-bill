@@ -9,23 +9,23 @@
 
     <!-- Left Section - POS Input Table -->
     <div class="lg:col-span-2">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col" style="height: calc(100vh - 200px); min-height: 600px;">
             
             <!-- Header -->
-            <div class="p-4 md:p-6 border-b border-slate-200">
+            <div class="p-4 md:p-6 border-b border-slate-200 flex-shrink-0">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-gray-900">📦 Input Produk</h3>
-                    <span class="text-xs text-gray-500">Scan barcode atau ketik nama produk</span>
+                    <span class="text-xs text-gray-500">Scan barcode / ketik kode / nama produk</span>
                 </div>
             </div>
 
-            <!-- POS Table -->
-            <div class="overflow-x-auto">
+            <!-- POS Table - Scrollable -->
+            <div class="flex-1 overflow-auto">
                 <table class="w-full">
-                    <thead class="bg-slate-50 border-b border-slate-200">
+                    <thead class="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
                         <tr>
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">No</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-full">Nama Produk / Barcode</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase w-full">Nama Produk / Barcode / Kode</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Qty</th>
                             <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Harga</th>
                             <th class="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Subtotal</th>
@@ -41,7 +41,7 @@
                                     <input 
                                         type="text" 
                                         class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
-                                        placeholder="Scan barcode atau ketik nama produk..."
+                                        placeholder="Scan barcode / ketik kode / nama produk..."
                                         data-row="0"
                                         autocomplete="off"
                                     >
@@ -71,7 +71,7 @@
             </div>
 
             <!-- Instructions -->
-            <div class="p-4 bg-slate-50 border-t border-slate-200">
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex-shrink-0">
                 <div class="flex items-start gap-3 text-xs text-gray-600">
                     <div class="flex-shrink-0 w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
                         i
@@ -79,7 +79,7 @@
                     <div class="space-y-1">
                         <p><strong>Cara pakai:</strong></p>
                         <ul class="list-disc list-inside space-y-0.5 ml-2">
-                            <li>Scan barcode atau ketik nama produk</li>
+                            <li>Scan barcode / ketik kode produk / ketik nama produk</li>
                             <li>Setelah produk terpilih, akan otomatis lanjut ke baris baru</li>
                             <li>Ubah qty jika perlu</li>
                             <li>Klik ✕ untuk hapus item</li>
@@ -213,11 +213,12 @@
                 console.log('Searching products...');
                 console.log('Available products:', products);
                 
-                // Search by name or barcode
+                // Search by name, barcode, or product ID (kode)
                 const results = products.filter(p => {
                     const nameMatch = p.nama_produk.toLowerCase().includes(searchTerm);
                     const barcodeMatch = p.kode_barcode && p.kode_barcode.toLowerCase().includes(searchTerm);
-                    return nameMatch || barcodeMatch;
+                    const idMatch = p.id.toString() === searchTerm; // Exact match for ID
+                    return nameMatch || barcodeMatch || idMatch;
                 });
                 
                 console.log('Search results:', results.length, 'found');
@@ -248,7 +249,10 @@
                 <div class="flex justify-between items-start">
                     <div class="flex-1">
                         <p class="text-sm font-medium text-gray-900">${product.nama_produk}</p>
-                        ${product.kode_barcode ? `<p class="text-xs text-gray-500">Barcode: ${product.kode_barcode}</p>` : ''}
+                        <div class="flex gap-3 mt-1">
+                            <span class="text-xs text-gray-500">Kode: <span class="font-semibold">${product.id}</span></span>
+                            ${product.kode_barcode ? `<span class="text-xs text-gray-500">Barcode: ${product.kode_barcode}</span>` : ''}
+                        </div>
                     </div>
                     <div class="text-right ml-3">
                         <p class="text-sm font-bold text-orange-600">${formatCurrency(product.harga)}</p>
@@ -365,7 +369,7 @@
                     <input 
                         type="text" 
                         class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
-                        placeholder="Scan barcode atau ketik nama produk..."
+                        placeholder="Scan barcode / ketik kode / nama produk..."
                         data-row="${currentRow}"
                         autocomplete="off"
                     >
