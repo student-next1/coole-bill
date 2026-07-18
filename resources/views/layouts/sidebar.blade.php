@@ -46,6 +46,12 @@
                 <span>Kategori</span>
             </a>
 
+            <a href="{{ route('payment-cards.index') }}"
+               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
+                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+                <span>Kartu Pembayaran</span>
+            </a>
+
             <a href="{{ route('laporan.index') }}"
                class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
                 <span class="w-1 h-6 bg-white/70 rounded-full"></span>

@@ -65,8 +65,8 @@
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kode Transaksi</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Kasir</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total</th>
-                    <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">Pajak</th>
-                    <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">Metode</th>
+                    <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden md:table-cell">Metode</th>
+                    <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">Pembayaran</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden lg:table-cell">Waktu</th>
                     <th class="px-4 md:px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
                 </tr>
@@ -77,16 +77,25 @@
                         <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900">{{ $transaksi->kode_transaksi }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">{{ $transaksi->user->name ?? '-' }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm font-bold text-orange-600">Rp{{ number_format($transaksi->total, 0, ',', '.') }}</td>
-                        <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden md:table-cell">Rp{{ number_format($transaksi->pajak, 0, ',', '.') }}</td>
-                        <td class="px-4 md:px-6 py-4 text-sm hidden lg:table-cell">
+                        <td class="px-4 md:px-6 py-4 text-sm hidden md:table-cell">
                             <span class="px-2 py-1 rounded text-xs font-medium {{ $transaksi->metode_pembayaran === 'tunai' ? 'bg-blue-100 text-blue-700' : ($transaksi->metode_pembayaran === 'transfer' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700') }}">
-                                {{ ucfirst($transaksi->metode_pembayaran) }}
+                                {{ ucfirst(str_replace('_', ' ', $transaksi->metode_pembayaran)) }}
                             </span>
+                        </td>
+                        <td class="px-4 md:px-6 py-4 text-sm hidden lg:table-cell">
+                            @if($transaksi->payment_card_id)
+                                <div class="text-xs">
+                                    <p class="font-medium text-gray-900">{{ $transaksi->paymentCard->holder_name }}</p>
+                                    <p class="text-gray-600">{{ $transaksi->paymentCard->card_code }}</p>
+                                </div>
+                            @else
+                                <span class="text-gray-600">-</span>
+                            @endif
                         </td>
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden lg:table-cell">{{ $transaksi->created_at->format('d/m/Y H:i') }}</td>
                         <td class="px-4 md:px-6 py-4 text-center">
                             <button type="button"
-                                    onclick="showDetail('{{ $transaksi->kode_transaksi }}', 'Rp{{ number_format($transaksi->total, 0, ',', '.') }}', '{{ $transaksi->details->count() }}', '{{ $transaksi->created_at->format('d/m/Y H:i') }}')"
+                                    onclick="showDetail('{{ $transaksi->kode_transaksi }}', 'Rp{{ number_format($transaksi->total, 0, ',', '.') }}', '{{ $transaksi->details->count() }}', '{{ $transaksi->created_at->format('d/m/Y H:i') }}', '{{ $transaksi->paymentCard->holder_name ?? '-' }}')"
                                     class="text-blue-600 hover:text-blue-700 text-xs md:text-sm font-medium">
                                 Detail
                             </button>
@@ -136,6 +145,10 @@
                     <p id="detailTime" class="text-sm font-medium text-gray-900">-</p>
                 </div>
             </div>
+            <div id="detailPaymentDiv" class="hidden border-t border-slate-200 pt-4">
+                <p class="text-xs text-gray-600 mb-2">Pembayaran Kartu</p>
+                <p id="detailPayment" class="text-sm font-medium text-gray-900">-</p>
+            </div>
         </div>
         <div class="p-6 border-t border-slate-200 flex justify-center">
             <button type="button" 
@@ -148,11 +161,21 @@
 </div>
 
 <script>
-    function showDetail(code, total, items, time) {
+    function showDetail(code, total, items, time, paymentCard) {
         document.getElementById('detailCode').textContent = code;
         document.getElementById('detailTotal').textContent = total;
         document.getElementById('detailItems').textContent = items;
         document.getElementById('detailTime').textContent = time;
+        
+        // Show payment card info if available
+        const paymentDiv = document.getElementById('detailPaymentDiv');
+        if (paymentCard && paymentCard !== '-') {
+            document.getElementById('detailPayment').textContent = paymentCard;
+            paymentDiv.classList.remove('hidden');
+        } else {
+            paymentDiv.classList.add('hidden');
+        }
+        
         document.getElementById('detailModal').classList.remove('hidden');
     }
 
