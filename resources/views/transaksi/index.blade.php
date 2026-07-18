@@ -96,7 +96,7 @@
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden lg:table-cell">{{ $transaksi->created_at->format('d/m/Y H:i') }}</td>
                         <td class="px-4 md:px-6 py-4 text-center">
                             <button type="button"
-                                    onclick="showDetail('{{ $transaksi->kode_transaksi }}', 'Rp{{ number_format($transaksi->total, 0, ',', '.') }}', '{{ $transaksi->details->count() }}', '{{ $transaksi->created_at->format('d/m/Y H:i') }}', '{{ $transaksi->paymentCard->holder_name ?? '-' }}')"
+                                    onclick="showDetail({{ $transaksi->id }}, '{{ $transaksi->kode_transaksi }}', 'Rp{{ number_format($transaksi->total, 0, ',', '.') }}', '{{ $transaksi->details->count() }}', '{{ $transaksi->created_at->format('d/m/Y H:i') }}', '{{ $transaksi->paymentCard->holder_name ?? '-' }}')"
                                     class="text-blue-600 hover:text-blue-700 text-xs md:text-sm font-medium">
                                 Detail
                             </button>
@@ -151,10 +151,15 @@
                 <p id="detailPayment" class="text-sm font-medium text-gray-900">-</p>
             </div>
         </div>
-        <div class="p-6 border-t border-slate-200 flex justify-center">
+        <div class="p-6 border-t border-slate-200 flex gap-3">
+            <button type="button" 
+                    onclick="printReceipt()"
+                    class="flex-1 px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
+                🖨️ Cetak Struk
+            </button>
             <button type="button" 
                     onclick="closeDetail()"
-                    class="px-6 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
+                    class="flex-1 px-6 py-2 bg-gray-200 text-gray-900 font-medium rounded-lg hover:bg-gray-300 transition-all duration-200 text-sm">
                 Tutup
             </button>
         </div>
@@ -162,7 +167,10 @@
 </div>
 
 <script>
-    function showDetail(code, total, items, time, paymentCard) {
+    let currentTransaksiId = null;
+
+    function showDetail(id, code, total, items, time, paymentCard) {
+        currentTransaksiId = id;
         document.getElementById('detailCode').textContent = code;
         document.getElementById('detailTotal').textContent = total;
         document.getElementById('detailItems').textContent = items;
@@ -182,6 +190,14 @@
 
     function closeDetail() {
         document.getElementById('detailModal').classList.add('hidden');
+        currentTransaksiId = null;
+    }
+
+    function printReceipt() {
+        if (currentTransaksiId) {
+            // Open receipt page in new window for printing
+            window.open(`/transaksi/receipt/${currentTransaksiId}`, '_blank', 'width=400,height=600');
+        }
     }
 
     function deleteAllTransactions() {
