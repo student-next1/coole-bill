@@ -37,15 +37,17 @@
                         <tr class="border-b border-slate-100 hover:bg-slate-50 input-row" data-row="0">
                             <td class="px-4 py-3 text-sm text-gray-600">1</td>
                             <td class="px-4 py-3">
-                                <input 
-                                    type="text" 
-                                    class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
-                                    placeholder="Scan barcode atau ketik nama produk..."
-                                    data-row="0"
-                                    autocomplete="off"
-                                >
-                                <!-- Autocomplete dropdown -->
-                                <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                                <div class="relative">
+                                    <input 
+                                        type="text" 
+                                        class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                                        placeholder="Scan barcode atau ketik nama produk..."
+                                        data-row="0"
+                                        autocomplete="off"
+                                    >
+                                    <!-- Autocomplete dropdown -->
+                                    <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                                </div>
                             </td>
                             <td class="px-4 py-3">
                                 <input 
@@ -160,7 +162,11 @@
 <!-- Product data for JavaScript -->
 <script>
     // Product data from backend
+    const productsData = @json($produks);
     const products = productsData;
+    
+    console.log('Products loaded:', products.length, 'items');
+    console.log('Product data:', products);
     
     // Cart and state
     let cart = {};
@@ -189,8 +195,12 @@
         const row = input.dataset.row;
         const dropdown = input.nextElementSibling;
         
+        console.log('Setup search for row:', row);
+        
         input.addEventListener('input', function(e) {
             const searchTerm = e.target.value.trim().toLowerCase();
+            
+            console.log('Search term:', searchTerm);
             
             clearTimeout(searchTimeout);
             
@@ -200,11 +210,18 @@
             }
             
             searchTimeout = setTimeout(() => {
+                console.log('Searching products...');
+                console.log('Available products:', products);
+                
                 // Search by name or barcode
-                const results = products.filter(p => 
-                    p.nama_produk.toLowerCase().includes(searchTerm) ||
-                    (p.kode_barcode && p.kode_barcode.toLowerCase() === searchTerm)
-                );
+                const results = products.filter(p => {
+                    const nameMatch = p.nama_produk.toLowerCase().includes(searchTerm);
+                    const barcodeMatch = p.kode_barcode && p.kode_barcode.toLowerCase().includes(searchTerm);
+                    return nameMatch || barcodeMatch;
+                });
+                
+                console.log('Search results:', results.length, 'found');
+                console.log('Results:', results);
                 
                 if (results.length > 0) {
                     showSearchResults(dropdown, results, row);
@@ -343,15 +360,17 @@
         
         newRow.innerHTML = `
             <td class="px-4 py-3 text-sm text-gray-600">${currentRow + 1}</td>
-            <td class="px-4 py-3 relative">
-                <input 
-                    type="text" 
-                    class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
-                    placeholder="Scan barcode atau ketik nama produk..."
-                    data-row="${currentRow}"
-                    autocomplete="off"
-                >
-                <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+            <td class="px-4 py-3">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                        placeholder="Scan barcode atau ketik nama produk..."
+                        data-row="${currentRow}"
+                        autocomplete="off"
+                    >
+                    <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                </div>
             </td>
             <td class="px-4 py-3">
                 <input 
@@ -552,15 +571,17 @@
         document.getElementById('posTableBody').innerHTML = `
             <tr class="border-b border-slate-100 hover:bg-slate-50 input-row" data-row="0">
                 <td class="px-4 py-3 text-sm text-gray-600">1</td>
-                <td class="px-4 py-3 relative">
-                    <input 
-                        type="text" 
-                        class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
-                        placeholder="Scan barcode atau ketik nama produk..."
-                        data-row="0"
-                        autocomplete="off"
-                    >
-                    <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                <td class="px-4 py-3">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            class="product-search w-full px-3 py-2 text-sm border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                            placeholder="Scan barcode atau ketik nama produk..."
+                            data-row="0"
+                            autocomplete="off"
+                        >
+                        <div class="search-results hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                    </div>
                 </td>
                 <td class="px-4 py-3">
                     <input 
