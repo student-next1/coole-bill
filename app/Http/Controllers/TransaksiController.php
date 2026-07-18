@@ -90,11 +90,18 @@ class TransaksiController extends Controller
         try {
             $cards = PaymentCard::where('status', 'active')
                 ->where(function($q) use ($search) {
-                    $q->where('barcode_data', 'like', "%{$search}%")
-                      ->orWhere('username', 'like', "%{$search}%")
+                    // Search by username (exact or partial)
+                    $q->where('username', 'like', "%{$search}%")
+                      // Search by card_code/ID
+                      ->orWhere('card_code', 'like', "%{$search}%")
+                      // Search by barcode_data
+                      ->orWhere('barcode_data', 'like', "%{$search}%")
+                      // Search by holder_name
                       ->orWhere('holder_name', 'like', "%{$search}%");
                 })
-                ->get(['id', 'barcode_data', 'username', 'holder_name', 'saldo', 'status']);
+                ->select('id', 'card_code', 'barcode_data', 'username', 'holder_name', 'saldo', 'status')
+                ->limit(10)
+                ->get();
 
             return response()->json([
                 'success' => true,
@@ -132,7 +139,7 @@ class TransaksiController extends Controller
                 'total' => $validated['total'],
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'payment_card_id' => $validated['payment_card_id'] ?? null,
-                'status' => 'selesai',
+                'status' => 'sukses',
             ]);
 
             // Create transaksi details & reduce stock
@@ -204,7 +211,7 @@ class TransaksiController extends Controller
                 'total' => $validated['total'],
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'payment_card_id' => $validated['payment_card_id'] ?? null,
-                'status' => 'selesai',
+                'status' => 'sukses',
             ]);
 
             // Create transaksi details & reduce stock
@@ -324,7 +331,7 @@ class TransaksiController extends Controller
                 'total' => $total,
                 'metode_pembayaran' => $method,
                 'payment_card_id' => $method === 'kartu_id' ? $paymentCardId : null,
-                'status' => 'selesai',
+                'status' => 'sukses',
             ]);
 
             // Create transaksi details & reduce stock

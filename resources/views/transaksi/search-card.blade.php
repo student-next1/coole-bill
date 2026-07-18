@@ -5,21 +5,25 @@
     <div class="max-w-2xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">🆔 Cari Kartu ID</h1>
-            <p class="text-sm text-gray-600 mt-2">Pilih kartu untuk pembayaran</p>
+            <h1 class="text-3xl font-bold text-gray-900">🆔 Pilih Kartu Pembayaran</h1>
+            <p class="text-sm text-gray-600 mt-2">Cari berdasarkan username atau ID kartu</p>
         </div>
 
         <!-- Search Box -->
         <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6">
-            <div class="flex gap-2">
-                <input type="text" 
-                       id="searchCard" 
-                       placeholder="Cari berdasarkan nama, nomor kartu, atau nomor ID..."
-                       class="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm">
-                <button onclick="searchCards()" 
-                        class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200">
-                    🔍 Cari
-                </button>
+            <div class="space-y-3">
+                <div class="flex gap-2">
+                    <input type="text" 
+                           id="searchCard" 
+                           placeholder="Ketik username atau ID kartu..."
+                           class="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm"
+                           autocomplete="off">
+                    <button onclick="searchCards()" 
+                            class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200">
+                        🔍 Cari
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500">💡 Tips: Cari dengan username (contoh: user123) atau ID kartu (contoh: CARD-xxx)</p>
             </div>
         </div>
 
@@ -81,16 +85,16 @@
 
         cardsList.innerHTML = cards.map(card => `
             <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-200">
-                <div class="p-6 cursor-pointer" onclick="selectCard(${card.id})">
-                    <!-- Card Info -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="p-6">
+                    <!-- Card Header -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pb-4 border-b-2 border-gray-200">
                         <div>
                             <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Nama Pemilik</p>
-                            <p class="text-lg font-bold text-gray-900">${card.holder_name}</p>
+                            <p class="text-lg font-bold text-gray-900">${card.holder_name || '-'}</p>
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Username</p>
-                            <p class="text-lg font-mono text-gray-900">${card.username}</p>
+                            <p class="text-lg font-mono text-blue-600 font-bold">${card.username}</p>
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-gray-600 uppercase mb-1">Saldo</p>
@@ -98,19 +102,20 @@
                         </div>
                     </div>
 
-                    <!-- Card Number -->
-                    <div class="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg mb-4">
-                        <p class="text-white text-sm font-mono">${maskCardNumber(card.barcode_data)}</p>
+                    <!-- Card Code / ID -->
+                    <div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg mb-4">
+                        <p class="text-white text-xs font-semibold opacity-75">KARTU ID</p>
+                        <p class="text-white text-sm font-mono font-bold break-all">${card.card_code}</p>
                     </div>
 
-                    <!-- Card Details -->
-                    <div class="grid grid-cols-2 gap-4 text-sm border-t pt-4">
+                    <!-- Barcode -->
+                    <div class="grid grid-cols-2 gap-4 text-sm mb-4 pb-4 border-b-2 border-gray-200">
                         <div>
-                            <p class="text-gray-600 text-xs">Barcode</p>
-                            <p class="font-semibold text-gray-900">${maskId(card.barcode_data)}</p>
+                            <p class="text-gray-600 text-xs font-semibold uppercase mb-1">Barcode</p>
+                            <p class="font-mono text-gray-900 text-xs break-all">${maskId(card.barcode_data)}</p>
                         </div>
                         <div>
-                            <p class="text-gray-600 text-xs">Status</p>
+                            <p class="text-gray-600 text-xs font-semibold uppercase mb-1">Status</p>
                             <p class="font-semibold ${card.status === 'active' ? 'text-green-600' : 'text-red-600'}">
                                 ${card.status === 'active' ? '✓ Aktif' : '✗ Nonaktif'}
                             </p>
@@ -118,13 +123,11 @@
                     </div>
 
                     <!-- Select Button -->
-                    <div class="mt-4 pt-4 border-t">
-                        <button type="button" 
-                                onclick="event.stopPropagation(); selectCard(${card.id})"
-                                class="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 text-sm">
-                            ✓ Pilih Kartu Ini
-                        </button>
-                    </div>
+                    <button type="button" 
+                            onclick="selectCard(${card.id})"
+                            class="w-full px-4 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 active:bg-green-800 transition-all duration-200">
+                        ✓ Gunakan Kartu Ini
+                    </button>
                 </div>
             </div>
         `).join('');
@@ -147,19 +150,11 @@
         form.submit();
     }
 
-    // Mask card number (show last 4 digits)
-    function maskCardNumber(number) {
-        const str = number.toString();
-        const lastFour = str.slice(-4);
-        return '•••• •••• •••• ' + lastFour;
-    }
-
     // Mask ID number
     function maskId(id) {
         const str = id.toString();
-        if (str.length <= 4) return str;
-        const lastFour = str.slice(-4);
-        return '••••••' + lastFour;
+        if (str.length <= 6) return str;
+        return str.substring(0, 3) + '...' + str.substring(str.length - 3);
     }
 
     // Allow Enter to search
