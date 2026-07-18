@@ -126,7 +126,9 @@
 
     </div>
 </div>
+@endsection
 
+@section('scripts')
 <script>
     function printReceipt() {
         console.log('✓ Print receipt function called');

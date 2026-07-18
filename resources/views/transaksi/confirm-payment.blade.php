@@ -103,7 +103,9 @@
         </div>
     </div>
 </div>
+@endsection
 
+@section('scripts')
 <script>
     // Keyboard shortcuts for confirm-payment page
     console.log('✓ Keyboard shortcuts loaded for confirm-payment');
