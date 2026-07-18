@@ -27,33 +27,66 @@ class TransaksiController extends Controller
 
     public function selectPaymentMethod(Request $request)
     {
-        // Validate cart items first
-        $items = json_decode($request->input('items'), true);
-        $validated = $request->validate([
-            'items' => 'required|array|min:1',
-            'subtotal' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
-        ]);
+        try {
+            // Get raw items string from request
+            $itemsJson = $request->input('items');
+            
+            // Decode items first
+            $items = json_decode($itemsJson, true);
+            
+            if ($items === null) {
+                throw new \Exception('Items JSON tidak valid');
+            }
+            
+            if (empty($items)) {
+                throw new \Exception('Keranjang kosong');
+            }
+            
+            // Validate numeric fields
+            $subtotal = $request->input('subtotal');
+            $total = $request->input('total');
+            $method = $request->input('method');
+            
+            if (!is_numeric($subtotal) || $subtotal <= 0) {
+                throw new \Exception('Subtotal tidak valid');
+            }
+            
+            if (!is_numeric($total) || $total <= 0) {
+                throw new \Exception('Total tidak valid');
+            }
+            
+            if (!in_array($method, ['tunai', 'kartu_id'])) {
+                throw new \Exception('Metode pembayaran tidak valid');
+            }
 
-        // Store in session
-        session([
-            'cart_items' => $items,
-            'subtotal' => $validated['subtotal'],
-            'total' => $validated['total'],
-        ]);
+            // Store in session
+            session([
+                'cart_items' => $items,
+                'subtotal' => floatval($subtotal),
+                'total' => floatval($total),
+            ]);
 
-        // Get payment method from request
-        $method = $request->input('method');
-        
-        if ($method === 'tunai') {
-            // Tunai: Langsung ke struk
-            return redirect()->route('transaksi.invoice', ['method' => 'tunai']);
-        } elseif ($method === 'kartu_id') {
-            // Kartu ID: Cari kartu dulu
-            return redirect()->route('transaksi.search-card');
+            \Log::info('Payment method selected', [
+                'method' => $method,
+                'total' => $total,
+                'items_count' => count($items),
+            ]);
+            
+            if ($method === 'tunai') {
+                // Tunai: Langsung ke struk
+                return redirect()->route('transaksi.invoice', ['method' => 'tunai']);
+            } elseif ($method === 'kartu_id') {
+                // Kartu ID: Cari kartu dulu
+                return redirect()->route('transaksi.search-card');
+            }
+            
+        } catch (\Exception $e) {
+            \Log::error('Payment method error', [
+                'message' => $e->getMessage(),
+                'request_data' => $request->all(),
+            ]);
+            return back()->with('error', 'Error: ' . $e->getMessage());
         }
-        
-        return back()->with('error', 'Metode pembayaran tidak valid');
     }
 
     public function searchCard(Request $request)
