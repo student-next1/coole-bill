@@ -1,167 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Coole-Bill POS</title>
-
     @vite('resources/css/app.css')
 </head>
-<body class="bg-slate-100">
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 antialiased">
 
-<div class="min-h-screen flex">
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    
+    <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 lg:gap-0">
+        
+        <!-- LEFT SIDE - Branding (Hidden on mobile) -->
+        <div class="hidden lg:flex flex-col items-center justify-center bg-gradient-to-br from-orange-600 via-orange-500 to-orange-600 rounded-l-3xl p-12 relative overflow-hidden">
+            
+            <!-- Decorative circles -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-black/5 rounded-full -ml-40 -mb-40"></div>
+            
+            <div class="relative z-10 text-center space-y-8">
+                
+                <!-- Logo -->
+                <div class="flex items-center justify-center gap-2 mb-8">
+                    <div class="px-5 py-2.5 bg-black rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                        <span class="text-white font-black text-2xl tracking-tight">COOL</span>
+                    </div>
+                    <div class="px-5 py-2.5 bg-white rounded-lg shadow-xl transform hover:scale-105 transition-transform">
+                        <span class="text-orange-600 font-black text-2xl tracking-tight">E-BILL</span>
+                    </div>
+                </div>
 
-    <!-- KIRI -->
-    <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-orange-600 to-amber-600 items-center justify-center">
+                <div class="space-y-3">
+                    <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">
+                        Smart POS System
+                    </h1>
+                    <p class="text-lg text-orange-100 font-medium">
+                        Kelola bisnis Anda dengan mudah
+                    </p>
+                </div>
 
-        <div class="text-center text-white px-10">
+                <!-- Features -->
+                <div class="mt-12 grid grid-cols-2 gap-4 text-left">
+                    <div class="flex items-start gap-3 text-white">
+                        <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Transaksi Cepat</p>
+                            <p class="text-sm text-orange-100">Proses dalam detik</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 text-white">
+                        <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Kelola Stok</p>
+                            <p class="text-sm text-orange-100">Real-time update</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 text-white">
+                        <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Laporan</p>
+                            <p class="text-sm text-orange-100">Analisis lengkap</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 text-white">
+                        <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Multi Payment</p>
+                            <p class="text-sm text-orange-100">Tunai & Kartu ID</p>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="text-7xl mb-8">
-                🖩
             </div>
-
-            <h1 class="text-5xl font-bold mb-5">
-                COOLE-BILL
-            </h1>
-
-            <p class="text-xl text-blue-100">
-                Smart System of Store Manage
-            </p>
-
-            <div class="mt-12 space-y-3 text-blue-100">
-
-                <p>✔ Kelola Produk</p>
-
-                <p>✔ Transaksi Cepat</p>
-
-                <p>✔ Dashboard Penjualan</p>
-
-                <p>✔ Laporan Harian</p>
-
-            </div>
-
         </div>
 
-    </div>
-
-    <!-- KANAN -->
-    <div class="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-orange-700 to-amber-600">
-
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-10">
-
-            <div class="text-center mb-8">
-
-                <div class="text-5xl mb-3">
-                    🔔
+        <!-- RIGHT SIDE - Login Form -->
+        <div class="bg-white rounded-3xl lg:rounded-l-none lg:rounded-r-3xl shadow-2xl p-8 sm:p-12 lg:p-16 flex flex-col justify-center">
+            
+            <!-- Mobile Logo (Visible only on mobile) -->
+            <div class="lg:hidden flex flex-col items-center mb-8">
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="px-4 py-2 bg-black rounded-lg">
+                        <span class="text-white font-black text-lg">COOL</span>
+                    </div>
+                    <div class="px-4 py-2 bg-orange-600 rounded-lg">
+                        <span class="text-white font-black text-lg">E-BILL</span>
+                    </div>
                 </div>
-
-                <h2 class="text-3xl font-bold text-slate-800">
-                    Selamat Datang
-                </h2>
-
-                <p class="text-slate-500 mt-2">
-                    Login untuk melanjutkan
-                </p>
-
+                <p class="text-sm text-slate-600 font-medium">Smart POS System</p>
             </div>
 
-            <form method="POST" action="{{ route('login') }}">
+            <!-- Header -->
+            <div class="mb-8">
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-2">
+                    Selamat Datang
+                </h2>
+                <p class="text-slate-500">
+                    Masuk ke akun Anda untuk melanjutkan
+                </p>
+            </div>
 
+            <!-- Login Form -->
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
                 @csrf
 
-                <!-- EMAIL -->
-
-                <div class="mb-5">
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                <!-- Username Field -->
+                <div>
+                    <label for="username" class="block text-sm font-semibold text-slate-700 mb-2">
                         Username
                     </label>
-
-                    <input
-                        type="text"
-                        name="username"
-                        value="{{ old('username') }}"
-                        required
-                        autofocus
-
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3
-                        focus:outline-none focus:ring-2 focus:ring-blue-500
-                        focus:border-blue-500 transition"
-                    >
-
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value="{{ old('username') }}"
+                            required
+                            autofocus
+                            placeholder="Masukkan username"
+                            class="w-full pl-12 pr-4 py-3.5 border-2 border-slate-200 rounded-xl
+                            focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent
+                            transition-all duration-200 text-slate-900 placeholder-slate-400"
+                        >
+                    </div>
                     @error('username')
-                        <p class="text-red-500 text-sm mt-2">
+                        <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
                             {{ $message }}
                         </p>
                     @enderror
-
                 </div>
 
-                <!-- PASSWORD -->
-
-                <div class="mb-5">
-
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">
                         Password
                     </label>
-
-                    <input
-                        type="password"
-                        name="password"
-                        required
-
-                        class="w-full rounded-xl border border-slate-300 px-4 py-3
-                        focus:outline-none focus:ring-2 focus:ring-blue-500
-                        focus:border-blue-500 transition"
-                    >
-
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            placeholder="Masukkan password"
+                            class="w-full pl-12 pr-4 py-3.5 border-2 border-slate-200 rounded-xl
+                            focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent
+                            transition-all duration-200 text-slate-900 placeholder-slate-400"
+                        >
+                    </div>
                     @error('password')
-                        <p class="text-red-500 text-sm mt-2">
+                        <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
                             {{ $message }}
                         </p>
                     @enderror
-
                 </div>
 
-                <!-- REMEMBER -->
-
-                <div class="flex items-center justify-between mb-8">
-
-                    <label class="flex items-center gap-2">
-
-                        <input
-                            type="checkbox"
-                            name="remember"
-                            class="rounded border-gray-300 text-blue-600"
-                        >
-
-                        <span class="text-sm text-slate-600">
-                            Remember Me
-                        </span>
-
+                <!-- Remember Me -->
+                <div class="flex items-center">
+                    <input
+                        type="checkbox"
+                        id="remember"
+                        name="remember"
+                        class="w-4 h-4 text-orange-600 bg-slate-100 border-slate-300 rounded focus:ring-orange-500 focus:ring-2"
+                    >
+                    <label for="remember" class="ml-2 text-sm text-slate-600 font-medium cursor-pointer">
+                        Ingat saya
                     </label>
-
                 </div>
 
-                <!-- BUTTON -->
-
+                <!-- Login Button -->
                 <button
                     type="submit"
-
-                    class="w-full bg-blue-600 hover:bg-blue-700
-                    text-white font-semibold py-3 rounded-xl
-                    transition duration-300 shadow-lg hover:shadow-xl">
-
-                    Login
-
+                    class="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600
+                    text-white font-bold py-4 rounded-xl
+                    transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5
+                    focus:outline-none focus:ring-4 focus:ring-orange-500 focus:ring-opacity-50"
+                >
+                    Masuk
                 </button>
 
             </form>
 
-            <div class="mt-8 text-center text-sm text-slate-400">
-
-                © {{ date('Y') }} Coole-Bill POS
-
+            <!-- Footer -->
+            <div class="mt-8 pt-6 border-t border-slate-200 text-center">
+                <p class="text-sm text-slate-500">
+                    © {{ date('Y') }} <span class="font-semibold text-slate-700">Coole-Bill</span> · Smart POS System
+                </p>
             </div>
 
         </div>
