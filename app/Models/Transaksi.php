@@ -16,6 +16,7 @@ class Transaksi extends Model
         'pajak',
         'total',
         'metode_pembayaran',
+        'payment_card_id',
         'status'
     ];
 
@@ -29,5 +30,11 @@ class Transaksi extends Model
     public function details()
     {
         return $this->hasMany(TransaksiDetail::class, 'transaksi_id');
+    }
+
+    // Relation to payment card
+    public function paymentCard()
+    {
+        return $this->belongsTo(PaymentCard::class, 'payment_card_id');
     }
 }

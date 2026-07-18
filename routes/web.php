@@ -10,6 +10,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PaymentCardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,6 +49,10 @@ Route::prefix('kategori')->middleware('auth')->group(function () {
 Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::get('/', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('/select-payment', [TransaksiController::class, 'selectPaymentMethod'])->name('transaksi.select-payment');
+    Route::get('/select-card', [TransaksiController::class, 'selectCard'])->name('transaksi.select-card');
+    Route::get('/find-card', [TransaksiController::class, 'findCard'])->name('transaksi.find-card');
+    Route::get('/confirm-payment/{cardId}', [TransaksiController::class, 'confirmPayment'])->name('transaksi.confirm-payment');
     Route::post('/', [TransaksiController::class, 'store'])->name('transaksi.store');
 });
 
@@ -62,6 +67,21 @@ Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+});
+
+// Payment Cards Routes
+Route::prefix('payment-cards')->middleware('auth')->group(function () {
+    Route::get('/', [PaymentCardController::class, 'index'])->name('payment-cards.index');
+    Route::get('/create', [PaymentCardController::class, 'create'])->name('payment-cards.create');
+    Route::post('/', [PaymentCardController::class, 'store'])->name('payment-cards.store');
+    Route::get('/{id}', [PaymentCardController::class, 'show'])->name('payment-cards.show');
+    Route::get('/{id}/edit', [PaymentCardController::class, 'edit'])->name('payment-cards.edit');
+    Route::put('/{id}', [PaymentCardController::class, 'update'])->name('payment-cards.update');
+    Route::delete('/{id}', [PaymentCardController::class, 'destroy'])->name('payment-cards.destroy');
+    Route::get('/{id}/topup', [PaymentCardController::class, 'topup'])->name('payment-cards.topup');
+    Route::post('/{id}/topup', [PaymentCardController::class, 'doTopup'])->name('payment-cards.do-topup');
+    Route::get('/{id}/transactions', [PaymentCardController::class, 'transactions'])->name('payment-cards.transactions');
+    Route::get('/search/card', [PaymentCardController::class, 'search'])->name('payment-cards.search');
 });
 
 Route::post('/logout', function () {

@@ -115,46 +115,6 @@
     </div>
 </div>
 
-<!-- Payment Modal -->
-<div id="paymentModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
-        <div class="p-6 border-b border-slate-200">
-            <h3 class="text-lg font-bold text-gray-900">Konfirmasi Pembayaran</h3>
-        </div>
-        <div class="p-6 space-y-4">
-            <div class="bg-slate-50 rounded-lg p-4">
-                <p class="text-sm text-gray-600">Total Pembayaran</p>
-                <p id="paymentTotal" class="text-2xl font-bold text-gray-900 mt-1">Rp0</p>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
-                <p id="paymentMethodDisplay" class="text-sm text-gray-900 font-medium">-</p>
-            </div>
-            <div id="nominalBayarDiv" class="hidden">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nominal Bayar (Tunai)</label>
-                <input type="number" 
-                       id="nominalBayar"
-                       placeholder="Masukkan nominal"
-                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
-                       min="0">
-                <p id="changeDisplay" class="text-sm text-gray-600 mt-2"></p>
-            </div>
-        </div>
-        <div class="p-6 border-t border-slate-200 flex gap-3">
-            <button type="button" 
-                    onclick="closePaymentModal()"
-                    class="flex-1 px-4 py-2 border border-slate-300 text-gray-900 font-medium rounded-lg hover:bg-slate-50 transition-colors text-sm">
-                Batal
-            </button>
-            <button type="button" 
-                    onclick="submitPayment()"
-                    class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
-                Bayar
-            </button>
-        </div>
-    </div>
-</div>
-
 <script>
     let cart = {};
     let totalAmount = 0;
@@ -238,67 +198,12 @@
         document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
     }
 
-    // Process Payment
+    // Process Payment - Redirect to payment method selection
     function processPayment() {
         const cartArray = Object.values(cart);
         if (cartArray.length === 0) {
             alert('Keranjang masih kosong!');
             return;
-        }
-
-        const paymentMethod = document.getElementById('paymentMethod').value;
-        document.getElementById('paymentTotal').textContent = formatCurrency(totalAmount);
-        
-        let methodDisplay = 'Tunai';
-        if (paymentMethod === 'transfer') methodDisplay = 'Transfer Bank';
-        if (paymentMethod === 'kartu_kredit') methodDisplay = 'Kartu Kredit/Debit';
-        
-        document.getElementById('paymentMethodDisplay').textContent = methodDisplay;
-
-        // Show nominal bayar input only for tunai
-        const nominalDiv = document.getElementById('nominalBayarDiv');
-        if (paymentMethod === 'tunai') {
-            nominalDiv.classList.remove('hidden');
-            document.getElementById('nominalBayar').value = '';
-        } else {
-            nominalDiv.classList.add('hidden');
-        }
-
-        document.getElementById('paymentModal').classList.remove('hidden');
-    }
-
-    // Handle nominal bayar change
-    document.getElementById('nominalBayar')?.addEventListener('input', function() {
-        const nominal = parseInt(this.value) || 0;
-        const change = nominal - totalAmount;
-        const changeDisplay = document.getElementById('changeDisplay');
-        
-        if (change >= 0) {
-            changeDisplay.textContent = 'Kembalian: ' + formatCurrency(change);
-            changeDisplay.className = 'text-sm text-green-600 mt-2 font-medium';
-        } else {
-            changeDisplay.textContent = 'Kurang: ' + formatCurrency(Math.abs(change));
-            changeDisplay.className = 'text-sm text-red-600 mt-2 font-medium';
-        }
-    });
-
-    // Submit Payment
-    function submitPayment() {
-        const paymentMethod = document.getElementById('paymentMethod').value;
-        const cartArray = Object.values(cart);
-
-        if (cartArray.length === 0) {
-            alert('Keranjang kosong!');
-            return;
-        }
-
-        let nominalBayar = totalAmount;
-        if (paymentMethod === 'tunai') {
-            nominalBayar = parseInt(document.getElementById('nominalBayar').value) || 0;
-            if (nominalBayar < totalAmount) {
-                alert('Nominal bayar harus >= total transaksi');
-                return;
-            }
         }
 
         // Prepare form data
@@ -309,11 +214,12 @@
 
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
         const tax = Math.round(subtotal * 0.1);
+        const total = subtotal + tax;
 
-        // Submit via form
+        // Submit to select payment endpoint
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '{{ route("transaksi.store") }}';
+        form.action = '{{ route("transaksi.select-payment") }}';
         
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
         
@@ -322,19 +228,17 @@
             <input type="hidden" name="items" value='${JSON.stringify(items)}'>
             <input type="hidden" name="subtotal" value="${subtotal}">
             <input type="hidden" name="pajak" value="${tax}">
-            <input type="hidden" name="total" value="${totalAmount}">
-            <input type="hidden" name="metode_pembayaran" value="${paymentMethod}">
-            <input type="hidden" name="nominal_bayar" value="${nominalBayar}">
+            <input type="hidden" name="total" value="${total}">
         `;
         
         document.body.appendChild(form);
         form.submit();
     }
 
-    // Close Payment Modal
-    function closePaymentModal() {
-        document.getElementById('paymentModal').classList.add('hidden');
-    }
+    // Handle nominal bayar change - No longer used
+    // (kept reference in case needed later)
+
+    // Close Payment Modal - No longer used
 
     // Reset Cart
     function resetCart() {
