@@ -106,23 +106,6 @@ class TransaksiController extends Controller
         }
     }
 
-    public function confirmPayment(Request $request, $cardId)
-    {
-        $card = PaymentCard::findOrFail($cardId);
-        $total = session('total');
-
-        if (!$card->hasEnoughBalance($total)) {
-            return back()->with('error', 'Saldo kartu tidak cukup');
-        }
-
-        return view('transaksi.confirm-payment', [
-            'card' => $card,
-            'items' => session('cart_items'),
-            'subtotal' => session('subtotal'),
-            'total' => session('total'),
-        ]);
-    }
-
     public function processPayment(Request $request, $paymentMethod = null)
     {
         $itemsInput = $request->input('items') ?? json_encode(session('cart_items'));
