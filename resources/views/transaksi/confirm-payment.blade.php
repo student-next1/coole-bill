@@ -106,17 +106,32 @@
 
 <script>
     // Keyboard shortcuts for confirm-payment page
+    console.log('✓ Keyboard shortcuts loaded for confirm-payment');
+    
     document.addEventListener('keydown', function(e) {
-        // Enter: Konfirmasi pembayaran
-        if (e.key === 'Enter') {
+        console.log('Key pressed:', e.key, 'Code:', e.code, 'CtrlKey:', e.ctrlKey);
+        
+        // Esc: Batal/Kembali (prioritas tinggi)
+        if (e.key === 'Escape' || e.code === 'Escape') {
+            console.log('✓ Escape key detected - navigating back');
             e.preventDefault();
-            document.getElementById('formKonfirmasi').submit();
+            e.stopPropagation();
+            window.location.href = '{{ route("transaksi.create") }}';
+            return;
         }
         
-        // Esc: Batal/Kembali
-        if (e.key === 'Escape') {
-            e.preventDefault();
-            window.location.href = '{{ route("transaksi.create") }}';
+        // Enter: Konfirmasi pembayaran (tapi jangan di input field)
+        if ((e.key === 'Enter' || e.code === 'Enter') && e.target.tagName !== 'TEXTAREA') {
+            console.log('✓ Enter key detected');
+            
+            // Jika tidak di dalam input text, submit form
+            if (e.target.tagName !== 'INPUT' || e.target.type === 'hidden') {
+                console.log('✓ Enter outside input - submitting form');
+                e.preventDefault();
+                e.stopPropagation();
+                document.getElementById('formKonfirmasi').submit();
+                return;
+            }
         }
     });
 </script>

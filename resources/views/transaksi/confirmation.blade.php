@@ -129,6 +129,7 @@
 
 <script>
     function printReceipt() {
+        console.log('✓ Print receipt function called');
         const printContent = document.getElementById('struk').innerHTML;
         const printWindow = window.open('', '', 'height=600,width=400');
         printWindow.document.write(`
@@ -161,17 +162,30 @@
     }
 
     // Keyboard shortcuts for confirmation page
+    console.log('✓ Keyboard shortcuts loaded for confirmation');
+    
     document.addEventListener('keydown', function(e) {
-        // Enter: Selesai & Kembali
-        if (e.key === 'Enter') {
+        console.log('Key pressed:', e.key, 'Code:', e.code, 'CtrlKey:', e.ctrlKey);
+        
+        // Ctrl+Enter: Cetak Struk (prioritas tinggi)
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.code === 'Enter')) {
+            console.log('✓ Ctrl+Enter detected - printing receipt');
             e.preventDefault();
-            window.location.href = '{{ route("transaksi.index") }}';
+            e.stopPropagation();
+            printReceipt();
+            return;
         }
         
-        // Ctrl+Enter: Cetak Struk
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault();
-            printReceipt();
+        // Enter: Selesai & Kembali (jika tidak di input)
+        if ((e.key === 'Enter' || e.code === 'Enter') && e.target.tagName !== 'TEXTAREA') {
+            // Hanya jika tidak sedang fokus di link
+            if (e.target.tagName !== 'A' && e.target.tagName !== 'INPUT') {
+                console.log('✓ Enter detected - navigating to transaction list');
+                e.preventDefault();
+                e.stopPropagation();
+                window.location.href = '{{ route("transaksi.index") }}';
+                return;
+            }
         }
     });
 </script>
