@@ -1,0 +1,228 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                    VISUAL FLOW DIAGRAM - PAYMENT PROCESS                       ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+
+STEP 1: USER MULAI TRANSAKSI
+═══════════════════════════════════════════════════════════════════════════════
+
+https://localhost/transaksi/create
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ╔════════════════════════════════╗      ╔═══════════════════════════════╗  │
+│  ║  PILIH PRODUK                  ║      ║  KERANJANG                    ║  │
+│  ╠════════════════════════════════╣      ╠═══════════════════════════════╣  │
+│  ║                                ║      ║                               ║  │
+│  ║  Cari: [____________]          ║      ║  [Nasi Goreng]      Rp50.000 ║  │
+│  ║                                ║      ║  [Mie Kuah]         Rp35.000 ║  │
+│  ║  ┌──┐ ┌──┐ ┌──┐               ║      ║                               ║  │
+│  ║  │N │ │M │ │I │               ║      ║  Subtotal: Rp85.000           ║  │
+│  ║  │a │ │i │ │k │ Rp50K        ║      ║  Total:    Rp85.000           ║  │
+│  ║  │s │ │e │ │a │              ║      ║                               ║  │
+│  ║  └──┘ └──┘ └──┘               ║      ║  ┌──────────────────────────┐ ║  │
+│  ║                                ║      ║  │ [💵 Tunai] [🆔 Kartu ID] │ ║  │
+│  ║  ┌──┐ ┌──┐ ┌──┐               ║      ║  └──────────────────────────┘ ║  │
+│  ║  │T │ │D │ │A │               ║      ║  [Proses Pembayaran]          ║  │
+│  ║  │e │ │a │ │y │ Rp35K        ║      ║  [Reset]                      ║  │
+│  ║  │l │ │g │ │u │              ║      ║                               ║  │
+│  ║  └──┘ └──┘ └──┘               ║      ║                               ║  │
+│  ║                                ║      ║                               ║  │
+│  ╚════════════════════════════════╝      ╚═══════════════════════════════╝  │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+
+STEP 2A: TUNAI - Langsung ke Struk
+═══════════════════════════════════════════════════════════════════════════════
+
+Klik: [💵 Tunai]
+  ↓
+POST /transaksi/select-payment
+  ↓
+Redirect /transaksi/invoice?method=tunai
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ╔════════════════════════════════════════════════════════════════════════╗ │
+│  ║                         STRUK PEMBAYARAN                               ║ │
+│  ╠════════════════════════════════════════════════════════════════════════╣ │
+│  ║                                                                        ║ │
+│  ║  Nasi Goreng   [Qty:5] [Harga:50000] [Subtotal:250000]               ║ │
+│  ║  Mie Kuah      [Qty:2] [Harga:35000] [Subtotal:70000]                ║ │
+│  ║                                                                        ║ │
+│  ║  Subtotal: Rp320.000                                                  ║ │
+│  ║  Total:    Rp320.000                                                  ║ │
+│  ║                                                                        ║ │
+│  ║  [✓ Konfirmasi Pembayaran]                                            ║ │
+│  ║                                                                        ║ │
+│  ╚════════════════════════════════════════════════════════════════════════╝ │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+    ↓
+    SKIP KARTU → Langsung ke Confirmation
+
+
+STEP 2B: KARTU ID - Cari & Pilih Kartu ⭐ INI YANG DITANYA
+═══════════════════════════════════════════════════════════════════════════════
+
+Klik: [🆔 Kartu ID]
+  ↓
+POST /transaksi/select-payment
+  ↓
+Redirect /transaksi/search-card
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                         🆔 PILIH KARTU PEMBAYARAN                         │
+│  ───────────────────────────────────────────────────────────────────────   │
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  Cari Kartu:                                                         │  │
+│  │  [_________Ketik username atau ID kartu__________] [🔍 Cari]       │  │
+│  │  💡 Tekan Enter atau klik tombol Cari                              │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │  👤 Nama Pemilik:     Andi Wijaya                                    │  │
+│  │  📧 Username:         card_001                                       │  │
+│  │  💰 Saldo:            Rp1,000,000                                    │  │
+│  │                                                                       │  │
+│  │  ┌────────────────────────────────────────────────────────────────┐ │  │
+│  │  │  CARD ID: CARD-202607171328-54231                             │ │  │
+│  │  └────────────────────────────────────────────────────────────────┘ │  │
+│  │                                                                       │  │
+│  │  🔐 Barcode:  202607...54231   │   ✓ Status: 🟢 Aktif             │  │
+│  │                                                                       │  │
+│  │  [✓ Gunakan Kartu Ini]                                              │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  [↩️ Kembali]                                                               │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+    ↓
+    User ketik: "card_001"
+    User klik: [🔍 Cari] atau tekan Enter
+    ↓
+    AJAX GET /transaksi/find-card?search=card_001
+    ↓
+    Return kartu yang cocok dan tampilkan hasilnya
+    ↓
+    User klik: [✓ Gunakan Kartu Ini]
+    ↓
+    POST /transaksi/select-card dengan card_id=1
+    ↓
+    Redirect /transaksi/invoice?method=kartu_id
+
+
+STEP 3: LANJUT KE STRUK EDITABLE
+═══════════════════════════════════════════════════════════════════════════════
+
+https://localhost/transaksi/invoice?method=kartu_id
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ╔════════════════════════════════════════════════════════════════════════╗ │
+│  ║                         STRUK PEMBAYARAN                               ║ │
+│  ╠════════════════════════════════════════════════════════════════════════╣ │
+│  ║                                                                        ║ │
+│  ║  Nasi Goreng   [Qty:5] [Harga:50000] [Subtotal:250000]               ║ │
+│  ║  Mie Kuah      [Qty:2] [Harga:35000] [Subtotal:70000]                ║ │
+│  ║                                                                        ║ │
+│  ║  Subtotal: Rp320.000                                                  ║ │
+│  ║  Total:    Rp320.000                                                  ║ │
+│  ║                                                                        ║ │
+│  ║  [✓ Konfirmasi Pembayaran]                                            ║ │
+│  ║                                                                        ║ │
+│  ╚════════════════════════════════════════════════════════════════════════╝ │
+│                                                                              │
+│  (User bisa edit qty, harga, nama)                                          │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+    ↓
+    User klik: [✓ Konfirmasi Pembayaran]
+    ↓
+    POST /transaksi/confirm dengan:
+      - items, subtotal, total
+      - metode_pembayaran='kartu_id'
+      - payment_card_id=1
+    ↓
+    SERVER ACTION:
+    1. Create Transaksi record
+    2. Create TransaksiDetail record (untuk setiap item)
+    3. Decrement stok produk
+    4. Deduct saldo kartu
+    ↓
+    Redirect /transaksi/confirmation/123
+
+
+STEP 4: HALAMAN SUKSES + STRUK
+═══════════════════════════════════════════════════════════════════════════════
+
+https://localhost/transaksi/confirmation/123
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  ✓ ✓ ✓  PEMBAYARAN BERHASIL!  ✓ ✓ ✓                                       │
+│  Transaksi telah diproses dan stok produk telah berkurang                  │
+│                                                                              │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │                                                                       │  │
+│  │                      ┌──────────────┐                               │  │
+│  │                      │ COOL │ E-BILL│                               │  │
+│  │                      └──────────────┘                               │  │
+│  │                                                                       │  │
+│  │                      STRUK PEMBAYARAN                               │  │
+│  │                                                                       │  │
+│  │  Kode Transaksi: TRX-202607181235-456                              │  │
+│  │  Tanggal: 18/07/2026 12:35                                          │  │
+│  │  Kasir: Administrator                                               │  │
+│  │  Metode: 🆔 KARTU ID                                                │  │
+│  │  Kartu: card_001                                                    │  │
+│  │  ─────────────────────────────────────────────────────────────────  │  │
+│  │                                                                       │  │
+│  │  Daftar Barang                                                       │  │
+│  │  Nasi Goreng    5x Rp50.000 = Rp250.000                            │  │
+│  │  Mie Kuah       2x Rp35.000 = Rp70.000                             │  │
+│  │  ─────────────────────────────────────────────────────────────────  │  │
+│  │  TOTAL: Rp320.000                                                   │  │
+│  │                                                                       │  │
+│  │  Terima Kasih Telah Berbelanja!                                     │  │
+│  │  ─────────────────────────────────────────────────────────────────  │  │
+│  │                                                                       │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│  [🖨️ Cetak Struk]  [✓ Selesai & Kembali ke Daftar Transaksi]             │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘
+
+    ↓
+    User bisa:
+    - Klik [🖨️ Cetak Struk] untuk print
+    - Klik [✓ Selesai & Kembali] untuk kembali ke daftar transaksi
+    ↓
+    Redirect /transaksi/index
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+🎯 RINGKASAN ANSWER:
+
+Q: search-card.blade.php itu tampil di bagian mana?
+
+A: 
+   search-card.blade.php tampil SETELAH:
+   1. User di halaman create (transaksi/create.blade.php)
+   2. User pilih produk dan masuk ke keranjang
+   3. User klik tombol "🆔 Kartu ID"
+   
+   MAKA sistem redirect ke halaman SEARCH CARD untuk:
+   ✓ User search kartu by username atau ID
+   ✓ User pilih kartu yang mau digunakan
+   ✓ User redirect ke halaman invoice untuk edit struk
+   
+   HANYA untuk pembayaran KARTU ID (tidak tampil jika pilih TUNAI)
+
+════════════════════════════════════════════════════════════════════════════════
