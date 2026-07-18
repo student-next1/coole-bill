@@ -223,10 +223,12 @@
             return;
         }
 
-        // Prepare items
+        // Prepare items with harga and subtotal
         const items = cartArray.map(item => ({
             produk_id: item.id,
-            qty: item.qty
+            qty: item.qty,
+            harga: item.price,
+            subtotal: item.price * item.qty
         }));
 
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
