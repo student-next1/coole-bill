@@ -1,0 +1,161 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                     QUICK REFERENCE - search-card.blade.php                    ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+❓ PERTANYAAN: "search-card.blade.php itu tampil di bagian mana kalau di web?"
+
+✅ JAWABAN CEPAT:
+
+   search-card.blade.php tampil di halaman untuk MENCARI DAN MEMILIH KARTU
+   setelah user memilih metode pembayaran "🆔 KARTU ID"
+
+   📍 LOKASI DALAM FLOW:
+   
+       Halaman: transaksi/create
+       (Pilih produk + pilih metode pembayaran)
+              ↓
+              [User klik "🆔 KARTU ID"]
+              ↓
+       🎯 Halaman: transaksi/search-card ← INI HALAMAN YANG DITANYA!
+       (Cari kartu, pilih kartu)
+              ↓
+              [User klik "✓ Gunakan Kartu Ini"]
+              ↓
+       Halaman: transaksi/invoice
+       (Edit struk)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔍 APA ITU search-card.blade.php?
+
+   Halaman untuk search dan pilih kartu pembayaran
+   
+   User bisa:
+   ✓ Search kartu by username (contoh: card_001)
+   ✓ Search kartu by card_code (contoh: CARD-202607...)
+   ✓ Search kartu by barcode
+   ✓ Pilih kartu yang mau digunakan
+   
+   Kartu yang cocok ditampilkan dengan detail:
+   - Nama pemilik
+   - Username
+   - Saldo
+   - Barcode
+   - Status (Aktif/Nonaktif)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 URL:
+
+   https://localhost/transaksi/search-card
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔄 KAPAN TAMPIL?
+
+   ✓ Ketika user di halaman transaksi/create
+   ✓ Ketika user pilih produk
+   ✓ Ketika user klik tombol "🆔 KARTU ID"
+   ✓ MAKA sistem redirect ke /transaksi/search-card
+   
+   ✗ TIDAK tampil jika user klik "💵 TUNAI"
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 FLOW DETAILS:
+
+   STEP 1: transaksi/create
+           User pilih produk → masuk ke keranjang
+   
+   STEP 2: User klik "🆔 KARTU ID" button
+           ↓
+           POST /transaksi/select-payment
+           ↓
+           Server redirect ke /transaksi/search-card
+   
+   STEP 3: search-card.blade.php TAMPIL
+           User search kartu, lihat hasil, pilih kartu
+           ↓
+           POST /transaksi/select-card dengan card_id
+           ↓
+           Server redirect ke /transaksi/invoice
+   
+   STEP 4: invoice.blade.php TAMPIL
+           User edit struk, confirm
+           ↓
+           POST /transaksi/confirm
+           ↓
+           Server redirect ke /transaksi/confirmation
+   
+   STEP 5: confirmation.blade.php TAMPIL
+           Success page dengan struk
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎨 HALAMAN TAMPILAN:
+
+   ┌─────────────────────────────────────────────────────┐
+   │  🆔 PILIH KARTU PEMBAYARAN                           │
+   │  ─────────────────────────────────────────────────  │
+   │  Cari dan pilih kartu yang ingin digunakan          │
+   │                                                      │
+   │  Cari Kartu:                                         │
+   │  [_____Ketik username atau ID_____] [Cari]         │
+   │                                                      │
+   │  ┌───────────────────────────────────────────────┐ │
+   │  │ 👤 Nama: Andi Wijaya                          │ │
+   │  │ 📧 Username: card_001                         │ │
+   │  │ 💰 Saldo: Rp1,000,000                        │ │
+   │  │ 🆔 Card ID: CARD-202607171328-54231         │ │
+   │  │ 🔐 Barcode: 202607...54231                   │ │
+   │  │ ✓ Status: Aktif                              │ │
+   │  │ [✓ Gunakan Kartu Ini]                        │ │
+   │  └───────────────────────────────────────────────┘ │
+   │                                                      │
+   │  [↩️ Kembali]                                        │
+   │                                                      │
+   └─────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 FILE LOCATION:
+
+   resources/views/transaksi/search-card.blade.php
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔗 RELATED FILES:
+
+   Controller: app/Http/Controllers/TransaksiController.php
+   - searchCard() → menampilkan halaman search-card
+   - findCard() → AJAX search kartu
+   - selectCard() → process pilihan kartu
+
+   Route: routes/web.php
+   - GET /transaksi/search-card → searchCard()
+   - GET /transaksi/find-card → findCard() [AJAX]
+   - POST /transaksi/select-card → selectCard()
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📝 KESIMPULAN:
+
+   search-card.blade.php adalah halaman INTERMEDIARY (perantara)
+   antara pemilihan metode pembayaran dan pengeditan struk.
+   
+   Hanya tampil untuk pembayaran KARTU ID.
+   
+   Memungkinkan user:
+   1. Mencari kartu dengan berbagai kriteria
+   2. Memilih kartu yang akan digunakan
+   3. Melanjutkan ke halaman edit struk
+
+════════════════════════════════════════════════════════════════════════════════
