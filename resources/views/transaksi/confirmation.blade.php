@@ -113,11 +113,13 @@
         <!-- Action Buttons -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button onclick="printReceipt()" 
-                    class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200">
+                    class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200"
+                    id="btnCetakStruk">
                 🖨️ Cetak Struk
             </button>
             <a href="{{ route('transaksi.index') }}" 
-               class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 text-center">
+               class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 text-center"
+               id="btnSelesai">
                 ✓ Selesai & Kembali ke Daftar Transaksi
             </a>
         </div>
@@ -157,5 +159,20 @@
         printWindow.document.close();
         setTimeout(() => { printWindow.print(); }, 250);
     }
+
+    // Keyboard shortcuts for confirmation page
+    document.addEventListener('keydown', function(e) {
+        // Enter: Selesai & Kembali
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            window.location.href = '{{ route("transaksi.index") }}';
+        }
+        
+        // Ctrl+Enter: Cetak Struk
+        if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
+            printReceipt();
+        }
+    });
 </script>
 @endsection

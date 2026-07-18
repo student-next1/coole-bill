@@ -81,10 +81,11 @@
         <!-- Actions -->
         <div class="flex gap-4">
             <a href="{{ route('transaksi.create') }}"
-               class="flex-1 px-6 py-3 bg-gray-200 text-gray-900 font-medium rounded-lg hover:bg-gray-300 transition-all duration-200 text-center">
+               class="flex-1 px-6 py-3 bg-gray-200 text-gray-900 font-medium rounded-lg hover:bg-gray-300 transition-all duration-200 text-center"
+               id="btnBatal">
                 Batal
             </a>
-            <form action="{{ route('transaksi.store') }}" method="POST" class="flex-1">
+            <form action="{{ route('transaksi.store') }}" method="POST" class="flex-1" id="formKonfirmasi">
                 @csrf
                 <input type="hidden" name="items" value="{{ json_encode($items) }}">
                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
@@ -94,11 +95,29 @@
                 <input type="hidden" name="payment_card_id" value="{{ $card->id }}">
                 
                 <button type="submit"
-                        class="w-full px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200">
+                        class="w-full px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200"
+                        id="btnKonfirmasi">
                     Konfirmasi & Proses Pembayaran
                 </button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    // Keyboard shortcuts for confirm-payment page
+    document.addEventListener('keydown', function(e) {
+        // Enter: Konfirmasi pembayaran
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            document.getElementById('formKonfirmasi').submit();
+        }
+        
+        // Esc: Batal/Kembali
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            window.location.href = '{{ route("transaksi.create") }}';
+        }
+    });
+</script>
 @endsection
