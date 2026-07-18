@@ -18,7 +18,7 @@
 </div>
 
 <!-- Stats Cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Total Transaksi</p>
         <h3 class="text-3xl md:text-4xl font-bold text-gray-900">{{ $transaksis->total() }}</h3>
@@ -26,10 +26,6 @@
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Total Penjualan</p>
         <h3 class="text-3xl md:text-4xl font-bold text-orange-600">Rp{{ number_format($transaksis->sum('total'), 0, ',', '.') }}</h3>
-    </div>
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
-        <p class="text-sm font-medium text-gray-600 mb-2">Pajak Terkumpul</p>
-        <h3 class="text-3xl md:text-4xl font-bold text-green-600">Rp{{ number_format($transaksis->sum('pajak'), 0, ',', '.') }}</h3>
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Rata-rata Transaksi</p>
@@ -50,9 +46,14 @@
         <select class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
             <option>Semua Metode</option>
             <option>Tunai</option>
-            <option>Transfer Bank</option>
-            <option>Kartu Kredit/Debit</option>
+            <option>Kartu ID</option>
         </select>
+        @if(Auth::user()->role === 'admin')
+        <button onclick="if(confirm('Apakah Anda yakin ingin menghapus semua riwayat transaksi? Tindakan ini tidak dapat dibatalkan.')) { deleteAllTransactions(); }"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
+            🗑️ Hapus Semua
+        </button>
+        @endif
     </div>
 </div>
 
@@ -78,7 +79,7 @@
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">{{ $transaksi->user->name ?? '-' }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm font-bold text-orange-600">Rp{{ number_format($transaksi->total, 0, ',', '.') }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm hidden md:table-cell">
-                            <span class="px-2 py-1 rounded text-xs font-medium {{ $transaksi->metode_pembayaran === 'tunai' ? 'bg-blue-100 text-blue-700' : ($transaksi->metode_pembayaran === 'transfer' ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700') }}">
+                            <span class="px-2 py-1 rounded text-xs font-medium {{ $transaksi->metode_pembayaran === 'tunai' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700' }}">
                                 {{ ucfirst(str_replace('_', ' ', $transaksi->metode_pembayaran)) }}
                             </span>
                         </td>
@@ -181,6 +182,28 @@
 
     function closeDetail() {
         document.getElementById('detailModal').classList.add('hidden');
+    }
+
+    function deleteAllTransactions() {
+        fetch('{{ route("transaksi.delete-all") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Semua riwayat transaksi telah dihapus');
+                location.reload();
+            } else {
+                alert('Gagal menghapus: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
     }
 
     document.addEventListener('keydown', function(e) {

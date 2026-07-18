@@ -13,7 +13,6 @@ class Transaksi extends Model
         'kode_transaksi',
         'user_id',
         'subtotal',
-        'pajak',
         'total',
         'metode_pembayaran',
         'payment_card_id',

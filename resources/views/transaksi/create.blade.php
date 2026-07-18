@@ -59,10 +59,6 @@
                     <span class="text-gray-600">Subtotal</span>
                     <span id="subtotal" class="font-medium text-gray-900">Rp0</span>
                 </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-600">Pajak (10%)</span>
-                    <span id="taxAmount" class="font-medium text-gray-900">Rp0</span>
-                </div>
                 <div class="flex justify-between text-lg font-bold pt-3 border-t border-slate-200">
                     <span class="text-gray-900">Total</span>
                     <span id="totalAmount" class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">Rp0</span>
@@ -74,8 +70,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
                 <select id="paymentMethod" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
                     <option value="tunai">Tunai</option>
-                    <option value="transfer">Transfer Bank</option>
-                    <option value="kartu_kredit">Kartu Kredit/Debit</option>
+                    <option value="kartu_id">Kartu ID</option>
                 </select>
             </div>
 
@@ -190,11 +185,9 @@
 
         // Update Summary
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const tax = Math.round(subtotal * 0.1);
-        totalAmount = subtotal + tax;
+        totalAmount = subtotal;
 
         document.getElementById('subtotal').textContent = formatCurrency(subtotal);
-        document.getElementById('taxAmount').textContent = formatCurrency(tax);
         document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
     }
 
@@ -213,8 +206,7 @@
         }));
 
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const tax = Math.round(subtotal * 0.1);
-        const total = subtotal + tax;
+        const total = subtotal;
 
         // Submit to select payment endpoint
         const form = document.createElement('form');
@@ -227,7 +219,6 @@
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" name="items" value='${JSON.stringify(items)}'>
             <input type="hidden" name="subtotal" value="${subtotal}">
-            <input type="hidden" name="pajak" value="${tax}">
             <input type="hidden" name="total" value="${total}">
         `;
         

@@ -69,7 +69,6 @@
     const total = {{ $total }};
     const items = @json($items);
     const subtotal = {{ $subtotal }};
-    const pajak = {{ $pajak }};
 
     let searchTimeout;
     let selectedCardId;
@@ -143,10 +142,6 @@
                     <div class="flex justify-between mb-2">
                         <span class="text-gray-600">Subtotal</span>
                         <span class="font-medium">Rp${subtotal.toLocaleString('id-ID')}</span>
-                    </div>
-                    <div class="flex justify-between mb-4">
-                        <span class="text-gray-600">Pajak (10%)</span>
-                        <span class="font-medium">Rp${pajak.toLocaleString('id-ID')}</span>
                     </div>
                     <div class="flex justify-between text-lg font-bold border-t border-slate-200 pt-2">
                         <span>Total Pembayaran</span>

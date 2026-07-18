@@ -32,7 +32,6 @@ class TransaksiController extends Controller
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'subtotal' => 'required|numeric|min:0',
-            'pajak' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
         ]);
 
@@ -40,14 +39,12 @@ class TransaksiController extends Controller
         session([
             'cart_items' => $items,
             'subtotal' => $validated['subtotal'],
-            'pajak' => $validated['pajak'],
             'total' => $validated['total'],
         ]);
 
         return view('transaksi.select-payment', [
             'items' => $items,
             'subtotal' => $validated['subtotal'],
-            'pajak' => $validated['pajak'],
             'total' => $validated['total'],
         ]);
     }
@@ -56,21 +53,20 @@ class TransaksiController extends Controller
     {
         $method = $request->query('method');
         
-        if (!in_array($method, ['card', 'cash', 'transfer'])) {
+        if (!in_array($method, ['kartu_id', 'tunai'])) {
             return back()->with('error', 'Metode pembayaran tidak valid');
         }
 
-        if ($method === 'cash' || $method === 'transfer') {
-            // Langsung proses untuk cash/transfer
+        if ($method === 'tunai') {
+            // Langsung proses untuk tunai
             return $this->processPayment($request, $method);
         }
 
-        // Untuk payment card, tampilkan form pencarian
+        // Untuk kartu ID, tampilkan form pencarian
         return view('transaksi.search-card', [
             'method' => $method,
             'items' => session('cart_items'),
             'subtotal' => session('subtotal'),
-            'pajak' => session('pajak'),
             'total' => session('total'),
         ]);
     }
@@ -107,7 +103,6 @@ class TransaksiController extends Controller
             'card' => $card,
             'items' => session('cart_items'),
             'subtotal' => session('subtotal'),
-            'pajak' => session('pajak'),
             'total' => session('total'),
         ]);
     }
@@ -119,9 +114,8 @@ class TransaksiController extends Controller
 
         $validated = $request->validate([
             'subtotal' => 'required|numeric|min:0',
-            'pajak' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
-            'metode_pembayaran' => 'required|in:tunai,transfer,kartu_kredit',
+            'metode_pembayaran' => 'required|in:tunai,kartu_id',
             'payment_card_id' => 'nullable|exists:payment_cards,id',
         ]);
 
@@ -136,7 +130,6 @@ class TransaksiController extends Controller
                 'kode_transaksi' => $kode_transaksi,
                 'user_id' => auth()->id(),
                 'subtotal' => $validated['subtotal'],
-                'pajak' => $validated['pajak'],
                 'total' => $validated['total'],
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'payment_card_id' => $validated['payment_card_id'] ?? null,
@@ -173,9 +166,9 @@ class TransaksiController extends Controller
 
             DB::commit();
 
-            session()->forget(['cart_items', 'subtotal', 'pajak', 'total']);
+            session()->forget(['cart_items', 'subtotal', 'total']);
 
-            return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan. Kode: ' . $kode_transaksi);
+            return redirect()->route('transaksi.receipt', ['id' => $transaksi->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->with('error', 'Gagal menyimpan transaksi: ' . $e->getMessage());
@@ -192,9 +185,8 @@ class TransaksiController extends Controller
             'items.*.produk_id' => 'required|exists:produks,id',
             'items.*.qty' => 'required|integer|min:1',
             'subtotal' => 'required|numeric|min:0',
-            'pajak' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
-            'metode_pembayaran' => 'required|in:tunai,transfer,kartu_kredit',
+            'metode_pembayaran' => 'required|in:tunai,kartu_id',
             'nominal_bayar' => 'required|numeric|min:0',
             'payment_card_id' => 'nullable|exists:payment_cards,id',
         ]);
@@ -210,7 +202,6 @@ class TransaksiController extends Controller
                 'kode_transaksi' => $kode_transaksi,
                 'user_id' => auth()->id(),
                 'subtotal' => $validated['subtotal'],
-                'pajak' => $validated['pajak'],
                 'total' => $validated['total'],
                 'metode_pembayaran' => $validated['metode_pembayaran'],
                 'payment_card_id' => $validated['payment_card_id'] ?? null,
@@ -247,10 +238,32 @@ class TransaksiController extends Controller
 
             DB::commit();
 
-            return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil disimpan. Kode: ' . $kode_transaksi);
+            return redirect()->route('transaksi.receipt', ['id' => $transaksi->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->with('error', 'Gagal menyimpan transaksi: ' . $e->getMessage());
+        }
+    }
+
+    public function receipt($id)
+    {
+        $transaksi = Transaksi::with('user', 'details.produk', 'paymentCard')
+            ->findOrFail($id);
+        return view('transaksi.receipt', compact('transaksi'));
+    }
+
+    public function deleteAll()
+    {
+        // Only admin can delete all transactions
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        try {
+            Transaksi::query()->delete();
+            return response()->json(['success' => true, 'message' => 'All transactions deleted']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }

@@ -53,7 +53,9 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::get('/select-card', [TransaksiController::class, 'selectCard'])->name('transaksi.select-card');
     Route::get('/find-card', [TransaksiController::class, 'findCard'])->name('transaksi.find-card');
     Route::get('/confirm-payment/{cardId}', [TransaksiController::class, 'confirmPayment'])->name('transaksi.confirm-payment');
+    Route::get('/receipt/{id}', [TransaksiController::class, 'receipt'])->name('transaksi.receipt');
     Route::post('/', [TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::post('/delete-all', [TransaksiController::class, 'deleteAll'])->name('transaksi.delete-all')->middleware('auth');
 });
 
 // Laporan Routes

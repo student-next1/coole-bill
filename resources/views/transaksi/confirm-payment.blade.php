@@ -71,10 +71,6 @@
                     <span>Subtotal</span>
                     <span>Rp{{ number_format($subtotal, 0, ',', '.') }}</span>
                 </div>
-                <div class="flex justify-between text-gray-600">
-                    <span>Pajak</span>
-                    <span>Rp{{ number_format($pajak, 0, ',', '.') }}</span>
-                </div>
                 <div class="flex justify-between text-lg font-bold text-gray-900 mt-4 pt-4 border-t border-slate-200">
                     <span>Total</span>
                     <span class="text-orange-600">Rp{{ number_format($total, 0, ',', '.') }}</span>
@@ -92,9 +88,8 @@
                 @csrf
                 <input type="hidden" name="items" value="{{ json_encode($items) }}">
                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
-                <input type="hidden" name="pajak" value="{{ $pajak }}">
                 <input type="hidden" name="total" value="{{ $total }}">
-                <input type="hidden" name="metode_pembayaran" value="kartu_kredit">
+                <input type="hidden" name="metode_pembayaran" value="kartu_id">
                 <input type="hidden" name="nominal_bayar" value="{{ $total }}">
                 <input type="hidden" name="payment_card_id" value="{{ $card->id }}">
                 
