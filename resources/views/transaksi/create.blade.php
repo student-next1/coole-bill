@@ -233,6 +233,22 @@
             }, 300);
         });
         
+        // Handle Enter key
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const dropdown = input.nextElementSibling;
+                
+                // If dropdown is visible, select first result
+                if (!dropdown.classList.contains('hidden')) {
+                    const firstResult = dropdown.querySelector('[onclick]');
+                    if (firstResult) {
+                        firstResult.click();
+                    }
+                }
+            }
+        });
+        
         // Close dropdown on click outside
         document.addEventListener('click', function(e) {
             if (!input.contains(e.target) && !dropdown.contains(e.target)) {

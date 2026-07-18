@@ -24,6 +24,7 @@ class ProdukController extends Controller
     {
         $validated = $request->validate([
             'kode_produk' => 'required|unique:produks',
+            'kode_barcode' => 'nullable|unique:produks',
             'nama_produk' => 'required|string',
             'kategori_id' => 'required|exists:kategoris,id',
             'harga' => 'required|numeric|min:0',
@@ -49,6 +50,7 @@ class ProdukController extends Controller
 
         $validated = $request->validate([
             'kode_produk' => 'required|unique:produks,kode_produk,' . $id,
+            'kode_barcode' => 'nullable|unique:produks,kode_barcode,' . $id,
             'nama_produk' => 'required|string',
             'kategori_id' => 'required|exists:kategoris,id',
             'harga' => 'required|numeric|min:0',
