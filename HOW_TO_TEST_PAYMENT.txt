@@ -1,0 +1,197 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                    CARA TEST PAYMENT FLOW DI KERANJANG                         ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+📍 HALAMAN: http://localhost/transaksi/create
+
+════════════════════════════════════════════════════════════════════════════════
+
+STEP 1: BUKA HALAMAN TRANSAKSI BARU
+═════════════════════════════════════
+
+Buka di browser: http://localhost/transaksi/create
+
+Anda akan lihat:
+┌─────────────────────────────────────────────────────────────────────┐
+│  TRANSAKSI BARU                                                      │
+│                                                                       │
+│  PILIH PRODUK            │         KERANJANG                         │
+│  ═══════════════════     │         ════════════                      │
+│                          │                                             │
+│  [Cari produk...]        │         📝 Pilih produk terlebih dahulu  │
+│                          │                                             │
+│  [Nasi]  [Mie]  [Ikan]   │         Subtotal: Rp0                    │
+│  [Telur] [Daging] [...]  │         Total:    Rp0                    │
+│                          │                                             │
+│                          │         [💵 Tunai] [🆔 Kartu ID]         │
+│                          │         [Proses Pembayaran]              │
+│                          │                                             │
+└─────────────────────────────────────────────────────────────────────┘
+
+
+STEP 2: PILIH PRODUK
+════════════════════
+
+Klik produk yang ingin dibeli:
+- Nasi Goreng
+- Mie Ayam
+- Ikan Bakar
+- dll
+
+Produk akan masuk ke KERANJANG (kanan) dengan qty 1
+
+Anda bisa:
+✓ + untuk tambah qty
+✓ - untuk kurangi qty
+✓ ✕ untuk hapus dari keranjang
+
+
+STEP 3: LIHAT STATUS MESSAGE
+════════════════════════════
+
+Di bawah TOTAL, ada box warna BIRU dengan status:
+
+❌ BELUM SIAP (kondisi awal):
+┌──────────────────────────────────────────────────────┐
+│ 📝 Pilih produk terlebih dahulu                      │
+└──────────────────────────────────────────────────────┘
+
+✓ BELUM CUKUP (ada produk tapi belum pilih metode):
+┌──────────────────────────────────────────────────────┐
+│ ⚠️ Pilih metode pembayaran (Tunai atau Kartu ID)   │
+└──────────────────────────────────────────────────────┘
+
+✅ SIAP (semua lengkap):
+┌──────────────────────────────────────────────────────┐
+│ ✅ Siap! Metode: 💵 Tunai - Klik Proses Pembayaran │
+│                                                       │
+│ atau                                                  │
+│                                                       │
+│ ✅ Siap! Metode: 🆔 Kartu ID - Klik Proses Pembayaran
+└──────────────────────────────────────────────────────┘
+
+
+STEP 4: PILIH METODE PEMBAYARAN
+════════════════════════════════
+
+Ada 2 tombol:
+┌─────────────────────────────┐
+│ [💵 Tunai] [🆔 Kartu ID]   │
+└─────────────────────────────┘
+
+Klik SALAH SATU:
+
+Option A - TUNAI:
+  [💵 Tunai ✓ Dipilih]  ← Tombol berubah
+  
+Option B - KARTU ID:
+  [🆔 Kartu ID ✓ Dipilih]  ← Tombol berubah
+
+Setelah klik, button akan:
+✓ Memberikan efek ring (lingkaran highlight)
+✓ Mencantumkan "✓ Dipilih"
+✓ Scale up untuk terlihat lebih prominent
+
+
+STEP 5: LIHAT STATUS BERUBAH
+════════════════════════════
+
+Setelah pilih metode pembayaran, status message akan berubah:
+
+Dari:
+┌──────────────────────────────────────────────────────┐
+│ ⚠️ Pilih metode pembayaran (Tunai atau Kartu ID)   │
+└──────────────────────────────────────────────────────┘
+
+Menjadi:
+┌──────────────────────────────────────────────────────┐
+│ ✅ Siap! Metode: 💵 Tunai - Klik Proses Pembayaran │
+│ (atau 🆔 Kartu ID jika pilih kartu)                │
+└──────────────────────────────────────────────────────┘
+
+
+STEP 6: KLIK "PROSES PEMBAYARAN"
+═════════════════════════════════
+
+Tombol akan enable (tidak gray lagi) dan siap diklik
+
+Klik: [Proses Pembayaran]
+
+Apa yang terjadi:
+- Sistem kirim data cart (produk, qty, harga, total) ke server
+- Redirect ke halaman berikutnya:
+  
+  JIKA TUNAI:
+  → Langsung ke /transaksi/invoice (struk editable)
+  
+  JIKA KARTU ID:
+  → Ke /transaksi/search-card (cari & pilih kartu)
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+❓ JIKA TIDAK BERFUNGSI - DEBUGGING TIPS
+═════════════════════════════════════════
+
+1. BUKA BROWSER CONSOLE (F12)
+   
+   Buka DevTools:
+   - Chrome/Firefox: Tekan F12
+   - Klik tab "Console"
+
+2. ULANGI LANGKAH DI ATAS
+
+3. LIHAT OUTPUT DI CONSOLE
+   
+   Anda akan lihat:
+   ✓ Payment method selected: tunai (atau kartu_id)
+   ✓ selectedPaymentMethod: tunai
+   ✓ cartArray length: 2
+   ✓ cartArray: [...]
+   ✓ Items prepared: [...]
+   ✓ Form submitted
+
+4. JIKA ADA ERROR:
+   
+   Lihat pesan error di console:
+   - ❌ Keranjang masih kosong!
+   - ❌ Pilih metode pembayaran terlebih dahulu!
+   - atau error lainnya
+
+5. SCREENSHOT CONSOLE:
+   
+   Ambil screenshot dari console output untuk share ke developer
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+✅ CHECKLIST - SEMUANYA SEHARUSNYA BERFUNGSI:
+
+□ Produk bisa ditambah ke keranjang
+□ Keranjang menampilkan produk dengan qty, harga
+□ Total otomatis terupdate saat tambah/kurangi qty
+□ Status message muncul dan update saat state berubah
+□ Tombol Tunai/Kartu ID bisa diklik
+□ Setelah klik metode, tombol berubah dengan highlight/label ✓
+□ Status message berubah menjadi "✅ Siap!"
+□ Tombol "Proses Pembayaran" enable (tidak gray)
+□ Klik "Proses Pembayaran" redirect ke halaman berikutnya
+□ Redirect benar (Tunai→invoice, Kartu ID→search-card)
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+📞 JIKA MASIH TIDAK BERFUNGSI:
+
+1. Buka DevTools (F12)
+2. Ulangi semua langkah di atas
+3. Screenshot Console output
+4. Share screenshot + deskripsi masalah
+
+Informasi yang helpful:
+- Step mana yang tidak berfungsi
+- Apa error/pesan di console
+- Screenshot console output
+- Browser apa yang digunakan
+
+════════════════════════════════════════════════════════════════════════════════
