@@ -65,16 +65,25 @@
                 </div>
             </div>
 
+            <!-- Status Message -->
+            <div id="statusMessage" class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-xs text-blue-700">
+                    <span id="statusText">📝 Pilih produk, lalu pilih metode pembayaran</span>
+                </p>
+            </div>
+
             <!-- Payment Method Selection -->
             <div class="mt-6 grid grid-cols-2 gap-2">
                 <button type="button"
+                        id="btnTunai"
                         onclick="selectPaymentMethod('tunai')"
-                        class="px-4 py-3 bg-blue-100 border-2 border-blue-300 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 transition-all duration-150 text-sm">
+                        class="px-4 py-3 bg-blue-100 border-2 border-blue-300 text-blue-700 font-semibold rounded-lg hover:bg-blue-200 transition-all duration-150 text-sm transform hover:scale-105">
                     💵 Tunai
                 </button>
                 <button type="button"
+                        id="btnKartuId"
                         onclick="selectPaymentMethod('kartu_id')"
-                        class="px-4 py-3 bg-green-100 border-2 border-green-300 text-green-700 font-semibold rounded-lg hover:bg-green-200 transition-all duration-150 text-sm">
+                        class="px-4 py-3 bg-green-100 border-2 border-green-300 text-green-700 font-semibold rounded-lg hover:bg-green-200 transition-all duration-150 text-sm transform hover:scale-105">
                     🆔 Kartu ID
                 </button>
             </div>
@@ -119,6 +128,7 @@
     let cart = {};
     let totalAmount = 0;
     let selectedPaymentMethod = null;
+    let paymentMethodSelected = false;
 
     // Format Currency
     function formatCurrency(amount) {
@@ -128,13 +138,29 @@
     // Select Payment Method
     function selectPaymentMethod(method) {
         selectedPaymentMethod = method;
-        // Update button styling
-        document.querySelectorAll('[onclick*="selectPaymentMethod"]').forEach(btn => {
-            btn.classList.remove('border-4');
-            btn.classList.add('border-2');
-        });
-        event.target.classList.remove('border-2');
-        event.target.classList.add('border-4');
+        paymentMethodSelected = true;
+        console.log('✓ Payment method selected:', method);
+        
+        // Reset all button styles
+        document.getElementById('btnTunai').classList.remove('ring-2', 'ring-blue-500', 'scale-110');
+        document.getElementById('btnKartuId').classList.remove('ring-2', 'ring-green-500', 'scale-110');
+        
+        // Highlight selected button
+        if (method === 'tunai') {
+            document.getElementById('btnTunai').classList.add('ring-2', 'ring-blue-500', 'scale-110');
+            document.getElementById('btnTunai').innerHTML = '💵 Tunai ✓ Dipilih';
+            document.getElementById('btnKartuId').innerHTML = '🆔 Kartu ID';
+        } else if (method === 'kartu_id') {
+            document.getElementById('btnKartuId').classList.add('ring-2', 'ring-green-500', 'scale-110');
+            document.getElementById('btnKartuId').innerHTML = '🆔 Kartu ID ✓ Dipilih';
+            document.getElementById('btnTunai').innerHTML = '💵 Tunai';
+        }
+        
+        // Make checkout button more prominent
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (cart && Object.keys(cart).length > 0) {
+            checkoutBtn.classList.add('animate-pulse');
+        }
     }
 
     // Add to Cart
@@ -179,10 +205,12 @@
     function updateCart() {
         const cartItems = document.getElementById('cartItems');
         const cartArray = Object.values(cart);
+        const statusText = document.getElementById('statusText');
 
         if (cartArray.length === 0) {
             cartItems.innerHTML = '<div class="text-center py-8 text-gray-500"><p class="text-sm">Keranjang kosong</p></div>';
             document.getElementById('checkoutBtn').disabled = true;
+            statusText.textContent = '📝 Pilih produk terlebih dahulu';
         } else {
             cartItems.innerHTML = cartArray.map(item => `
                 <div class="flex items-center gap-2 md:gap-3 p-3 bg-slate-50 rounded-lg">
@@ -198,7 +226,14 @@
                     <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 text-sm">✕</button>
                 </div>
             `).join('');
-            document.getElementById('checkoutBtn').disabled = false;
+            
+            if (selectedPaymentMethod) {
+                document.getElementById('checkoutBtn').disabled = false;
+                statusText.textContent = `✅ Siap! Metode: ${selectedPaymentMethod === 'tunai' ? '💵 Tunai' : '🆔 Kartu ID'} - Klik "Proses Pembayaran"`;
+            } else {
+                document.getElementById('checkoutBtn').disabled = true;
+                statusText.textContent = '⚠️ Pilih metode pembayaran (Tunai atau Kartu ID)';
+            }
         }
 
         // Update Summary
@@ -211,15 +246,22 @@
 
     // Process Payment
     function processPayment() {
+        console.log('=== PROSES PEMBAYARAN START ===');
+        console.log('selectedPaymentMethod:', selectedPaymentMethod);
+        
         const cartArray = Object.values(cart);
+        console.log('cartArray length:', cartArray.length);
+        console.log('cartArray:', cartArray);
         
         if (cartArray.length === 0) {
-            alert('Keranjang masih kosong!');
+            alert('❌ Keranjang masih kosong!\n\nSilakan pilih produk terlebih dahulu.');
+            console.log('ABORT: Keranjang kosong');
             return;
         }
 
         if (!selectedPaymentMethod) {
-            alert('Pilih metode pembayaran terlebih dahulu!');
+            alert('❌ Pilih metode pembayaran terlebih dahulu!\n\nPilih:\n💵 Tunai\natau\n🆔 Kartu ID');
+            console.log('ABORT: No payment method selected');
             return;
         }
 
@@ -231,8 +273,14 @@
             subtotal: item.price * item.qty
         }));
 
+        console.log('Items prepared:', items);
+
         const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
         const total = subtotal;
+
+        console.log('Subtotal:', subtotal);
+        console.log('Total:', total);
+        console.log('Method:', selectedPaymentMethod);
 
         // Submit to select payment
         const form = document.createElement('form');
@@ -249,8 +297,10 @@
             <input type="hidden" name="method" value="${selectedPaymentMethod}">
         `;
         
+        console.log('Form created, submitting to:', form.action);
         document.body.appendChild(form);
         form.submit();
+        console.log('Form submitted');
     }
 
     // Reset Cart
