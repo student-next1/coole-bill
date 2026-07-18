@@ -265,42 +265,70 @@
             return;
         }
 
-        // Prepare items with harga and subtotal
-        const items = cartArray.map(item => ({
-            produk_id: item.id,
-            qty: item.qty,
-            harga: item.price,
-            subtotal: item.price * item.qty
-        }));
+        try {
+            console.log('STEP 1: Preparing items...');
+            
+            // Prepare items with harga and subtotal
+            const items = cartArray.map(item => ({
+                produk_id: item.id,
+                qty: item.qty,
+                harga: item.price,
+                subtotal: item.price * item.qty
+            }));
 
-        console.log('Items prepared:', items);
+            console.log('✓ Items prepared:', items);
 
-        const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
-        const total = subtotal;
+            console.log('STEP 2: Calculating totals...');
+            const subtotal = cartArray.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal;
 
-        console.log('Subtotal:', subtotal);
-        console.log('Total:', total);
-        console.log('Method:', selectedPaymentMethod);
+            console.log('✓ Subtotal:', subtotal);
+            console.log('✓ Total:', total);
+            console.log('✓ Method:', selectedPaymentMethod);
 
-        // Submit to select payment
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route("transaksi.select-payment") }}';
-        
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
-        
-        form.innerHTML = `
-            <input type="hidden" name="_token" value="${csrfToken}">
-            <input type="hidden" name="items" value='${JSON.stringify(items)}'>
-            <input type="hidden" name="subtotal" value="${subtotal}">
-            <input type="hidden" name="total" value="${total}">
-            <input type="hidden" name="method" value="${selectedPaymentMethod}">
-        `;
-        
-        console.log('Form created, submitting to:', form.action);
-        document.body.appendChild(form);
-        form.submit();
-        console.log('Form submitted');
+            console.log('STEP 3: Getting CSRF token...');
+            const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+            let csrfToken = csrfTokenElement ? csrfTokenElement.content : '{{ csrf_token() }}';
+            console.log('✓ CSRF token found:', csrfToken.substring(0, 10) + '...');
+
+            console.log('STEP 4: Creating form...');
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("transaksi.select-payment") }}';
+            console.log('✓ Form action:', form.action);
+            
+            const itemsJson = JSON.stringify(items);
+            console.log('✓ Items JSON:', itemsJson);
+            
+            form.innerHTML = `
+                <input type="hidden" name="_token" value="${csrfToken}">
+                <input type="hidden" name="items" value='${itemsJson}'>
+                <input type="hidden" name="subtotal" value="${subtotal}">
+                <input type="hidden" name="total" value="${total}">
+                <input type="hidden" name="method" value="${selectedPaymentMethod}">
+            `;
+            
+            console.log('✓ Form HTML created');
+            console.log('Form fields:', form.innerHTML);
+            
+            console.log('STEP 5: Appending form to body...');
+            document.body.appendChild(form);
+            console.log('✓ Form appended');
+            
+            console.log('STEP 6: Submitting form...');
+            console.log('Form element:', form);
+            console.log('Form action:', form.action);
+            console.log('Form method:', form.method);
+            
+            form.submit();
+            console.log('✓✓✓ FORM SUBMITTED - WAIT FOR REDIRECT ✓✓✓');
+            
+        } catch (error) {
+            console.error('❌ ERROR IN PROCESSPAYMENT:', error);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            alert('❌ Error: ' + error.message);
+        }
     }
 
     // Reset Cart
