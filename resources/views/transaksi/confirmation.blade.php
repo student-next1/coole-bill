@@ -126,12 +126,13 @@
 
     </div>
 </div>
-@endsection
 
-@section('scripts')
-<script>
+<!-- Keyboard Shortcuts Script -->
+<script defer>
+    console.log('CONFIRMATION PAGE KEYBOARD SHORTCUTS LOADED');
+    
     function printReceipt() {
-        console.log('✓ Print receipt function called');
+        console.log('PRINT RECEIPT CALLED');
         const printContent = document.getElementById('struk').innerHTML;
         const printWindow = window.open('', '', 'height=600,width=400');
         printWindow.document.write(`
@@ -163,32 +164,29 @@
         setTimeout(() => { printWindow.print(); }, 250);
     }
 
-    // Keyboard shortcuts for confirmation page
-    console.log('✓ Keyboard shortcuts loaded for confirmation');
-    
-    document.addEventListener('keydown', function(e) {
-        console.log('Key pressed:', e.key, 'Code:', e.code, 'CtrlKey:', e.ctrlKey);
+    function setupKeyboardShortcuts() {
+        console.log('setupKeyboardShortcuts() called');
         
-        // Ctrl+Enter: Cetak Struk (prioritas tinggi)
-        if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.code === 'Enter')) {
-            console.log('✓ Ctrl+Enter detected - printing receipt');
-            e.preventDefault();
-            e.stopPropagation();
-            printReceipt();
-            return;
-        }
-        
-        // Enter: Selesai & Kembali (jika tidak di input)
-        if ((e.key === 'Enter' || e.code === 'Enter') && e.target.tagName !== 'TEXTAREA') {
-            // Hanya jika tidak sedang fokus di link
-            if (e.target.tagName !== 'A' && e.target.tagName !== 'INPUT') {
-                console.log('✓ Enter detected - navigating to transaction list');
+        document.addEventListener('keydown', function(e) {
+            console.log('Key:', e.key, 'Code:', e.code, 'Ctrl:', e.ctrlKey);
+            
+            // Ctrl+Enter: print receipt
+            if (e.ctrlKey && e.key === 'Enter') {
+                console.log('CTRL+ENTER PRESSED - printing receipt');
                 e.preventDefault();
-                e.stopPropagation();
-                window.location.href = '{{ route("transaksi.index") }}';
+                printReceipt();
                 return;
             }
-        }
-    });
+            
+            // Enter: go back to list
+            if (e.key === 'Enter') {
+                console.log('ENTER PRESSED - going to transaction list');
+                window.location.href = '{{ route("transaksi.index") }}';
+            }
+        });
+    }
+    
+    // Run immediately
+    setupKeyboardShortcuts();
 </script>
 @endsection

@@ -103,38 +103,39 @@
         </div>
     </div>
 </div>
-@endsection
 
-@section('scripts')
-<script>
-    // Keyboard shortcuts for confirm-payment page
-    console.log('✓ Keyboard shortcuts loaded for confirm-payment');
+<!-- Keyboard Shortcuts Script -->
+<script defer>
+    console.log('KEYBOARD SHORTCUTS LOADED');
     
-    document.addEventListener('keydown', function(e) {
-        console.log('Key pressed:', e.key, 'Code:', e.code, 'CtrlKey:', e.ctrlKey);
+    function setupKeyboardShortcuts() {
+        console.log('setupKeyboardShortcuts() called');
         
-        // Esc: Batal/Kembali (prioritas tinggi)
-        if (e.key === 'Escape' || e.code === 'Escape') {
-            console.log('✓ Escape key detected - navigating back');
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = '{{ route("transaksi.create") }}';
-            return;
-        }
-        
-        // Enter: Konfirmasi pembayaran (tapi jangan di input field)
-        if ((e.key === 'Enter' || e.code === 'Enter') && e.target.tagName !== 'TEXTAREA') {
-            console.log('✓ Enter key detected');
+        document.addEventListener('keydown', function(e) {
+            console.log('Key:', e.key, 'Code:', e.code);
             
-            // Jika tidak di dalam input text, submit form
-            if (e.target.tagName !== 'INPUT' || e.target.type === 'hidden') {
-                console.log('✓ Enter outside input - submitting form');
-                e.preventDefault();
-                e.stopPropagation();
-                document.getElementById('formKonfirmasi').submit();
+            // Escape key: go back
+            if (e.key === 'Escape') {
+                console.log('ESCAPE PRESSED - going back');
+                window.location.href = '{{ route("transaksi.create") }}';
                 return;
             }
-        }
-    });
+            
+            // Enter key: submit form
+            if (e.key === 'Enter') {
+                console.log('ENTER PRESSED');
+                const form = document.getElementById('formKonfirmasi');
+                if (form) {
+                    console.log('Form found, submitting...');
+                    form.submit();
+                } else {
+                    console.log('Form NOT found');
+                }
+            }
+        });
+    }
+    
+    // Run immediately
+    setupKeyboardShortcuts();
 </script>
 @endsection
