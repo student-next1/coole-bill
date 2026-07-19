@@ -11,6 +11,21 @@
     <p class="text-sm text-gray-600 mt-1">Analisis dan laporan bisnis Anda</p>
 </div>
 
+<!-- Tabs Navigation -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 mb-6 overflow-hidden">
+    <div class="flex border-b border-slate-200">
+        <a href="{{ route('laporan.index') }}" class="px-6 py-4 font-medium text-sm border-b-2 border-orange-600 text-orange-600">
+            Custom Range
+        </a>
+        <a href="{{ route('laporan.monthly') }}" class="px-6 py-4 font-medium text-sm text-gray-600 hover:text-gray-900 hover:bg-slate-50 transition-colors">
+            Bulanan
+        </a>
+        <a href="{{ route('laporan.yearly') }}" class="px-6 py-4 font-medium text-sm text-gray-600 hover:text-gray-900 hover:bg-slate-50 transition-colors">
+            Tahunan
+        </a>
+    </div>
+</div>
+
 <!-- Filter Section -->
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
     <form method="GET" action="{{ route('laporan.index') }}" class="flex flex-col md:flex-row gap-4 items-end">
@@ -18,6 +33,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Awal</label>
             <input type="date" 
                    name="start_date" 
+                   id="start_date"
                    value="{{ $startDate->format('Y-m-d') }}"
                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
         </div>
@@ -25,16 +41,42 @@
             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
             <input type="date" 
                    name="end_date" 
+                   id="end_date"
                    value="{{ $endDate->format('Y-m-d') }}"
                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
         </div>
-        <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">
-            Filter
-        </button>
-        <a href="{{ route('laporan.index') }}" class="px-6 py-2 bg-slate-200 text-gray-900 rounded-lg hover:bg-slate-300 transition-colors font-medium">
-            Reset
-        </a>
+        <div class="flex gap-2">
+            <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">
+                Filter
+            </button>
+            <a href="{{ route('laporan.index') }}" class="px-6 py-2 bg-slate-200 text-gray-900 rounded-lg hover:bg-slate-300 transition-colors font-medium">
+                Reset
+            </a>
+        </div>
     </form>
+    
+    <!-- Export Buttons -->
+    @if($jumlahTransaksi > 0)
+    <div class="mt-4 pt-4 border-t border-slate-200">
+        <div class="flex flex-wrap gap-2">
+            <p class="text-sm font-medium text-gray-700 mr-2 flex items-center">Export Laporan:</p>
+            <a href="{{ route('laporan.export-pdf', ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d')]) }}" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+                Download PDF
+            </a>
+            <a href="{{ route('laporan.export-csv', ['start_date' => $startDate->format('Y-m-d'), 'end_date' => $endDate->format('Y-m-d')]) }}" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Download CSV
+            </a>
+        </div>
+    </div>
+    @endif
 </div>
 
 <!-- Stats Cards -->
