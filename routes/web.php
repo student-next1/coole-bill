@@ -22,8 +22,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::get('/dashboard', [BerandaController::class, 'dashboard'])->name('dashboard');
 
-// Produk Routes
-Route::prefix('produk')->middleware('auth')->group(function () {
+// Produk Routes - Admin only
+Route::prefix('produk')->middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/', [ProdukController::class, 'index'])->name('produk.index');
     Route::get('/create', [ProdukController::class, 'create'])->name('produk.create');
     Route::post('/', [ProdukController::class, 'store'])->name('produk.store');
@@ -32,8 +32,8 @@ Route::prefix('produk')->middleware('auth')->group(function () {
     Route::delete('/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
 });
 
-// Kategori Routes
-Route::prefix('kategori')->middleware('auth')->group(function () {
+// Kategori Routes - Admin only
+Route::prefix('kategori')->middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/', [KategoriController::class, 'index'])->name('kategori.index');
     Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
     Route::post('/', [KategoriController::class, 'store'])->name('kategori.store');
@@ -57,11 +57,11 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::post('/delete-all', [TransaksiController::class, 'deleteAll'])->name('transaksi.delete-all')->middleware('auth');
 });
 
-// Laporan Routes
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index')->middleware('auth');
+// Laporan Routes - Admin only
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index')->middleware(['auth', 'check.role:admin']);
 
-// User Management Routes (Admin only)
-Route::prefix('users')->middleware('auth')->group(function () {
+// User Management Routes - Admin only
+Route::prefix('users')->middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('users.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/', [UserController::class, 'store'])->name('users.store');
@@ -70,8 +70,8 @@ Route::prefix('users')->middleware('auth')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 
-// Payment Cards Routes
-Route::prefix('payment-cards')->middleware('auth')->group(function () {
+// Payment Cards Routes - Admin only
+Route::prefix('payment-cards')->middleware(['auth', 'check.role:admin'])->group(function () {
     Route::get('/', [PaymentCardController::class, 'index'])->name('payment-cards.index');
     Route::get('/create', [PaymentCardController::class, 'create'])->name('payment-cards.create');
     Route::post('/', [PaymentCardController::class, 'store'])->name('payment-cards.store');
