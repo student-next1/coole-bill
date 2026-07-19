@@ -41,15 +41,15 @@ class LaporanController extends Controller
         }
 
         // Get top 5 products
-        $topProducts = Produk::withCount(['details' => function ($query) {
+        $topProducts = Produk::withCount(['transaksiDetails' => function ($query) {
             $query->whereHas('transaksi', function ($q) {
-                $q->whereBetween('transaksis.created_at', [
+                $q->whereBetween('created_at', [
                     Carbon::now()->subDays(30),
                     Carbon::now()
                 ]);
             });
         }])
-        ->orderBy('details_count', 'desc')
+        ->orderBy('transaksi_details_count', 'desc')
         ->take(5)
         ->get();
 

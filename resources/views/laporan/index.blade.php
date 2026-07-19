@@ -92,7 +92,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">{{ $produk->nama_produk }}</p>
-                            <p class="text-xs text-gray-500">{{ $produk->details_count }} penjualan</p>
+                            <p class="text-xs text-gray-500">{{ $produk->transaksi_details_count }} penjualan</p>
                         </div>
                     </div>
                     <p class="text-sm font-semibold text-gray-900">Rp{{ number_format($produk->harga, 0, ',', '.') }}</p>
