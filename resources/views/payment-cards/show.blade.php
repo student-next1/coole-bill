@@ -6,6 +6,17 @@
 @section('content')
 
 <div class="max-w-4xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="{{ route('payment-cards.index') }}" 
+           class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span class="font-medium">Kembali</span>
+        </a>
+    </div>
+
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
