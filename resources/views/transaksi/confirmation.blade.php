@@ -135,31 +135,24 @@
         console.log('PRINT RECEIPT CALLED');
         const printContent = document.getElementById('struk').innerHTML;
         const printWindow = window.open('', '', 'height=600,width=400');
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Struk Pembayaran</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 20px; }
-                    #struk { max-width: 80mm; margin: 0 auto; }
-                    * { margin: 0; padding: 0; }
-                    .text-center { text-align: center; }
-                    .border-b { border-bottom: 1px solid #000; }
-                    .border-dashed { border-bottom-style: dashed; }
-                    .font-bold { font-weight: bold; }
-                    .text-sm { font-size: 12px; }
-                    .flex { display: flex; justify-content: space-between; }
-                    table { width: 100%; border-collapse: collapse; }
-                    th, td { padding: 5px; text-align: left; }
-                    @media print { body { margin: 0; padding: 0; } }
-                </style>
-            </head>
-            <body>
-                ${printContent}
-            </body>
-            </html>
-        `);
+        printWindow.document.write(
+            '<!DOCTYPE html><html><head><title>Struk Pembayaran</title><style>' +
+            'body { font-family: Arial, sans-serif; padding: 20px; }' +
+            '#struk { max-width: 80mm; margin: 0 auto; }' +
+            '* { margin: 0; padding: 0; }' +
+            '.text-center { text-align: center; }' +
+            '.border-b { border-bottom: 1px solid #000; }' +
+            '.border-dashed { border-bottom-style: dashed; }' +
+            '.font-bold { font-weight: bold; }' +
+            '.text-sm { font-size: 12px; }' +
+            '.flex { display: flex; justify-content: space-between; }' +
+            'table { width: 100%; border-collapse: collapse; }' +
+            'th, td { padding: 5px; text-align: left; }' +
+            '@media print { body { margin: 0; padding: 0; } }' +
+            '</style></head><body>' +
+            printContent +
+            '</body></html>'
+        );
         printWindow.document.close();
         setTimeout(() => { printWindow.print(); }, 250);
     }
