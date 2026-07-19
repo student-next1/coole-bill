@@ -25,19 +25,19 @@
      class="hidden fixed inset-0 bg-black/50 z-30 md:hidden"
      onclick="toggleSidebar()"></div>
 
-<div class="flex min-h-screen">
+<div class="flex h-screen">
 
     <!-- Sidebar - Responsive -->
     <div id="sidebar" 
-         class="fixed md:relative w-64 h-screen z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+         class="fixed md:relative w-64 h-screen z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 overflow-y-auto">
         @include('layouts.sidebar')
     </div>
 
-    <div class="flex-1 flex flex-col w-full">
+    <div class="flex-1 flex flex-col w-full overflow-hidden">
 
         @include('layouts.navbar')
 
-        <main class="flex-1 p-4 md:p-8 bg-slate-50">
+        <main class="flex-1 p-4 md:p-8 bg-slate-50 overflow-y-auto">
 
             @yield('content')
 
