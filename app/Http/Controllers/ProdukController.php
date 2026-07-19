@@ -11,6 +11,7 @@ class ProdukController extends Controller
     public function index(Request $request)
     {
         $kategori_id = $request->query('kategori_id');
+        $search = $request->query('search');
         $perPage = 10;
         
         // Build query
@@ -19,6 +20,15 @@ class ProdukController extends Controller
         // Filter by kategori jika ada
         if ($kategori_id) {
             $query->where('kategori_id', $kategori_id);
+        }
+        
+        // Search by nama_produk or kode_produk
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama_produk', 'like', '%' . $search . '%')
+                  ->orWhere('kode_produk', 'like', '%' . $search . '%')
+                  ->orWhere('kode_barcode', 'like', '%' . $search . '%');
+            });
         }
         
         // Get all kategoris for filter dropdown

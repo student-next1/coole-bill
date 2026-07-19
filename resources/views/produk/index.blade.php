@@ -43,6 +43,8 @@
             <div class="flex-1">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Cari Produk</label>
                 <input type="text" 
+                       name="search"
+                       value="{{ request('search') }}"
                        placeholder="Cari berdasarkan nama atau kode..." 
                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
             </div>
@@ -51,7 +53,6 @@
             <div class="md:min-w-64">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Filter Kategori</label>
                 <select name="kategori_id" 
-                        onchange="this.form.submit()"
                         class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
                     <option value="">-- Semua Kategori --</option>
                     @foreach($kategoris as $kat)
@@ -62,13 +63,19 @@
                 </select>
             </div>
 
-            <!-- Clear Filter Button -->
-            @if($kategori_id)
-            <a href="{{ route('produk.index') }}" 
-               class="px-4 py-2 bg-slate-200 text-gray-900 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center">
-                ✕ Clear Filter
-            </a>
-            @endif
+            <!-- Action Buttons -->
+            <div class="flex gap-2">
+                <button type="submit" 
+                        class="px-6 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-sm">
+                    Cari
+                </button>
+                @if(request('search') || request('kategori_id'))
+                <a href="{{ route('produk.index') }}" 
+                   class="px-4 py-2 bg-slate-200 text-gray-900 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center">
+                    Reset
+                </a>
+                @endif
+            </div>
         </form>
     </div>
 
