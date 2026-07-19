@@ -14,7 +14,7 @@
 
     <!-- Form -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
-        <form action="{{ route('produk.store') }}" method="POST">
+        <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Kode Produk & Barcode -->
@@ -120,6 +120,30 @@
                           placeholder="Deskripsi produk (opsional)"
                           rows="4"
                           class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">{{ old('deskripsi') }}</textarea>
+            </div>
+
+            <!-- Foto Produk -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-900 mb-2">Foto Produk</label>
+                <div class="flex items-start gap-4">
+                    <!-- Preview -->
+                    <div id="preview-container" class="hidden">
+                        <img id="foto-preview" src="" alt="Preview" class="w-32 h-32 object-cover rounded-lg border border-slate-300">
+                    </div>
+                    <!-- Upload Input -->
+                    <div class="flex-1">
+                        <input type="file" 
+                               name="foto" 
+                               id="foto-input"
+                               accept="image/*"
+                               class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm @error('foto') border-red-500 @enderror"
+                               onchange="previewFoto(event)">
+                        <p class="text-xs text-gray-500 mt-1">📷 Format: JPG, PNG, GIF (Max: 2MB)</p>
+                        @error('foto')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
             </div>
 
             <!-- Buttons -->
@@ -243,6 +267,19 @@
             closeAddCategoryModal();
         }
     });
+
+    // Preview foto before upload
+    function previewFoto(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('foto-preview').src = e.target.result;
+                document.getElementById('preview-container').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 
 @endsection

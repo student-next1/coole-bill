@@ -30,7 +30,16 @@ class ProdukController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle foto upload
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/produk'), $filename);
+            $validated['foto'] = $filename;
+        }
 
         Produk::create($validated);
 
@@ -56,7 +65,21 @@ class ProdukController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle foto upload
+        if ($request->hasFile('foto')) {
+            // Delete old foto if exists
+            if ($produk->foto && file_exists(public_path('uploads/produk/' . $produk->foto))) {
+                unlink(public_path('uploads/produk/' . $produk->foto));
+            }
+            
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/produk'), $filename);
+            $validated['foto'] = $filename;
+        }
 
         $produk->update($validated);
 
@@ -66,6 +89,12 @@ class ProdukController extends Controller
     public function destroy($id)
     {
         $produk = Produk::findOrFail($id);
+        
+        // Delete foto if exists
+        if ($produk->foto && file_exists(public_path('uploads/produk/' . $produk->foto))) {
+            unlink(public_path('uploads/produk/' . $produk->foto));
+        }
+        
         $produk->delete();
 
         return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus');
