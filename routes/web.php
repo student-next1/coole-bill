@@ -20,10 +20,7 @@ route::get('/login',[BerandaController::class,'login'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-// })->middleware('auth')
-})->name('dashboard');
+Route::get('/dashboard', [BerandaController::class, 'dashboard'])->name('dashboard');
 
 // Produk Routes
 Route::prefix('produk')->middleware('auth')->group(function () {

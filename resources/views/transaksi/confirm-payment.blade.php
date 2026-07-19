@@ -75,7 +75,7 @@
                     <span>Total</span>
                     <span class="text-orange-600">Rp{{ number_format($total, 0, ',', '.') }}</span>
                 </div>
-            </div>
+            </div>  
         </div>
 
         <!-- Actions -->
