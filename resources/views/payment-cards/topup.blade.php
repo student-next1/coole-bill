@@ -51,10 +51,10 @@
             <!-- Quick Amount Buttons -->
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-900 mb-2">Atau pilih preset:</label>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
                     @foreach([50000, 100000, 250000, 500000, 1000000] as $preset)
                         <button type="button"
-                                onclick="document.querySelector('input[name=\"amount\"]').value = {{ $preset }}; document.querySelector('input[name=\"amount\"]').focus();"
+                                onclick="setAmount({{ $preset }})"
                                 class="px-3 py-2 border border-orange-300 text-orange-600 font-medium rounded-lg hover:bg-orange-50 transition-colors text-sm">
                             Rp{{ number_format($preset, 0, ',', '.') }}
                         </button>
@@ -102,6 +102,12 @@
         const amount = parseInt(amountInput.value) || 0;
         const newSaldo = currentSaldo + amount;
         document.getElementById('previewSaldo').textContent = 'Rp' + newSaldo.toLocaleString('id-ID');
+    }
+    
+    function setAmount(amount) {
+        amountInput.value = amount;
+        updatePreview();
+        amountInput.focus();
     }
     
     amountInput.addEventListener('input', updatePreview);
