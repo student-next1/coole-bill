@@ -1,7 +1,7 @@
-<aside class="w-64 bg-gradient-to-b from-orange-600 to-orange-500 shadow-lg">
+<aside class="w-64 h-screen bg-gradient-to-b from-orange-600 to-orange-500 shadow-lg flex flex-col">
 
     <!-- Logo Section -->
-    <div class="px-6 py-6 border-b border-orange-700/30">
+    <div class="px-6 py-6 border-b border-orange-700/30 flex-shrink-0">
 
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-1">
@@ -76,7 +76,7 @@
     </nav>
 
     <!-- Logout Section -->
-    <div class="px-4 py-4 border-t border-orange-700/30">
+    <div class="px-4 py-4 border-t border-orange-700/30 flex-shrink-0">
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
