@@ -96,10 +96,10 @@
                 </div>
 
                 <!-- Holder Name -->
-                <div class="text-center my-2">
+<div class="text-center my-2">
                     <p class="text-sm font-semibold">{{ $card->holder_name }}</p>
                     @if($card->username)
-                        <p class="text-xs opacity-90">@{{ $card->username }}</p>
+                        <p class="text-xs opacity-90">{{ '@' . $card->username }}</p>
                     @endif
                 </div>
 
