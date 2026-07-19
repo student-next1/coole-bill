@@ -21,7 +21,7 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Total Produk</p>
-        <h3 class="text-3xl md:text-4xl font-bold text-gray-900">{{ $produks->count() }}</h3>
+        <h3 class="text-3xl md:text-4xl font-bold text-gray-900">{{ $produks->total() }}</h3>
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Stok Rendah</p>
@@ -36,21 +36,40 @@
 <!-- Table Section -->
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
     
-    <!-- Search Bar -->
+    <!-- Filter Bar -->
     <div class="p-4 md:p-6 border-b border-slate-200">
-        <div class="flex flex-col md:flex-row md:items-end gap-4">
+        <form method="GET" action="{{ route('produk.index') }}" class="flex flex-col md:flex-row md:items-end gap-4">
+            <!-- Search -->
             <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Cari Produk</label>
                 <input type="text" 
-                       placeholder="Cari produk..." 
+                       placeholder="Cari berdasarkan nama atau kode..." 
                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
             </div>
-            <select class="px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-                <option>Semua Kategori</option>
-                <option>Makanan</option>
-                <option>Minuman</option>
-                <option>Snack</option>
-            </select>
-        </div>
+            
+            <!-- Filter Kategori -->
+            <div class="md:min-w-64">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Filter Kategori</label>
+                <select name="kategori_id" 
+                        onchange="this.form.submit()"
+                        class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
+                    <option value="">-- Semua Kategori --</option>
+                    @foreach($kategoris as $kat)
+                        <option value="{{ $kat->id }}" @selected($kategori_id == $kat->id)>
+                            {{ $kat->nama_kategori }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Clear Filter Button -->
+            @if($kategori_id)
+            <a href="{{ route('produk.index') }}" 
+               class="px-4 py-2 bg-slate-200 text-gray-900 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center">
+                ✕ Clear Filter
+            </a>
+            @endif
+        </form>
     </div>
 
     <!-- Table -->
@@ -72,7 +91,11 @@
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900">{{ $produk->kode_produk }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-900">{{ $produk->nama_produk }}</td>
-                        <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">{{ $produk->kategori->nama_kategori ?? '-' }}</td>
+                        <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                {{ $produk->kategori->nama_kategori ?? '-' }}
+                            </span>
+                        </td>
                         <td class="px-4 md:px-6 py-4 text-sm font-medium text-orange-600">Rp{{ number_format($produk->harga, 0, ',', '.') }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm hidden md:table-cell">
                             <span class="px-3 py-1 rounded-full text-xs font-medium {{ $produk->stok < 10 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
@@ -95,13 +118,32 @@
                 @empty
                     <tr>
                         <td colspan="7" class="px-4 md:px-6 py-12 text-center text-gray-500">
-                            <p class="text-sm">Belum ada produk. <a href="{{ route('produk.create') }}" class="text-orange-600 font-medium hover:text-orange-700">Tambah produk baru</a></p>
+                            <p class="text-sm">Tidak ada produk yang sesuai. <a href="{{ route('produk.create') }}" class="text-orange-600 font-medium hover:text-orange-700">Tambah produk baru</a></p>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination -->
+    @if($produks->hasPages())
+    <div class="px-4 md:px-6 py-4 border-t border-slate-200 bg-slate-50">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <!-- Pagination Info -->
+            <div class="text-sm text-gray-600">
+                Menampilkan <span class="font-semibold">{{ $produks->firstItem() }}</span> hingga 
+                <span class="font-semibold">{{ $produks->lastItem() }}</span> dari 
+                <span class="font-semibold">{{ $produks->total() }}</span> produk
+            </div>
+
+            <!-- Pagination Links -->
+            <div class="flex justify-center md:justify-end">
+                {{ $produks->appends(request()->query())->links('pagination::tailwind') }}
+            </div>
+        </div>
+    </div>
+    @endif
 
 </div>
 

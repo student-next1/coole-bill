@@ -8,10 +8,26 @@ use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produks = Produk::with('kategori')->orderBy('created_at', 'desc')->get();
-        return view('produk.index', compact('produks'));
+        $kategori_id = $request->query('kategori_id');
+        $perPage = 10;
+        
+        // Build query
+        $query = Produk::with('kategori')->orderBy('created_at', 'desc');
+        
+        // Filter by kategori jika ada
+        if ($kategori_id) {
+            $query->where('kategori_id', $kategori_id);
+        }
+        
+        // Get all kategoris for filter dropdown
+        $kategoris = Kategori::orderBy('nama_kategori', 'asc')->get();
+        
+        // Paginate results
+        $produks = $query->paginate($perPage);
+        
+        return view('produk.index', compact('produks', 'kategoris', 'kategori_id'));
     }
 
     public function create()
