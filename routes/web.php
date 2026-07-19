@@ -20,7 +20,7 @@ route::get('/login',[BerandaController::class,'login'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::get('/dashboard', [BerandaController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [BerandaController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 
 // Produk Routes - Admin only
 Route::prefix('produk')->middleware(['auth', 'check.role:admin'])->group(function () {

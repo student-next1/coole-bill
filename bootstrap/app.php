@@ -20,4 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        // Handle Unauthenticated exceptions
+        $exceptions->render(function (Throwable $e, Request $request) {
+            if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                return redirect()->route('login')->with('warning', '⚠️ Silakan login terlebih dahulu untuk mengakses halaman ini.');
+            }
+        });
     })->create();
