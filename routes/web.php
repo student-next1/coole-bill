@@ -59,6 +59,17 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
 
 // Laporan Routes - Admin only
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/export-csv', [LaporanController::class, 'exportCsv'])->name('laporan.export-csv')->middleware(['auth', 'check.role:admin']);
+
+// Advanced Reports - Monthly & Yearly
+Route::get('/laporan/monthly', [LaporanController::class, 'monthly'])->name('laporan.monthly')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/monthly/export-pdf', [LaporanController::class, 'exportMonthlyPdf'])->name('laporan.monthly.export-pdf')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/monthly/export-csv', [LaporanController::class, 'exportMonthlyCsv'])->name('laporan.monthly.export-csv')->middleware(['auth', 'check.role:admin']);
+
+Route::get('/laporan/yearly', [LaporanController::class, 'yearly'])->name('laporan.yearly')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/yearly/export-pdf', [LaporanController::class, 'exportYearlyPdf'])->name('laporan.yearly.export-pdf')->middleware(['auth', 'check.role:admin']);
+Route::get('/laporan/yearly/export-csv', [LaporanController::class, 'exportYearlyCsv'])->name('laporan.yearly.export-csv')->middleware(['auth', 'check.role:admin']);
 
 // User Management Routes - Admin only
 Route::prefix('users')->middleware(['auth', 'check.role:admin'])->group(function () {
