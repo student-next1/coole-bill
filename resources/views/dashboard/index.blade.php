@@ -135,7 +135,7 @@
         <!-- Left Column: Stock Alert -->
         <div>
             <!-- Stock Alert -->
-            <div class="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6 min-h-48">
+            <div class="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6 h-full">
                 <div class="flex items-center justify-between mb-5">
                     <h3 class="text-lg font-bold text-red-900">Peringatan Stok Rendah</h3>
                 </div>
@@ -172,7 +172,7 @@
         <!-- Middle Column: System Info Card -->
         <div>
             <!-- System Info Card -->
-            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 min-h-57" style="background: linear-gradient(to bottom right, #1e293b, #0f172a) !important;">
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 h-full" style="background: linear-gradient(to bottom right, #1e293b, #0f172a) !important;">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(4px);">
                         <svg class="w-5 h-5" style="color: #ffffff !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
