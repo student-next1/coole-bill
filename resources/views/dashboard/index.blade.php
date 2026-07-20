@@ -112,19 +112,19 @@
         </div>
 
         <!-- Pendapatan -->
-        <div class="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-md hover:shadow-lg p-6 transition-all duration-300">
+        <div class="group relative rounded-xl shadow-md hover:shadow-lg p-6 transition-all duration-300" style="background: linear-gradient(to bottom right, #f97316, #ea580c) !important;">
             <div class="flex items-center justify-between mb-4">
-                <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform" style="background-color: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(4px);">
+                    <svg class="w-6 h-6" style="color: #ffffff !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <span class="text-xs font-semibold text-white bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">Pendapatan</span>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full" style="color: #ffffff !important; background-color: rgba(255, 255, 255, 0.2) !important; backdrop-filter: blur(4px);">Pendapatan</span>
             </div>
-            <h3 class="text-2xl lg:text-3xl font-black text-white mb-1 break-words">
+            <h3 class="text-2xl lg:text-3xl font-black mb-1 break-words" style="color: #ffffff !important;">
                 Rp{{ number_format($pendapatanHariIni, 0, ',', '.') }}
             </h3>
-            <p class="text-sm text-orange-100">Pendapatan Hari Ini</p>
+            <p class="text-sm" style="color: #fed7aa !important;">Pendapatan Hari Ini</p>
         </div>
 
     </div>
