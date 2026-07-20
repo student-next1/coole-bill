@@ -17,11 +17,13 @@
             <!-- Logo -->
             <div class="flex items-center gap-2">
                 <div class="flex items-center gap-1">
-                    <div class="px-3 py-1 bg-black rounded-lg">
-                        <span class="text-white font-black text-lg">COOL</span>
+                    <!-- COOL: BG Hitam, Text Putih -->
+                    <div class="px-3 py-1 rounded-lg" style="background-color: #000000 !important;">
+                        <span class="font-black text-lg" style="color: #FFFFFF !important;">COOL</span>
                     </div>
-                    <div class="px-3 py-1 bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg">
-                        <span class="text-white font-black text-lg">E-BILL</span>
+                    <!-- E-BILL: BG Putih, Text Orange -->
+                    <div class="px-3 py-1 rounded-lg" style="background-color: #FFFFFF !important;">
+                        <span class="font-black text-lg" style="color: #EA580C !important;">E-BILL</span>
                     </div>
                 </div>
             </div>
@@ -446,11 +448,13 @@
             <!-- Logo & Copyright -->
             <div class="text-center md:text-left">
                 <div class="flex items-center gap-1 justify-center md:justify-start mb-3">
-                    <div class="px-3 py-1 bg-white rounded-lg">
-                        <span class="text-black font-black">COOL</span>
+                    <!-- COOL: BG Hitam, Text Putih -->
+                    <div class="px-3 py-1 rounded-lg" style="background-color: #000000 !important;">
+                        <span class="font-black" style="color: #FFFFFF !important;">COOL</span>
                     </div>
-                    <div class="px-3 py-1 bg-gradient-to-r from-orange-600 to-orange-500 rounded-lg">
-                        <span class="text-white font-black">E-BILL</span>
+                    <!-- E-BILL: BG Putih, Text Orange -->
+                    <div class="px-3 py-1 rounded-lg" style="background-color: #FFFFFF !important;">
+                        <span class="font-black" style="color: #EA580C !important;">E-BILL</span>
                     </div>
                 </div>
                 <p class="text-slate-400 text-sm">

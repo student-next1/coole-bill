@@ -263,12 +263,15 @@
 
     // Payment Methods Chart
     const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+    const paymentData = {!! json_encode($paymentMethods->pluck('count')->toArray()) !!};
+    const paymentTotal = paymentData.reduce((a, b) => a + b, 0);
+    
     new Chart(paymentCtx, {
         type: 'doughnut',
         data: {
             labels: {!! json_encode($paymentMethods->map(fn($m) => ucfirst(str_replace('_', ' ', $m->metode_pembayaran)))->toArray()) !!},
             datasets: [{
-                data: {!! json_encode($paymentMethods->pluck('count')->toArray()) !!},
+                data: paymentData,
                 backgroundColor: [
                     '#ea580c',
                     '#3b82f6',
@@ -290,6 +293,15 @@
                         font: { size: 12 },
                         padding: 15,
                         color: '#374151'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed;
+                            const percentage = ((value / paymentTotal) * 100).toFixed(1);
+                            return context.label + ': ' + value + ' (' + percentage + '%)';
+                        }
                     }
                 }
             }

@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light-mode-only">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Coole-Bill POS</title>
     @vite('resources/css/app.css')
+    <style>
+        /* Force light mode for login page - override any dark mode styles */
+        html.light-mode-only,
+        html.light-mode-only body {
+            background: #f8fafc !important;
+            color: #1e293b !important;
+        }
+        
+        html.light-mode-only * {
+            color-scheme: light !important;
+        }
+    </style>
+    <script>
+        // Prevent dark mode from affecting login page
+        (function() {
+            const html = document.documentElement;
+            html.classList.remove('dark');
+            // Don't read theme from localStorage on login page
+        })();
+    </script>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 antialiased">
 
@@ -23,11 +43,11 @@
                 
                 <!-- Logo -->
                 <div class="flex items-center justify-center gap-2 mb-8">
-                    <div class="px-5 py-2.5 bg-black rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                        <span class="text-white font-black text-2xl tracking-tight">COOL</span>
+                    <div class="px-5 py-2.5 rounded-lg shadow-xl transform hover:scale-105 transition-transform" style="background-color: #000000 !important;">
+                        <span class="font-black text-2xl tracking-tight" style="color: #FFFFFF !important;">COOL</span>
                     </div>
-                    <div class="px-5 py-2.5 bg-white rounded-lg shadow-xl transform hover:scale-105 transition-transform">
-                        <span class="text-orange-600 font-black text-2xl tracking-tight">E-BILL</span>
+                    <div class="px-5 py-2.5 rounded-lg shadow-xl transform hover:scale-105 transition-transform" style="background-color: #FFFFFF !important;">
+                        <span class="font-black text-2xl tracking-tight" style="color: #EA580C !important;">E-BILL</span>
                     </div>
                 </div>
 
@@ -97,11 +117,11 @@
             <!-- Mobile Logo (Visible only on mobile) -->
             <div class="lg:hidden flex flex-col items-center mb-8">
                 <div class="flex items-center gap-2 mb-3">
-                    <div class="px-4 py-2 bg-black rounded-lg">
-                        <span class="text-white font-black text-lg">COOL</span>
+                    <div class="px-4 py-2 rounded-lg" style="background-color: #000000 !important;">
+                        <span class="font-black text-lg" style="color: #FFFFFF !important;">COOL</span>
                     </div>
-                    <div class="px-4 py-2 bg-orange-600 rounded-lg">
-                        <span class="text-white font-black text-lg">E-BILL</span>
+                    <div class="px-4 py-2 rounded-lg" style="background-color: #FFFFFF !important;">
+                        <span class="font-black text-lg" style="color: #EA580C !important;">E-BILL</span>
                     </div>
                 </div>
                 <p class="text-sm text-slate-600 font-medium">Smart POS System</p>

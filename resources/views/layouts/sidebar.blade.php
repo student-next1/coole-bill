@@ -5,14 +5,16 @@
 
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-1">
-                <div class="px-3 py-1.5 bg-black rounded flex items-center justify-center">
-                    <span class="text-white font-black text-sm">COOL</span>
+                <!-- COOL: BG Hitam, Text Putih -->
+                <div class="px-3 py-1.5 rounded flex items-center justify-center" style="background-color: #000000 !important;">
+                    <span class="font-black text-sm" style="color: #FFFFFF !important;">COOL</span>
                 </div>
-                <div class="px-3 py-1.5 bg-white rounded flex items-center justify-center">
-                    <span class="text-orange-600 font-black text-sm">E-BILL</span>
+                <!-- E-BILL: BG Putih, Text Orange -->
+                <div class="px-3 py-1.5 rounded flex items-center justify-center" style="background-color: #FFFFFF !important;">
+                    <span class="font-black text-sm" style="color: #EA580C !important;">E-BILL</span>
                 </div>
             </div>
-            <p class="text-xs text-orange-100 font-medium">Smart POS System</p>
+            <p class="text-xs font-medium" style="color: rgb(254 215 170) !important;">Smart POS System</p>
         </div>
 
     </div>
@@ -22,8 +24,8 @@
 
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}"
-           class="flex items-center gap-3 px-4 py-3 text-white font-medium rounded-lg hover:bg-white/10 backdrop-blur-sm transition-all duration-200">
-            <span class="w-1 h-6 bg-white rounded-full"></span>
+           class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+            <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
             <span>Dashboard</span>
         </a>
 
@@ -31,36 +33,36 @@
 
             <!-- Admin Section -->
             <div class="mt-6 mb-3 px-4">
-                <h3 class="text-xs font-semibold text-orange-200 uppercase tracking-wider">Admin</h3>
+                <h3 class="text-xs font-semibold uppercase tracking-wider" style="color: rgb(254 215 170) !important;">Admin</h3>
             </div>
 
             <a href="{{ route('produk.index') }}"
-               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+               class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Produk</span>
             </a>
 
             <a href="{{ route('kategori.index') }}"
-               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+               class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Kategori</span>
             </a>
 
             <a href="{{ route('payment-cards.index') }}"
-               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+               class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Kartu Pembayaran</span>
             </a>
 
             <a href="{{ route('laporan.index') }}"
-               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+               class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Laporan</span>
             </a>
 
             <a href="{{ route('users.index') }}"
-               class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+               class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Kelola User</span>
             </a>
 
@@ -68,22 +70,22 @@
 
         <!-- Transactions -->
         <a href="{{ route('transaksi.index') }}"
-           class="flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200">
-            <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+           class="flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+            <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
             <span>Transaksi</span>
         </a>
 
     </nav>
 
     <!-- Logout Section -->
-    <div class="px-4 py-4 border-t border-orange-700/30 flex-shrink-0">
+    <div class="px-4 py-4 border-t flex-shrink-0" style="border-color: rgba(194, 65, 12, 0.3) !important;">
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
             <button type="submit"
-                class="w-full flex items-center gap-3 px-4 py-3 text-white/90 font-medium rounded-lg hover:bg-red-600 hover:text-white backdrop-blur-sm transition-all duration-200">
-                <span class="w-1 h-6 bg-white/70 rounded-full"></span>
+                class="w-full flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-red-600 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
                 <span>Logout</span>
             </button>
 
