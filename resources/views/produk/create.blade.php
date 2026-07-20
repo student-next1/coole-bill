@@ -74,7 +74,7 @@
                     </select>
                     <button type="button" 
                             onclick="openAddCategoryModal()"
-                            class="px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm whitespace-nowrap">
+                            class="px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm whitespace-nowrap" style="color: #ffffff !important;">
                         + Baru
                     </button>
                 </div>
@@ -153,7 +153,7 @@
                     Batal
                 </a>
                 <button type="submit" 
-                        class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm" style="color: #ffffff !important;">
                     Simpan Produk
                 </button>
             </div>
@@ -191,7 +191,7 @@
                 </button>
                 <button type="button" 
                         onclick="submitCategory()"
-                        class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm">
+                        class="flex-1 px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-500 font-medium rounded-lg hover:shadow-lg transition-all duration-200 text-sm" style="color: #ffffff !important;">
                     Simpan
                 </button>
             </div>

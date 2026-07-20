@@ -40,7 +40,7 @@
             </select>
         </div>
         <div class="flex gap-2">
-            <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">
+            <button type="submit" class="px-6 py-2 bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors font-medium" style="color: #ffffff !important;">
                 Filter
             </button>
             <a href="{{ route('laporan.yearly') }}" class="px-6 py-2 rounded-lg hover:bg-slate-300 transition-colors font-medium" style="background-color: #e2e8f0 !important; color: #1e293b !important;">

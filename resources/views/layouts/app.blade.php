@@ -13,8 +13,8 @@
 
 <!-- Mobile Sidebar Toggle Button (Visible only on mobile) -->
 <button id="sidebarToggle" 
-        class="fixed top-4 left-4 md:hidden z-50 p-2 bg-orange-600 dark:bg-orange-700 text-white rounded-lg hover:bg-orange-700 dark:hover:bg-orange-800 transition-colors"
-        onclick="toggleSidebar()">
+        class="fixed top-4 left-4 md:hidden z-50 p-2 bg-orange-600 dark:bg-orange-700 rounded-lg hover:bg-orange-700 dark:hover:bg-orange-800 transition-colors"
+        onclick="toggleSidebar()" style="color: #ffffff !important;">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
     </svg>

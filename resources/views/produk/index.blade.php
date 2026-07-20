@@ -66,7 +66,7 @@
             <!-- Action Buttons -->
             <div class="flex gap-2">
                 <button type="submit" 
-                        class="px-6 py-2 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-colors text-sm">
+                        class="px-6 py-2 bg-orange-600 font-medium rounded-lg hover:bg-orange-700 transition-colors text-sm" style="color: #ffffff !important;">
                     Cari
                 </button>
                 @if(request('search') || request('kategori_id'))
