@@ -25,7 +25,7 @@
 
                 <!-- User Info -->
                 <div class="hidden md:block text-left">
-                    <p id="userName" class="font-semibold text-sm leading-tight text-gray-900 dark:text-white">
+                    <p id="userName" class="font-semibold text-sm leading-tight" style="color: #111827;">
                         {{ Auth::user()->name }}
                     </p>
                     <div class="flex items-center gap-1.5 mt-0.5">
@@ -36,7 +36,7 @@
                 </div>
 
                 <!-- Dropdown Icon -->
-                <svg id="dropdownIcon" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg id="dropdownIcon" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #6b7280;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
@@ -48,7 +48,7 @@
                 
                 <!-- User Info Mobile -->
                 <div class="md:hidden px-4 py-3 border-b border-slate-100 dark:border-slate-700">
-                    <p class="font-semibold text-gray-900 dark:text-white text-sm">
+                    <p class="font-semibold text-sm" style="color: #111827;">
                         {{ Auth::user()->name }}
                     </p>
                     <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 mt-1">
@@ -57,16 +57,16 @@
                 </div>
 
                 <!-- Menu Items -->
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 hover:bg-slate-50 dark:hover:bg-slate-300 transition-colors">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-300 transition-colors" style="color: #374151;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #6b7280;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                     </svg>
                     <span>Dashboard</span>
                 </a>
 
                 @if(Auth::user()->role === 'admin')
-                <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 hover:bg-slate-50 dark:hover:bg-slate-300 transition-colors">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-300 transition-colors" style="color: #374151;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #6b7280;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                     <span>Kelola Pengguna</span>
@@ -77,7 +77,7 @@
 
                 <!-- Theme Toggle -->
                 <div class="px-4 py-2">
-                    <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">TEMA</p>
+                    <p class="text-xs font-semibold mb-2" style="color: #6b7280;">TEMA</p>
                     <div class="flex gap-2 mb-2">
                         <button 
                             id="lightModeBtn"
@@ -163,16 +163,32 @@
 
         console.log('🔘 Updating theme buttons for:', theme);
 
+        const htmlElement = document.documentElement;
+        const isDark = htmlElement.classList.contains('dark');
+
         // Reset both buttons
-        lightBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300';
-        darkBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300';
+        lightBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-slate-100 dark:bg-slate-700';
+        darkBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-slate-100 dark:bg-slate-700';
+
+        // Set text colors based on dark mode
+        if (isDark) {
+            // In dark mode
+            lightBtn.style.color = '#d1d5db'; // gray-300
+            darkBtn.style.color = '#d1d5db'; // gray-300
+        } else {
+            // In light mode
+            lightBtn.style.color = '#374151'; // gray-700
+            darkBtn.style.color = '#374151'; // gray-700
+        }
 
         // Highlight active button
         if (theme === 'dark') {
-            darkBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-orange-500 text-white shadow-sm';
+            darkBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-orange-500 shadow-sm';
+            darkBtn.style.color = '#ffffff'; // white
             console.log('🌙 Dark button highlighted');
         } else {
-            lightBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-orange-500 text-white shadow-sm';
+            lightBtn.className = 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-orange-500 shadow-sm';
+            lightBtn.style.color = '#ffffff'; // white
             console.log('☀️ Light button highlighted');
         }
     };
