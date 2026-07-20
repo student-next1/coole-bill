@@ -84,6 +84,7 @@
         <table class="w-full text-sm">
             <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
+                    <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-16">Foto</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Kode</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nama Produk</th>
                     <th class="px-4 md:px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Kategori</th>
@@ -96,6 +97,20 @@
             <tbody class="divide-y divide-slate-200">
                 @forelse($produks as $produk)
                     <tr class="hover:bg-slate-50 transition-colors">
+                        <!-- Foto Thumbnail -->
+                        <td class="px-4 md:px-6 py-4">
+                            @if($produk->foto)
+                                <img src="{{ asset('storage/' . $produk->foto) }}" 
+                                     alt="{{ $produk->nama_produk }}" 
+                                     class="w-10 h-10 object-cover rounded-lg border border-slate-200">
+                            @else
+                                <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center border border-slate-200">
+                                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            @endif
+                        </td>
                         <td class="px-4 md:px-6 py-4 text-sm font-medium text-gray-900">{{ $produk->kode_produk }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-900">{{ $produk->nama_produk }}</td>
                         <td class="px-4 md:px-6 py-4 text-sm text-gray-600 hidden sm:table-cell">
@@ -124,7 +139,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-4 md:px-6 py-12 text-center text-gray-500">
+                        <td colspan="8" class="px-4 md:px-6 py-12 text-center text-gray-500">
                             <p class="text-sm">Tidak ada produk yang sesuai. <a href="{{ route('produk.create') }}" class="text-orange-600 font-medium hover:text-orange-700">Tambah produk baru</a></p>
                         </td>
                     </tr>
