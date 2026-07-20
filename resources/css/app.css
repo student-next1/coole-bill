@@ -23,6 +23,20 @@
         color: rgb(15 23 42) !important; /* slate-900 */
     }
     
+    /* FORCE WHITE TEXT ON ALL ORANGE BUTTONS */
+    .bg-orange-600,
+    .bg-orange-500,
+    .bg-gradient-to-r.from-orange-600,
+    .bg-gradient-to-r.from-orange-500,
+    .bg-gradient-to-br.from-orange-600,
+    .bg-gradient-to-br.from-orange-500,
+    html:not(.dark) .bg-orange-600,
+    html:not(.dark) .bg-orange-500,
+    html:not(.dark) .bg-gradient-to-r.from-orange-600,
+    html:not(.dark) .bg-gradient-to-r.from-orange-500 {
+        color: rgb(255 255 255) !important; /* white text */
+    }
+    
     html:not(.dark) header,
     html:not(.dark) .bg-white {
         background-color: rgb(255 255 255) !important;
