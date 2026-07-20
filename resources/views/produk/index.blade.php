@@ -100,7 +100,7 @@
                         <!-- Foto Thumbnail -->
                         <td class="px-4 md:px-6 py-4">
                             @if($produk->foto)
-                                <img src="{{ asset('storage/' . $produk->foto) }}" 
+                                <img src="{{ asset('uploads/produk/' . $produk->foto) }}" 
                                      alt="{{ $produk->nama_produk }}" 
                                      class="w-10 h-10 object-cover rounded-lg border border-slate-200">
                             @else
