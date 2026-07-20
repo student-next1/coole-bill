@@ -71,7 +71,7 @@
                 </button>
                 @if(request('search') || request('kategori_id'))
                 <a href="{{ route('produk.index') }}" 
-                   class="px-4 py-2 bg-slate-200 text-gray-900 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center">
+                   class="px-4 py-2 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center" style="background-color: #e2e8f0 !important; color: #1e293b !important;">
                     Reset
                 </a>
                 @endif

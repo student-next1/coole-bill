@@ -149,7 +149,7 @@
                     Proses Pembayaran
                 </button>
                 <button onclick="resetCart()" 
-                        class="w-full px-4 py-3 border border-slate-300 text-gray-700 font-medium rounded-lg hover:bg-slate-50 transition-colors duration-150 text-sm md:text-base">
+                        class="w-full px-4 py-3 border font-medium rounded-lg hover:bg-slate-50 transition-colors duration-150 text-sm md:text-base" style="border-color: #cbd5e1 !important; color: #334155 !important;">
                     Reset
                 </button>
             </div>

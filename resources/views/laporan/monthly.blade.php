@@ -41,7 +41,7 @@
             <button type="submit" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium">
                 Filter
             </button>
-            <a href="{{ route('laporan.monthly') }}" class="px-6 py-2 bg-slate-200 text-gray-900 rounded-lg hover:bg-slate-300 transition-colors font-medium">
+            <a href="{{ route('laporan.monthly') }}" class="px-6 py-2 rounded-lg hover:bg-slate-300 transition-colors font-medium" style="background-color: #e2e8f0 !important; color: #1e293b !important;">
                 Reset
             </a>
         </div>
