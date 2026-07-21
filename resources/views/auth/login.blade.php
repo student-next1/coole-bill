@@ -52,58 +52,58 @@
                 </div>
 
                 <div class="space-y-3">
-                    <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">
+                    <h1 class="text-4xl md:text-5xl font-black leading-tight" style="color: #ffffff !important;">
                         Smart POS System
                     </h1>
-                    <p class="text-lg text-orange-100 font-medium">
+                    <p class="text-lg font-medium" style="color: #ffffff !important;">
                         Kelola bisnis Anda dengan mudah
                     </p>
                 </div>
 
                 <!-- Features -->
                 <div class="mt-12 grid grid-cols-2 gap-4 text-left">
-                    <div class="flex items-start gap-3 text-white">
+                    <div class="flex items-start gap-3">
                         <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="color: #ffffff !important;">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold">Transaksi Cepat</p>
-                            <p class="text-sm text-orange-100">Proses dalam detik</p>
+                            <p class="font-semibold" style="color: #ffffff !important;">Transaksi Cepat</p>
+                            <p class="text-sm" style="color: #ffffff !important;">Proses dalam detik</p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3 text-white">
+                    <div class="flex items-start gap-3">
                         <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="color: #ffffff !important;">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold">Kelola Stok</p>
-                            <p class="text-sm text-orange-100">Real-time update</p>
+                            <p class="font-semibold" style="color: #ffffff !important;">Kelola Stok</p>
+                            <p class="text-sm" style="color: #ffffff !important;">Real-time update</p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3 text-white">
+                    <div class="flex items-start gap-3">
                         <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="color: #ffffff !important;">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold">Laporan</p>
-                            <p class="text-sm text-orange-100">Analisis lengkap</p>
+                            <p class="font-semibold" style="color: #ffffff !important;">Laporan</p>
+                            <p class="text-sm" style="color: #ffffff !important;">Analisis lengkap</p>
                         </div>
                     </div>
-                    <div class="flex items-start gap-3 text-white">
+                    <div class="flex items-start gap-3">
                         <div class="mt-1 w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" style="color: #ffffff !important;">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <p class="font-semibold">Multi Payment</p>
-                            <p class="text-sm text-orange-100">Tunai & Kartu ID</p>
+                            <p class="font-semibold" style="color: #ffffff !important;">Multi Payment</p>
+                            <p class="text-sm" style="color: #ffffff !important;">Tunai & Kartu ID</p>
                         </div>
                     </div>
                 </div>
