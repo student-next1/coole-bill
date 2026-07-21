@@ -9,11 +9,60 @@
             <p class="text-sm text-gray-600 mt-2">Metode: <span class="font-semibold text-{{ $method === 'tunai' ? 'blue' : 'green' }}-600">{{ $method === 'tunai' ? '💵 Tunai' : '🆔 Kartu ID' }}</span></p>
         </div>
 
+        @php
+            $paymentCard = null;
+            if ($method === 'kartu_id' && $paymentCardId) {
+                $paymentCard = \App\Models\PaymentCard::find($paymentCardId);
+            }
+        @endphp
+
+        <!-- Payment Card Info (if using card) -->
+        @if($paymentCard)
+        <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg text-white p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-sm opacity-90 mb-1">Kartu Pembayaran</p>
+                    <p class="text-2xl font-bold">{{ $paymentCard->holder_name }}</p>
+                    <p class="text-xs opacity-75 font-mono mt-1">{{ $paymentCard->card_code }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs opacity-90 mb-1">Saldo</p>
+                    <p class="text-2xl font-bold">Rp{{ number_format($paymentCard->saldo, 0, ',', '.') }}</p>
+                </div>
+            </div>
+            
+            @php
+                $hasEnoughBalance = $paymentCard->saldo >= $total;
+                $remainingBalance = $paymentCard->saldo - $total;
+            @endphp
+            
+            <!-- Balance Validation -->
+            <div class="p-3 bg-white/20 backdrop-blur rounded-lg">
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span>Total Belanja:</span>
+                    <span class="font-bold">Rp{{ number_format($total, 0, ',', '.') }}</span>
+                </div>
+                <div class="flex items-center justify-between text-sm border-t border-white/30 pt-2">
+                    <span>Saldo Setelah Bayar:</span>
+                    <span class="font-bold {{ $hasEnoughBalance ? 'text-green-300' : 'text-red-300' }}">
+                        Rp{{ number_format($remainingBalance, 0, ',', '.') }}
+                    </span>
+                </div>
+            </div>
+            
+            @if(!$hasEnoughBalance)
+            <div class="mt-3 p-3 bg-red-500 rounded-lg">
+                <p class="text-sm font-bold">⚠️ Saldo Tidak Mencukupi!</p>
+                <p class="text-xs mt-1">Kurang Rp{{ number_format(abs($remainingBalance), 0, ',', '.') }}</p>
+            </div>
+            @endif
+        </div>
+        @endif
+
         <!-- Struk Container -->
         <div id="struk" class="bg-white rounded-xl shadow-lg p-6 md:p-8">
             
             <!-- Store Header -->
-            <div class="text-center mb-8 pb-6 border-b-2 border-dotted border-slate-300">
             <div class="text-center mb-8 pb-6 border-b-2 border-dotted border-slate-300">
                 <div class="flex items-center justify-center gap-2 mb-3">
                     <div class="px-3 py-1.5 bg-black rounded flex items-center justify-center">
@@ -120,14 +169,33 @@
                 ↩️ Kembali
             </a>
             <button onclick="confirmPayment()" 
-                    class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200">
+                    id="confirmBtn"
+                    @if($paymentCard && !($paymentCard->saldo >= $total)) disabled @endif
+                    class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                 ✓ Konfirmasi Pembayaran
             </button>
         </div>
+        
+        @if($paymentCard && !($paymentCard->saldo >= $total))
+        <div class="mt-4 p-4 bg-red-100 border border-red-300 rounded-lg">
+            <p class="text-sm font-bold text-red-800">⚠️ Tidak dapat melanjutkan pembayaran</p>
+            <p class="text-xs text-red-700 mt-1">Saldo kartu tidak mencukupi. Silakan top-up kartu atau pilih metode pembayaran lain.</p>
+            <a href="{{ route('payment-cards.topup', $paymentCard) }}" 
+               class="inline-block mt-3 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700">
+                💰 Top-up Sekarang
+            </a>
+        </div>
+        @endif
     </div>
 </div>
 
 <script>
+    const paymentMethod = '{{ $method }}';
+    const paymentCardId = {{ $paymentCardId ?? 'null' }};
+    @if($paymentCard)
+    const cardBalance = {{ $paymentCard->saldo }};
+    const hasEnoughBalance = {{ $paymentCard->saldo >= $total ? 'true' : 'false' }};
+    @endif
     // Calculate subtotals when qty or price changes
     function calculateTotal() {
         let grandTotal = 0;
@@ -151,6 +219,14 @@
 
     // Confirm Payment
     function confirmPayment() {
+        @if($paymentCard)
+        // Validate balance again before submit
+        if (!hasEnoughBalance) {
+            alert('⚠️ Saldo kartu tidak mencukupi!\n\nSilakan top-up kartu terlebih dahulu.');
+            return false;
+        }
+        @endif
+        
         const form = document.getElementById('invoiceForm');
         
         // Collect items data
@@ -168,6 +244,22 @@
         // Validate
         if (items.some(item => item.qty <= 0 || item.harga <= 0)) {
             alert('Semua item harus memiliki qty dan harga lebih dari 0!');
+            return;
+        }
+
+        const total = parseInt(document.getElementById('totalInput').value);
+        
+        // Final confirmation
+        let confirmMsg = `Konfirmasi pembayaran?\n\nTotal: Rp${total.toLocaleString('id-ID')}`;
+        @if($paymentCard)
+        confirmMsg += `\n\nMetode: Kartu ${$paymentCard->holder_name}`;
+        confirmMsg += `\nSaldo saat ini: Rp${cardBalance.toLocaleString('id-ID')}`;
+        confirmMsg += `\nSaldo setelah bayar: Rp${(cardBalance - total).toLocaleString('id-ID')}`;
+        @else
+        confirmMsg += `\n\nMetode: Tunai`;
+        @endif
+        
+        if (!confirm(confirmMsg)) {
             return;
         }
 

@@ -366,8 +366,22 @@ class TransaksiController extends Controller
                     throw new \Exception('Silakan pilih kartu pembayaran');
                 }
                 $card = PaymentCard::findOrFail($paymentCardId);
+                
+                // Check card status
+                if ($card->status !== 'active') {
+                    throw new \Exception('Kartu tidak aktif. Silakan gunakan kartu lain atau hubungi admin.');
+                }
+                
+                // Check balance with detailed message
                 if (!$card->hasEnoughBalance($total)) {
-                    throw new \Exception('Saldo kartu tidak cukup');
+                    $shortage = $total - $card->saldo;
+                    throw new \Exception(
+                        "Saldo kartu tidak mencukupi!\n\n" .
+                        "Saldo saat ini: Rp" . number_format($card->saldo, 0, ',', '.') . "\n" .
+                        "Total pembayaran: Rp" . number_format($total, 0, ',', '.') . "\n" .
+                        "Kurang: Rp" . number_format($shortage, 0, ',', '.') . "\n\n" .
+                        "Silakan lakukan top-up terlebih dahulu atau gunakan metode pembayaran lain."
+                    );
                 }
             }
 

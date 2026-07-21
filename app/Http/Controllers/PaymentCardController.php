@@ -98,13 +98,17 @@ class PaymentCardController extends Controller
         $card = PaymentCard::findOrFail($id);
 
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'notes' => 'nullable|string',
+            'amount' => 'required|numeric|min:10000',
+            'notes' => 'nullable|string|max:255',
+        ], [
+            'amount.min' => 'Minimal top-up adalah Rp10.000',
+            'amount.required' => 'Jumlah top-up harus diisi',
+            'amount.numeric' => 'Jumlah top-up harus berupa angka',
         ]);
 
-        $card->addBalance($validated['amount'], 'Topup: ' . ($validated['notes'] ?? ''));
+        $card->addBalance($validated['amount'], 'Top-up: ' . ($validated['notes'] ?? 'Manual top-up'));
 
-        return redirect()->route('payment-cards.show', $card)->with('success', 'Saldo berhasil ditambahkan');
+        return redirect()->route('payment-cards.show', $card)->with('success', 'Saldo berhasil ditambahkan sebesar Rp' . number_format($validated['amount'], 0, ',', '.'));
     }
 
     public function transactions($id)
