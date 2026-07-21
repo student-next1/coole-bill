@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+<header class="sticky top-0 z-40 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-100 shadow-sm">
 
     <div class="px-4 md:px-8 py-4 flex items-center justify-between">
 

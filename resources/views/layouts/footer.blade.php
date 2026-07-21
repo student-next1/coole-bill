@@ -1,4 +1,4 @@
-<footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+<footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-300">
 
     <div class="px-8 py-4 text-center text-sm text-gray-600 dark:text-gray-400">
         © {{ date('Y') }} <span class="font-semibold text-orange-600">Coole-Bill POS</span> 
