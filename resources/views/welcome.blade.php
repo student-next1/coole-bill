@@ -73,9 +73,9 @@
                 </div>
 
                 <!-- Headline -->
-                <h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
+<h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
                     Kasir Modern
-                    <span class="bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                    <span class="text-orange-600">
                         untuk Bisnis
                     </span>
                     Anda
