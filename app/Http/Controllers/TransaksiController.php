@@ -11,12 +11,30 @@ use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transaksis = Transaksi::with('user', 'details.produk', 'paymentCard')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        return view('transaksi.index', compact('transaksis'));
+        $search = $request->query('search');
+        $metode = $request->query('metode');
+        $perPage = 10;
+        
+        // Build query
+        $query = Transaksi::with('user', 'details.produk', 'paymentCard')
+            ->orderBy('created_at', 'desc');
+        
+        // Filter by search (kode transaksi)
+        if ($search) {
+            $query->where('kode_transaksi', 'like', '%' . $search . '%');
+        }
+        
+        // Filter by metode pembayaran
+        if ($metode && $metode !== 'semua') {
+            $query->where('metode_pembayaran', $metode);
+        }
+        
+        // Paginate
+        $transaksis = $query->paginate($perPage);
+        
+        return view('transaksi.index', compact('transaksis', 'search', 'metode'));
     }
 
     public function create()

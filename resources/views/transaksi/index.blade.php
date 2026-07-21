@@ -22,6 +22,9 @@
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Total Transaksi</p>
         <h3 class="text-3xl md:text-4xl font-bold text-gray-900">{{ $transaksis->total() }}</h3>
+        @if(request('search') || request('metode'))
+        <p class="text-xs text-orange-600 mt-2 font-medium">📊 Hasil filter</p>
+        @endif
     </div>
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 md:p-6">
         <p class="text-sm font-medium text-gray-600 mb-2">Total Penjualan</p>
@@ -35,26 +38,38 @@
 
 <!-- Filters -->
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 md:p-6 mb-8">
-    <div class="flex flex-col md:flex-row gap-4">
+    <form method="GET" action="{{ route('transaksi.index') }}" class="flex flex-col md:flex-row gap-4">
         <input type="text" 
+               name="search"
+               value="{{ request('search') }}"
                placeholder="Cari kode transaksi..." 
                class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-        <select class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-            <option>Semua Status</option>
-            <option>Selesai</option>
+        <select name="metode" 
+                class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
+            <option value="">Semua Metode</option>
+            <option value="tunai" @selected(request('metode') === 'tunai')>Tunai</option>
+            <option value="kartu_id" @selected(request('metode') === 'kartu_id')>Kartu ID</option>
         </select>
-        <select class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm">
-            <option>Semua Metode</option>
-            <option>Tunai</option>
-            <option>Kartu ID</option>
-        </select>
-        @if(Auth::user()->role === 'admin')
-        <button onclick="if(confirm('Apakah Anda yakin ingin menghapus semua riwayat transaksi? Tindakan ini tidak dapat dibatalkan.')) { deleteAllTransactions(); }"
-                class="px-4 py-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium" style="color: #ffffff !important;">
-            🗑️ Hapus Semua
-        </button>
-        @endif
-    </div>
+        <div class="flex gap-2">
+            <button type="submit" 
+                    class="px-6 py-2 bg-orange-600 rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium" style="color: #ffffff !important;">
+                🔍 Cari
+            </button>
+            @if(request('search') || request('metode'))
+            <a href="{{ route('transaksi.index') }}" 
+               class="px-4 py-2 font-medium rounded-lg hover:bg-slate-300 transition-colors text-sm text-center" style="background-color: #e2e8f0 !important; color: #1e293b !important;">
+                Reset
+            </a>
+            @endif
+            @if(Auth::user()->role === 'admin')
+            <button type="button"
+                    onclick="if(confirm('Apakah Anda yakin ingin menghapus semua riwayat transaksi? Tindakan ini tidak dapat dibatalkan.')) { deleteAllTransactions(); }"
+                    class="px-4 py-2 bg-red-600 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium" style="color: #ffffff !important;">
+                🗑️ Hapus Semua
+            </button>
+            @endif
+        </div>
+    </form>
 </div>
 
 <!-- Table Section -->
@@ -117,7 +132,7 @@
 <!-- Pagination -->
 @if($transaksis->hasPages())
     <div class="mt-6 flex justify-center">
-        {{ $transaksis->links() }}
+        {{ $transaksis->appends(request()->query())->links() }}
     </div>
 @endif
 
