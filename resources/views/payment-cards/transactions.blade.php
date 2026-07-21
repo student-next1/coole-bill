@@ -81,7 +81,7 @@
                             </td>
                             <td class="px-4 md:px-6 py-4 text-sm">
                                 <span class="px-3 py-1 rounded-full text-xs font-bold {{ $tx->type === 'purchase' ? 'bg-red-100 text-red-700' : ($tx->type === 'topup' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700') }}">
-                                    {{ $tx->type === 'purchase' ? '🛒 Pembelian' : ($tx->type === 'topup' ? '💰 Top-up' : ucfirst($tx->type)) }}
+                                    {{ $tx->type === 'purchase' ? 'Pembelian' : ($tx->type === 'topup' ? 'Top-up' : ucfirst($tx->type)) }}
                                 </span>
                             </td>
                             <td class="px-4 md:px-6 py-4 text-sm text-gray-700">
@@ -126,7 +126,6 @@
                         <tr id="emptyRow">
                             <td colspan="7" class="px-4 md:px-6 py-12 text-center text-gray-500">
                                 <div class="flex flex-col items-center gap-3">
-                                    <span class="text-4xl">📭</span>
                                     <p class="text-sm font-semibold">Belum ada transaksi</p>
                                     <p class="text-xs">Transaksi akan muncul di sini setelah melakukan top-up atau pembayaran</p>
                                 </div>

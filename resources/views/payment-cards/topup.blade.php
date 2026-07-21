@@ -56,7 +56,7 @@
 
             <!-- Quick Amount Buttons (Move to top) -->
             <div class="mb-6">
-                <label class="block text-lg font-bold text-gray-900 mb-4">💰 Pilih Nominal Top-up</label>
+                <label class="block text-lg font-bold text-gray-900 mb-4">Pilih Nominal Top-up</label>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                     @foreach([50000, 100000, 200000, 250000, 500000, 1000000] as $preset)
                         <button type="button"
@@ -81,7 +81,7 @@
 
             <!-- Custom Amount -->
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-900 mb-2">💵 Masukkan Nominal Custom <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-gray-900 mb-2">Masukkan Nominal Custom <span class="text-red-500">*</span></label>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                     <input type="number" 
@@ -93,7 +93,7 @@
                            min="10000"
                            step="1000">
                 </div>
-                <p class="text-xs text-gray-500 mt-2">💡 Minimal top-up Rp10.000</p>
+                <p class="text-xs text-gray-500 mt-2">Minimal top-up Rp10.000</p>
                 @error('amount')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -101,7 +101,7 @@
 
             <!-- Catatan -->
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-900 mb-2">📝 Catatan (Opsional)</label>
+                <label class="block text-sm font-medium text-gray-900 mb-2">Catatan (Opsional)</label>
                 <input type="text" 
                        name="notes" 
                        placeholder="Contoh: Top-up via transfer bank"
@@ -112,7 +112,6 @@
             <!-- Preview Card -->
             <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-xl p-5 mb-6">
                 <div class="flex items-start gap-3">
-                    <div class="text-3xl">🧾</div>
                     <div class="flex-1">
                         <p class="text-sm font-bold text-blue-900 mb-2">Ringkasan Top-up</p>
                         <div class="space-y-1">
@@ -137,7 +136,6 @@
             <!-- Warning -->
             <div class="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-6">
                 <div class="flex gap-3">
-                    <span class="text-xl">⚠️</span>
                     <div class="text-xs text-yellow-800">
                         <p class="font-bold mb-1">Perhatian:</p>
                         <ul class="list-disc list-inside space-y-1">
@@ -153,13 +151,13 @@
             <div class="flex gap-3 pt-4 border-t-2 border-slate-200">
                 <a href="{{ route('payment-cards.show', $card) }}" 
                    class="flex-1 px-6 py-3 border-2 border-slate-300 text-gray-900 font-bold rounded-lg hover:bg-slate-50 transition-colors text-center">
-                    ❌ Batal
+                    Batal
                 </a>
                 <button type="submit" 
                         id="submitBtn"
                         disabled
                         class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                    ✅ Konfirmasi Top-up
+                    Konfirmasi Top-up
                 </button>
             </div>
         </form>

@@ -5,7 +5,7 @@
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">🆔 Pilih Kartu Pembayaran</h1>
+            <h1 class="text-3xl font-bold text-gray-900">Pilih Kartu Pembayaran</h1>
             <p class="text-sm text-gray-600 mt-2">Scan barcode atau cari kartu yang ingin digunakan untuk pembayaran</p>
             
             <!-- Total Payment Info -->
@@ -22,12 +22,12 @@
                 <div class="flex items-center gap-3 mb-4">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="barcodeMode" class="w-5 h-5 text-orange-600 rounded focus:ring-orange-500">
-                        <span class="text-sm font-semibold text-gray-700">📷 Mode Scan Barcode (tekan Enter untuk scan cepat)</span>
+                        <span class="text-sm font-semibold text-gray-700">Mode Scan Barcode (tekan Enter untuk scan cepat)</span>
                     </label>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">🔍 Cari Kartu</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cari Kartu</label>
                     <div class="flex gap-2">
                         <input type="text" 
                                id="searchInput" 
@@ -37,19 +37,19 @@
                                autofocus>
                         <button onclick="searchCards()" 
                                 class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200">
-                            🔍 Cari
+                            Cari
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">💡 Tekan Enter untuk search otomatis</p>
+                    <p class="text-xs text-gray-500 mt-2">Tekan Enter untuk search otomatis</p>
                 </div>
                 
                 <!-- Quick Tips -->
                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p class="text-xs text-blue-900 font-semibold mb-1">💡 Tips Pencarian:</p>
+                    <p class="text-xs text-blue-900 font-semibold mb-1">Tips Pencarian:</p>
                     <ul class="text-xs text-blue-800 space-y-1">
-                        <li>✓ Scan barcode kartu langsung dengan scanner</li>
-                        <li>✓ Ketik username (contoh: user123)</li>
-                        <li>✓ Ketik ID kartu atau nama pemilik</li>
+                        <li>Scan barcode kartu langsung dengan scanner</li>
+                        <li>Ketik username (contoh: user123)</li>
+                        <li>Ketik ID kartu atau nama pemilik</li>
                     </ul>
                 </div>
             </div>
@@ -66,7 +66,7 @@
         <!-- Search Results -->
         <div id="cardsList" class="space-y-3 mb-6">
             <div class="bg-white rounded-xl shadow p-6 text-center text-gray-600">
-                <p class="text-sm">👆 Mulai dengan scan barcode atau mengetik username / ID kartu di atas</p>
+                <p class="text-sm">Mulai dengan scan barcode atau mengetik username / ID kartu di atas</p>
             </div>
         </div>
 
@@ -74,7 +74,7 @@
         <div class="mt-6">
             <a href="{{ route('transaksi.create') }}" 
                class="inline-block px-6 py-3 bg-gray-200 text-gray-900 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200">
-                ↩️ Kembali
+                Kembali
             </a>
         </div>
     </div>
@@ -133,7 +133,7 @@
                     ${!canUse ? `
                     <div class="mb-4 p-3 ${!isActive ? 'bg-red-100 border border-red-300' : 'bg-yellow-100 border border-yellow-300'} rounded-lg">
                         <p class="text-sm font-bold ${!isActive ? 'text-red-800' : 'text-yellow-800'}">
-                            ${!isActive ? '🔴 Kartu Tidak Aktif' : '⚠️ Saldo Tidak Mencukupi'}
+                            ${!isActive ? 'Kartu Tidak Aktif' : 'Saldo Tidak Mencukupi'}
                         </p>
                         ${!hasEnoughBalance ? `
                         <p class="text-xs ${!isActive ? 'text-red-700' : 'text-yellow-700'} mt-1">
@@ -176,7 +176,7 @@
                         <div>
                             <p class="text-gray-600 text-xs font-semibold uppercase mb-1">✓ Status</p>
                             <p class="font-semibold ${card.status === 'active' ? 'text-green-600' : 'text-red-600'}">
-                                ${card.status === 'active' ? '🟢 Aktif' : '🔴 Nonaktif'}
+                                ${card.status === 'active' ? 'Aktif' : 'Nonaktif'}
                             </p>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
                             onclick="selectCard(${card.id}, ${hasEnoughBalance}, ${isActive})"
                             ${!canUse ? 'disabled' : ''}
                             class="w-full px-4 py-3 ${canUse ? 'bg-green-600 hover:bg-green-700 active:bg-green-800' : 'bg-gray-400 cursor-not-allowed'} text-white font-bold rounded-lg transition-all duration-200">
-                        ${canUse ? '✓ Gunakan Kartu Ini' : '✗ Tidak Dapat Digunakan'}
+                        ${canUse ? 'Gunakan Kartu Ini' : 'Tidak Dapat Digunakan'}
                     </button>
                 </div>
             </div>
@@ -211,7 +211,7 @@
     function displayNoResults(query) {
         document.getElementById('cardsList').innerHTML = `
             <div class="bg-white rounded-xl shadow p-6 text-center">
-                <p class="text-gray-600 text-sm mb-2">❌ Kartu tidak ditemukan</p>
+                <p class="text-gray-600 text-sm mb-2">Kartu tidak ditemukan</p>
                 <p class="text-gray-500 text-xs">Pencarian: "<strong>${query}</strong>"</p>
                 <p class="text-gray-500 text-xs mt-2">Coba cari dengan barcode, username atau ID kartu lain</p>
             </div>
@@ -221,12 +221,12 @@
     // Select card and proceed to invoice
     function selectCard(cardId, hasEnoughBalance, isActive) {
         if (!hasEnoughBalance) {
-            alert('⚠️ Saldo kartu tidak mencukupi!\n\nSilakan pilih kartu lain atau lakukan top-up terlebih dahulu.');
+            alert('Saldo kartu tidak mencukupi!\n\nSilakan pilih kartu lain atau lakukan top-up terlebih dahulu.');
             return;
         }
         
         if (!isActive) {
-            alert('🔴 Kartu tidak aktif!\n\nSilakan pilih kartu lain.');
+            alert('Kartu tidak aktif!\n\nSilakan pilih kartu lain.');
             return;
         }
         

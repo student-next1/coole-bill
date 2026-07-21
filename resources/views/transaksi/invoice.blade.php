@@ -5,8 +5,8 @@
     <div class="max-w-3xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">📄 Struk Pembayaran</h1>
-            <p class="text-sm text-gray-600 mt-2">Metode: <span class="font-semibold text-{{ $method === 'tunai' ? 'blue' : 'green' }}-600">{{ $method === 'tunai' ? '💵 Tunai' : '🆔 Kartu ID' }}</span></p>
+            <h1 class="text-3xl font-bold text-gray-900">Struk Pembayaran</h1>
+            <p class="text-sm text-gray-600 mt-2">Metode: <span class="font-semibold text-{{ $method === 'tunai' ? 'blue' : 'green' }}-600">{{ $method === 'tunai' ? 'Tunai' : 'Kartu ID' }}</span></p>
         </div>
 
         @php
@@ -52,7 +52,7 @@
             
             @if(!$hasEnoughBalance)
             <div class="mt-3 p-3 bg-red-500 rounded-lg">
-                <p class="text-sm font-bold">⚠️ Saldo Tidak Mencukupi!</p>
+                <p class="text-sm font-bold">Saldo Tidak Mencukupi!</p>
                 <p class="text-xs mt-1">Kurang Rp{{ number_format(abs($remainingBalance), 0, ',', '.') }}</p>
             </div>
             @endif
@@ -166,23 +166,23 @@
         <div class="mt-6 flex gap-3">
             <a href="{{ route('transaksi.create') }}" 
                class="flex-1 px-6 py-3 bg-gray-200 text-gray-900 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200 text-center">
-                ↩️ Kembali
+                Kembali
             </a>
             <button onclick="confirmPayment()" 
                     id="confirmBtn"
                     @if($paymentCard && !($paymentCard->saldo >= $total)) disabled @endif
                     class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                ✓ Konfirmasi Pembayaran
+                Konfirmasi Pembayaran
             </button>
         </div>
         
         @if($paymentCard && !($paymentCard->saldo >= $total))
         <div class="mt-4 p-4 bg-red-100 border border-red-300 rounded-lg">
-            <p class="text-sm font-bold text-red-800">⚠️ Tidak dapat melanjutkan pembayaran</p>
+            <p class="text-sm font-bold text-red-800">Tidak dapat melanjutkan pembayaran</p>
             <p class="text-xs text-red-700 mt-1">Saldo kartu tidak mencukupi. Silakan top-up kartu atau pilih metode pembayaran lain.</p>
             <a href="{{ route('payment-cards.topup', $paymentCard) }}" 
                class="inline-block mt-3 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700">
-                💰 Top-up Sekarang
+                Top-up Sekarang
             </a>
         </div>
         @endif
@@ -222,7 +222,7 @@
         @if($paymentCard)
         // Validate balance again before submit
         if (!hasEnoughBalance) {
-            alert('⚠️ Saldo kartu tidak mencukupi!\n\nSilakan top-up kartu terlebih dahulu.');
+            alert('Saldo kartu tidak mencukupi!\n\nSilakan top-up kartu terlebih dahulu.');
             return false;
         }
         @endif
