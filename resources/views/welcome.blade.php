@@ -73,12 +73,12 @@
                 </div>
 
                 <!-- Headline -->
-<h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
-                    Kasir Modern
+<h1 class="text-5xl lg:text-6xl font-black text-gray-900 leading-tight mb-6">
+                    Atur Bisnis Anda
                     <span class="text-orange-600">
-                        untuk Bisnis
+                        dengan Sistem Kasir
                     </span>
-                    Anda
+                    Terbaik dan Cepat 
                 </h1>
 
                 <!-- Subheadline -->
@@ -122,45 +122,74 @@
             <div class="relative hidden lg:block">
                 <div class="relative">
                     <!-- Main Card -->
-                    <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
-                        <div class="space-y-6">
+                    <div class="bg-white rounded-3xl shadow-2xl p-6 border border-gray-200">
+                        <div class="space-y-4">
                             <!-- Header -->
-                            <div class="flex items-center justify-between">
+                            <div class="flex items-center justify-between pb-4 border-b border-gray-200">
                                 <div>
-                                    <div class="text-sm text-gray-500 mb-1">Dashboard Overview</div>
-                                    <div class="text-2xl font-black text-gray-900">Rp 5.178.000</div>
+                                    <div class="text-sm text-gray-500 mb-1">Tabel Transaksi Kasir</div>
+                                    <div class="text-lg font-bold text-gray-900">Rp 375.000</div>
                                 </div>
-                                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <span class="text-2xl">📊</span>
+                                <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                                    <span class="text-lg">�</span>
                                 </div>
                             </div>
                             
-                            <!-- Mini Stats -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-                                    <div class="text-sm text-blue-600 mb-1">Produk</div>
-                                    <div class="text-2xl font-bold text-blue-900">156</div>
-                                </div>
-                                <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4">
-                                    <div class="text-sm text-orange-600 mb-1">Transaksi</div>
-                                    <div class="text-2xl font-bold text-orange-900">89</div>
-                                </div>
+                            <!-- Transaction Table -->
+                            <div class="overflow-hidden">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="bg-gray-50">
+                                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Produk</th>
+                                            <th class="px-3 py-2 text-center font-semibold text-gray-700">Qty</th>
+                                            <th class="px-3 py-2 text-right font-semibold text-gray-700">Harga</th>
+                                            <th class="px-3 py-2 text-right font-semibold text-gray-700">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-3 py-2 text-gray-900 font-medium">Kopi Arabika</td>
+                                            <td class="px-3 py-2 text-center text-gray-600">2</td>
+                                            <td class="px-3 py-2 text-right text-gray-600">Rp 25K</td>
+                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 50K</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-3 py-2 text-gray-900 font-medium">Roti Cokelat</td>
+                                            <td class="px-3 py-2 text-center text-gray-600">3</td>
+                                            <td class="px-3 py-2 text-right text-gray-600">Rp 15K</td>
+                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 45K</td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-3 py-2 text-gray-900 font-medium">Minuman Segar</td>
+                                            <td class="px-3 py-2 text-center text-gray-600">1</td>
+                                            <td class="px-3 py-2 text-right text-gray-600">Rp 20K</td>
+                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 20K</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <!-- Chart Placeholder -->
-                            <div class="h-32 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-end justify-around p-4">
-                                <div class="w-8 bg-orange-400 rounded-t" style="height: 60%"></div>
-                                <div class="w-8 bg-orange-500 rounded-t" style="height: 80%"></div>
-                                <div class="w-8 bg-orange-400 rounded-t" style="height: 45%"></div>
-                                <div class="w-8 bg-orange-600 rounded-t" style="height: 90%"></div>
-                                <div class="w-8 bg-orange-500 rounded-t" style="height: 70%"></div>
+                            <!-- Summary -->
+                            <div class="pt-3 border-t-2 border-gray-200 space-y-2">
+                                <div class="flex justify-between text-gray-600">
+                                    <span>Subtotal</span>
+                                    <span class="font-semibold">Rp 115K</span>
+                                </div>
+                                <div class="flex justify-between text-gray-600">
+                                    <span>Diskon</span>
+                                    <span class="font-semibold text-orange-600">- Rp 0</span>
+                                </div>
+                                <div class="flex justify-between text-lg font-bold text-gray-900 bg-orange-50 -mx-6 -mb-6 px-6 py-3 rounded-b-3xl">
+                                    <span>Total</span>
+                                    <span class="text-orange-600">Rp 115K</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Floating Badge -->
-                    <div class="absolute -top-4 -right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg font-bold">
-                        ✓ Real-time
+                    <div class="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm">
+                        Proses
                     </div>
                 </div>
             </div>
@@ -441,13 +470,13 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-slate-900 text-white py-12">
+<footer class="bg-slate-900 text-white py-2">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
             
             <!-- Logo & Copyright -->
             <div class="text-center md:text-left">
-                <div class="flex items-center gap-1 justify-center md:justify-start mb-3">
+                <div class="flex items-center gap-1 justify-center md:justify-start mb-1">
                     <!-- COOL: BG Hitam, Text Putih -->
                     <div class="px-3 py-1 rounded-lg" style="background-color: #000000 !important;">
                         <span class="font-black" style="color: #FFFFFF !important;">COOL</span>
@@ -456,9 +485,9 @@
                     <div class="px-3 py-1 rounded-lg" style="background-color: #FFFFFF !important;">
                         <span class="font-black" style="color: #EA580C !important;">E-BILL</span>
                     </div>
-                </div>
                 <p class="text-slate-400 text-sm">
                     © {{ date('Y') }} Coole-Bill POS. All rights reserved.
+                </div>  
                 </p>
             </div>
 
