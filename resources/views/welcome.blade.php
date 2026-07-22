@@ -121,8 +121,111 @@
             <!-- Right Visual -->
             <div class="relative hidden lg:block">
                 <div class="relative">
-                    <!-- Main Card -->
-                    <div class="bg-white rounded-3xl shadow-2xl p-6 border border-gray-200">
+                    <!-- Main Card - Combined Table & Chart -->
+                    <div class="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+                        <div class="grid grid-cols-2 min-h-96">
+                            
+                            <!-- LEFT: Transaction Table -->
+                            <div class="p-5 border-r border-gray-200 flex flex-col bg-white">
+                                <div class="flex-1 flex flex-col">
+                                    <!-- Header -->
+                                    <div class="pb-3 border-b border-gray-200 mb-3">
+                                        <div class="text-xs text-gray-500 mb-1">Tabel Transaksi</div>
+                                        <div class="text-lg font-bold text-gray-900">Rp 115K</div>
+                                    </div>
+                                    
+                                    <!-- Transaction Items -->
+                                    <div class="space-y-1 text-sm flex-1 overflow-y-auto">
+                                        <div class="flex justify-between items-center hover:bg-gray-50 p-2 rounded">
+                                            <span class="font-medium text-gray-900 text-xs">Produk A</span>
+                                            <span class="text-gray-600 text-xs">x2</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-gray-600 px-2">
+                                            <span>Rp 25K</span>
+                                            <span class="font-semibold text-gray-900">Rp 50K</span>
+                                        </div>
+
+                                        <div class="flex justify-between items-center hover:bg-gray-50 p-2 rounded">
+                                            <span class="font-medium text-gray-900 text-xs">Produk B</span>
+                                            <span class="text-gray-600 text-xs">x3</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-gray-600 px-2">
+                                            <span>Rp 15K</span>
+                                            <span class="font-semibold text-gray-900">Rp 45K</span>
+                                        </div>
+
+                                        <div class="flex justify-between items-center hover:bg-gray-50 p-2 rounded">
+                                            <span class="font-medium text-gray-900 text-xs">Produk C</span>
+                                            <span class="text-gray-600 text-xs">x1</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs text-gray-600 px-2">
+                                            <span>Rp 20K</span>
+                                            <span class="font-semibold text-gray-900">Rp 20K</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Summary -->
+                                    <div class="pt-2 mt-3 border-t-2 border-gray-200 space-y-1 text-xs">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Subtotal</span>
+                                            <span class="font-semibold">Rp 115K</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Diskon</span>
+                                            <span class="font-semibold text-orange-600">- Rp 0</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm font-bold bg-orange-50 -mx-5 px-5 py-2 mt-2 rounded-bl-3xl">
+                                            <span>Total</span>
+                                            <span class="text-orange-600">Rp 115K</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- RIGHT: Chart -->
+                            <div class="p-5 bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col justify-between rounded-br-3xl">
+                                <div>
+                                    <div class="text-xs text-gray-500 mb-4 font-semibold">Grafik Penjualan</div>
+                                </div>
+                                
+                                <!-- Bar Chart -->
+                                <div class="flex items-end justify-around gap-1.5 h-44">
+                                    <div class="flex flex-col items-center gap-1 flex-1">
+                                        <div class="w-full bg-orange-400 rounded-t transition-all hover:bg-orange-500" style="height: 60%; max-width: 20px;"></div>
+                                        <span class="text-xs text-gray-600">Mon</span>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1 flex-1">
+                                        <div class="w-full bg-orange-500 rounded-t transition-all hover:bg-orange-600" style="height: 80%; max-width: 20px;"></div>
+                                        <span class="text-xs text-gray-600">Tue</span>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1 flex-1">
+                                        <div class="w-full bg-orange-400 rounded-t transition-all hover:bg-orange-500" style="height: 45%; max-width: 20px;"></div>
+                                        <span class="text-xs text-gray-600">Wed</span>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1 flex-1">
+                                        <div class="w-full bg-orange-600 rounded-t transition-all hover:bg-orange-700" style="height: 90%; max-width: 20px;"></div>
+                                        <span class="text-xs text-gray-600">Thu</span>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1 flex-1">
+                                        <div class="w-full bg-orange-500 rounded-t transition-all hover:bg-orange-600" style="height: 70%; max-width: 20px;"></div>
+                                        <span class="text-xs text-gray-600">Fri</span>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <span class="text-xs text-gray-500">Weekly Sales</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Floating Badge -->
+                    <div class="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm">
+                        Proses
+                    </div>
+                </div>
+            </div>
                         <div class="space-y-4">
                             <!-- Header -->
                             <div class="flex items-center justify-between pb-4 border-b border-gray-200">
