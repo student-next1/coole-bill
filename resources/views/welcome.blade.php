@@ -514,7 +514,7 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <div class="text-sm text-gray-500 mb-1">Pendapatan</div>
-                                    <div class="text-3xl font-black bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                                    <div class="text-3xl font-black text-gray-900">
                                         Rp 8.5jt
                                     </div>
                                 </div>
