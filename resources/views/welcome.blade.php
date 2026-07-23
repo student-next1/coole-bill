@@ -46,10 +46,82 @@
             </div>
 
             <!-- CTA Button -->
+            @auth
+            <!-- User Profile Dropdown (if logged in) -->
+            <div class="relative">
+                <button 
+                    id="userMenuButtonWelcome"
+                    class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 transition-all duration-200 group border-2 border-orange-200">
+                    
+                    <!-- Avatar -->
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 p-0.5 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
+                        <img
+                            src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ffffff&color=ea580c"
+                            class="w-full h-full rounded-full"
+                            alt="avatar">
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="hidden md:block text-left">
+                        <p class="font-semibold text-sm leading-tight text-gray-900">
+                            {{ Auth::user()->name }}
+                        </p>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-orange-100 text-orange-700">
+                                {{ ucfirst(Auth::user()->role) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Dropdown Icon -->
+                    <svg id="dropdownIconWelcome" class="w-4 h-4 text-gray-700 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div 
+                    id="userMenuWelcome"
+                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50 opacity-0 scale-95 transition-all duration-100">
+                    
+                    <!-- User Info Mobile -->
+                    <div class="md:hidden px-4 py-3 border-b border-slate-100">
+                        <p class="font-semibold text-sm text-gray-900">
+                            {{ Auth::user()->name }}
+                        </p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-orange-100 text-orange-700 mt-1">
+                            {{ ucfirst(Auth::user()->role) }}
+                        </span>
+                    </div>
+
+                    <!-- Menu Items -->
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-slate-50 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <div class="border-t border-slate-100 my-2"></div>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @else
+            <!-- Login Button (if not logged in) -->
             <a href="{{ route('login') }}" 
                class="px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200">
                 Masuk Sekarang
             </a>
+            @endauth
 
         </div>
     </div>
@@ -818,6 +890,53 @@ document.addEventListener('DOMContentLoaded', function() {
                             drawBorder: false
                         }
                     }
+                }
+            }
+        });
+    }
+});
+</script>
+
+<!-- User Menu Dropdown Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const userMenuButton = document.getElementById('userMenuButtonWelcome');
+    const userMenu = document.getElementById('userMenuWelcome');
+    const dropdownIcon = document.getElementById('dropdownIconWelcome');
+
+    if (userMenuButton && userMenu) {
+        // Toggle dropdown
+        userMenuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = userMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                userMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    userMenu.classList.remove('opacity-0', 'scale-95');
+                    userMenu.classList.add('opacity-100', 'scale-100');
+                }, 10);
+                dropdownIcon.classList.add('rotate-180');
+            } else {
+                userMenu.classList.remove('opacity-100', 'scale-100');
+                userMenu.classList.add('opacity-0', 'scale-95');
+                dropdownIcon.classList.remove('rotate-180');
+                setTimeout(() => {
+                    userMenu.classList.add('hidden');
+                }, 100);
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target)) {
+                if (!userMenu.classList.contains('hidden')) {
+                    userMenu.classList.remove('opacity-100', 'scale-100');
+                    userMenu.classList.add('opacity-0', 'scale-95');
+                    dropdownIcon.classList.remove('rotate-180');
+                    setTimeout(() => {
+                        userMenu.classList.add('hidden');
+                    }, 100);
                 }
             }
         });
