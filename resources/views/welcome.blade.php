@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coole-Bill POS - Sistem Kasir Modern untuk Bisnis Anda</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="bg-white">
@@ -52,7 +53,7 @@
 </nav>
 
 <!-- Hero Section - Bold & Engaging -->
-<section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+<section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden bg-gradient-to-b from-orange-300 to-orange-100">
     
     <!-- Decorative Background -->
     <div class="absolute inset-0 -z-10">
@@ -185,35 +186,16 @@
                             <!-- RIGHT: Chart -->
                             <div class="p-5 bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col justify-between rounded-br-3xl">
                                 <div>
-                                    <div class="text-xs text-gray-500 mb-4 font-semibold">Grafik Penjualan</div>
+                                    <div class="text-xs text-gray-500 mb-4 font-semibold">Grafik Penjualan 7 Hari</div>
                                 </div>
                                 
-                                <!-- Bar Chart -->
-                                <div class="flex items-end justify-around gap-1.5 h-44">
-                                    <div class="flex flex-col items-center gap-1 flex-1">
-                                        <div class="w-full bg-orange-400 rounded-t transition-all hover:bg-orange-500" style="height: 60%; max-width: 20px;"></div>
-                                        <span class="text-xs text-gray-600">Mon</span>
-                                    </div>
-                                    <div class="flex flex-col items-center gap-1 flex-1">
-                                        <div class="w-full bg-orange-500 rounded-t transition-all hover:bg-orange-600" style="height: 80%; max-width: 20px;"></div>
-                                        <span class="text-xs text-gray-600">Tue</span>
-                                    </div>
-                                    <div class="flex flex-col items-center gap-1 flex-1">
-                                        <div class="w-full bg-orange-400 rounded-t transition-all hover:bg-orange-500" style="height: 45%; max-width: 20px;"></div>
-                                        <span class="text-xs text-gray-600">Wed</span>
-                                    </div>
-                                    <div class="flex flex-col items-center gap-1 flex-1">
-                                        <div class="w-full bg-orange-600 rounded-t transition-all hover:bg-orange-700" style="height: 90%; max-width: 20px;"></div>
-                                        <span class="text-xs text-gray-600">Thu</span>
-                                    </div>
-                                    <div class="flex flex-col items-center gap-1 flex-1">
-                                        <div class="w-full bg-orange-500 rounded-t transition-all hover:bg-orange-600" style="height: 70%; max-width: 20px;"></div>
-                                        <span class="text-xs text-gray-600">Fri</span>
-                                    </div>
+                                <!-- Bar Chart with Chart.js -->
+                                <div class="flex-1 flex items-center justify-center">
+                                    <canvas id="weeklyChart" style="max-height: 160px; max-width: 100%;"></canvas>
                                 </div>
 
-                                <div class="text-center">
-                                    <span class="text-xs text-gray-500">Weekly Sales</span>
+                                <div class="text-center mt-2">
+                                    <span class="text-xs text-gray-500">Penjualan Mingguan (Rp)</span>
                                 </div>
                             </div>
 
@@ -226,74 +208,7 @@
                     </div>
                 </div>
             </div>
-                        <div class="space-y-4">
-                            <!-- Header -->
-                            <div class="flex items-center justify-between pb-4 border-b border-gray-200">
-                                <div>
-                                    <div class="text-sm text-gray-500 mb-1">Tabel Transaksi Kasir</div>
-                                    <div class="text-lg font-bold text-gray-900">Rp 375.000</div>
-                                </div>
-                                <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                                    <span class="text-lg">�</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Transaction Table -->
-                            <div class="overflow-hidden">
-                                <table class="w-full text-sm">
-                                    <thead>
-                                        <tr class="bg-gray-50">
-                                            <th class="px-3 py-2 text-left font-semibold text-gray-700">Produk</th>
-                                            <th class="px-3 py-2 text-center font-semibold text-gray-700">Qty</th>
-                                            <th class="px-3 py-2 text-right font-semibold text-gray-700">Harga</th>
-                                            <th class="px-3 py-2 text-right font-semibold text-gray-700">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-gray-100">
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-3 py-2 text-gray-900 font-medium">Kopi Arabika</td>
-                                            <td class="px-3 py-2 text-center text-gray-600">2</td>
-                                            <td class="px-3 py-2 text-right text-gray-600">Rp 25K</td>
-                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 50K</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-3 py-2 text-gray-900 font-medium">Roti Cokelat</td>
-                                            <td class="px-3 py-2 text-center text-gray-600">3</td>
-                                            <td class="px-3 py-2 text-right text-gray-600">Rp 15K</td>
-                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 45K</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-3 py-2 text-gray-900 font-medium">Minuman Segar</td>
-                                            <td class="px-3 py-2 text-center text-gray-600">1</td>
-                                            <td class="px-3 py-2 text-right text-gray-600">Rp 20K</td>
-                                            <td class="px-3 py-2 text-right font-semibold text-gray-900">Rp 20K</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
 
-                            <!-- Summary -->
-                            <div class="pt-3 border-t-2 border-gray-200 space-y-2">
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Subtotal</span>
-                                    <span class="font-semibold">Rp 115K</span>
-                                </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Diskon</span>
-                                    <span class="font-semibold text-orange-600">- Rp 0</span>
-                                </div>
-                                <div class="flex justify-between text-lg font-bold text-gray-900 bg-orange-50 -mx-6 -mb-6 px-6 py-3 rounded-b-3xl">
-                                    <span>Total</span>
-                                    <span class="text-orange-600">Rp 115K</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Floating Badge -->
-                    <div class="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg font-bold text-sm">
-                        Proses
-                    </div>
                 </div>
             </div>
 
@@ -626,6 +541,85 @@
         animation-delay: 4s;
     }
 </style>
+
+<!-- Chart Initialization Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('weeklyChart');
+    if (ctx) {
+        const weeklyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+                datasets: [{
+                    label: 'Penjualan (Rp)',
+                    data: [750000, 950000, 650000, 1100000, 850000, 920000, 780000],
+                    backgroundColor: [
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(234, 88, 12, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(249, 115, 22, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(234, 88, 12, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(249, 115, 22, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + (value / 1000).toFixed(0) + 'K';
+                            },
+                            font: {
+                                size: 10
+                            },
+                            color: 'rgba(107, 114, 128, 0.7)'
+                        },
+                        grid: {
+                            color: 'rgba(229, 231, 235, 0.5)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 10
+                            },
+                            color: 'rgba(107, 114, 128, 0.7)'
+                        },
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 
 </body>
 </html>
