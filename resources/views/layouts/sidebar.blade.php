@@ -84,15 +84,31 @@
 
     </nav>
 
-    <!-- Logout Section -->
-    <div class="px-4 py-4 border-t flex-shrink-0" style="border-color: rgba(194, 65, 12, 0.3) !important;">
+    <!-- Footer Section -->
+    <div class="px-4 py-4 border-t flex-shrink-0 space-y-2" style="border-color: rgba(194, 65, 12, 0.3) !important;">
 
+        <!-- Back to Home Button -->
+        <a href="{{ route('home') }}"
+           class="w-full flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-white/10 backdrop-blur-sm transition-all duration-200" 
+           style="color: rgba(255, 255, 255, 0.9) !important;">
+            <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span>Kembali ke Beranda</span>
+        </a>
+
+        <!-- Logout Button -->
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
             <button type="submit"
-                class="w-full flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-red-600 hover:text-white backdrop-blur-sm transition-all duration-200" style="color: rgba(255, 255, 255, 0.9) !important;">
+                class="w-full flex items-center gap-3 px-4 py-3 font-medium rounded-lg hover:bg-red-600 hover:text-white backdrop-blur-sm transition-all duration-200" 
+                style="color: rgba(255, 255, 255, 0.9) !important;">
                 <span class="w-1 h-6 rounded-full" style="background-color: rgba(255, 255, 255, 0.7) !important;"></span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
                 <span>Logout</span>
             </button>
 
