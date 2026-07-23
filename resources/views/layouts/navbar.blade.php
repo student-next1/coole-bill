@@ -10,11 +10,11 @@
         </div>
 
         <!-- User Profile Dropdown -->
-        <div class="relative flex items-center gap-4">
+        <div class="relative flex items-center gap-3">
             
             <!-- Subscription Badge -->
             @if(Auth::user()->subscription)
-            <div class="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border-2 {{ Auth::user()->subscription->isActive() ? (Auth::user()->subscription->daysRemaining() > 30 ? 'bg-green-50 border-green-500 text-green-700' : 'bg-yellow-50 border-yellow-500 text-yellow-700') : 'bg-red-50 border-red-500 text-red-700' }}">
+            <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg {{ Auth::user()->subscription->isActive() ? (Auth::user()->subscription->daysRemaining() > 30 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700') : 'bg-red-100 text-red-700' }}">
                 @if(Auth::user()->subscription->plan_type === 'trial')
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -36,10 +36,10 @@
 
             <button 
                 id="userMenuButton"
-                class="flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 border-orange-200 hover:border-orange-400 hover:bg-orange-50 dark:border-orange-700 dark:hover:border-orange-500 dark:hover:bg-slate-700 transition-all duration-200 group shadow-sm">
+                class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-300 transition-all duration-200 group">
                 
                 <!-- Avatar -->
-                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 p-0.5 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-200 shadow-md">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 p-0.5 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform duration-200">
                     <img
                         src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=ffffff&color=ea580c"
                         class="w-full h-full rounded-full"
@@ -48,18 +48,18 @@
 
                 <!-- User Info -->
                 <div class="hidden md:block text-left">
-                    <p id="userName" class="font-bold text-base leading-tight text-gray-900 dark:text-white">
+                    <p id="userName" class="font-semibold text-sm leading-tight">
                         {{ Auth::user()->name }}
                     </p>
-                    <div class="flex items-center gap-1.5 mt-1">
-                        <span id="userRole" class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-bold bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border border-orange-300 dark:border-orange-700">
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <span id="userRole" class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">
                             {{ ucfirst(Auth::user()->role) }}
                         </span>
                     </div>
                 </div>
 
                 <!-- Dropdown Icon -->
-                <svg id="dropdownIcon" class="w-5 h-5 text-gray-600 dark:text-gray-300 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg id="dropdownIcon" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
@@ -67,7 +67,7 @@
             <!-- Dropdown Menu -->
             <div 
                 id="userMenu"
-                class="hidden absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 opacity-0 scale-95 transition-all duration-100">
+                class="hidden absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 opacity-0 scale-95 transition-all duration-100">
                 
                 <!-- User Info Mobile -->
                 <div class="md:hidden px-4 py-3 border-b border-slate-100 dark:border-slate-700">
