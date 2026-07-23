@@ -164,6 +164,17 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
+                    @auth
+                    <!-- If logged in - Go to Dashboard -->
+                    <a href="{{ route('dashboard') }}" 
+                       class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-200">
+                        <span>Mulai Sekarang</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                    @else
+                    <!-- If not logged in - Go to Login -->
                     <a href="{{ route('login') }}" 
                        class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-200">
                         <span>Mulai Sekarang</span>
@@ -171,6 +182,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                         </svg>
                     </a>
+                    @endauth
                     <a href="#fitur" 
                        class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white border-2 border-gray-300 text-gray-900 font-bold rounded-xl hover:border-orange-500 hover:text-orange-600 transition-all duration-200">
                         <span>Lihat Fitur</span>
@@ -753,6 +765,17 @@
         <p class="text-xl text-orange-100 mb-10">
             Mulai gunakan Coole-Bill sekarang dan rasakan perbedaannya
         </p>
+        @auth
+        <!-- If logged in - Go to Dashboard -->
+        <a href="{{ route('dashboard') }}" 
+           class="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-orange-600 font-black rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-lg">
+            <span>Masuk ke Dashboard</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+        </a>
+        @else
+        <!-- If not logged in - Go to Login -->
         <a href="{{ route('login') }}" 
            class="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-orange-600 font-black rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 text-lg">
             <span>Masuk ke Dashboard</span>
@@ -760,6 +783,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
             </svg>
         </a>
+        @endauth
     </div>
 </section>
 
