@@ -3,6 +3,28 @@
 @section('content')
 <div class="min-h-screen bg-gray-100 p-4 md:p-8">
     <div class="max-w-3xl mx-auto">
+        
+        <!-- Error Alert -->
+        @if(session('error'))
+        <div class="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg" role="alert">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ session('error') }}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto">
+                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        @endif
+        
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Struk Pembayaran</h1>
@@ -171,8 +193,15 @@
             <button onclick="confirmPayment()" 
                     id="confirmBtn"
                     @if($paymentCard && !($paymentCard->saldo >= $total)) disabled @endif
-                    class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                Konfirmasi Pembayaran
+                    class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg hover:from-orange-700 hover:to-orange-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                <span id="btnText">Konfirmasi Pembayaran</span>
+                <span id="btnLoading" class="hidden">
+                    <svg class="animate-spin h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Memproses...
+                </span>
             </button>
         </div>
         
@@ -219,8 +248,24 @@
 
     // Confirm Payment
     function confirmPayment() {
+        console.log('🔵 confirmPayment() called');
+        
+        const btn = document.getElementById('confirmBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoading = document.getElementById('btnLoading');
+        
+        // Prevent double click
+        if (btn.disabled) {
+            console.log('⚠️ Button already disabled, preventing double click');
+            return;
+        }
+        
         @if($paymentCard)
         // Validate balance again before submit
+        console.log('💳 Card Balance:', cardBalance);
+        console.log('💰 Total:', parseInt(document.getElementById('totalInput').value));
+        console.log('✅ Has Enough Balance:', hasEnoughBalance);
+        
         if (!hasEnoughBalance) {
             alert('Saldo kartu tidak mencukupi!\n\nSilakan top-up kartu terlebih dahulu.');
             return false;
@@ -241,6 +286,8 @@
         });
         @endforeach
 
+        console.log('📦 Items:', items);
+
         // Validate
         if (items.some(item => item.qty <= 0 || item.harga <= 0)) {
             alert('Semua item harus memiliki qty dan harga lebih dari 0!');
@@ -252,16 +299,25 @@
         // Final confirmation
         let confirmMsg = `Konfirmasi pembayaran?\n\nTotal: Rp${total.toLocaleString('id-ID')}`;
         @if($paymentCard)
-        confirmMsg += `\n\nMetode: Kartu ${$paymentCard->holder_name}`;
+        confirmMsg += `\n\nMetode: Kartu {{ $paymentCard->holder_name }}`;
         confirmMsg += `\nSaldo saat ini: Rp${cardBalance.toLocaleString('id-ID')}`;
         confirmMsg += `\nSaldo setelah bayar: Rp${(cardBalance - total).toLocaleString('id-ID')}`;
         @else
         confirmMsg += `\n\nMetode: Tunai`;
         @endif
         
+        console.log('❓ Showing confirmation dialog...');
         if (!confirm(confirmMsg)) {
+            console.log('❌ User cancelled');
             return;
         }
+        
+        console.log('✅ User confirmed, showing loading state...');
+        
+        // Show loading state
+        btn.disabled = true;
+        btnText.classList.add('hidden');
+        btnLoading.classList.remove('hidden');
 
         // Submit form
         document.getElementById('itemsJson').value = JSON.stringify(items);
@@ -272,6 +328,9 @@
         
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
         
+        console.log('🔑 CSRF Token:', csrfToken);
+        console.log('🎯 Submit URL:', submitForm.action);
+        
         submitForm.innerHTML = `
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" name="method" value="{{ $method }}">
@@ -281,8 +340,20 @@
             <input type="hidden" name="payment_card_id" value="{{ $paymentCardId }}">
         `;
         
+        console.log('📋 Form Data:');
+        console.log('  - method:', '{{ $method }}');
+        console.log('  - payment_card_id:', '{{ $paymentCardId }}');
+        console.log('  - subtotal:', document.getElementById('subtotalInput').value);
+        console.log('  - total:', document.getElementById('totalInput').value);
+        console.log('  - items:', JSON.stringify(items));
+        
         document.body.appendChild(submitForm);
+        console.log('✅ Form appended to body');
+        
+        console.log('🚀 Submitting form...');
         submitForm.submit();
+        
+        console.log('✅ Form submitted!');
     }
 
     // Calculate on page load
