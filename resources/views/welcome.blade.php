@@ -48,7 +48,30 @@
             <!-- CTA Button -->
             @auth
             <!-- User Profile Dropdown (if logged in) -->
-            <div class="relative">
+            <div class="relative flex items-center gap-3">
+                
+                <!-- Subscription Badge -->
+                @if(Auth::user()->subscription)
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg {{ Auth::user()->subscription->isActive() ? (Auth::user()->subscription->daysRemaining() > 30 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700') : 'bg-red-100 text-red-700' }}">
+                    @if(Auth::user()->subscription->plan_type === 'trial')
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    @else
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    @endif
+                    <span class="text-xs font-bold">
+                        @if(Auth::user()->subscription->isActive())
+                            {{ Auth::user()->subscription->daysRemaining() }} hari lagi
+                        @else
+                            Expired
+                        @endif
+                    </span>
+                </div>
+                @endif
+
                 <button 
                     id="userMenuButtonWelcome"
                     class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-50 transition-all duration-200 group border-2 border-orange-200">

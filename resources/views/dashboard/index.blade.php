@@ -63,7 +63,44 @@
     </div>
 
     <!-- Stats Grid - Modern Cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
+
+        <!-- Subscription Status Card -->
+        @if(Auth::user()->subscription)
+        <div class="lg:col-span-1 group relative rounded-xl shadow-md hover:shadow-lg p-6 transition-all duration-300 {{ Auth::user()->subscription->isActive() ? (Auth::user()->subscription->daysRemaining() > 30 ? 'bg-gradient-to-br from-green-500 to-green-600' : 'bg-gradient-to-br from-yellow-500 to-yellow-600') : 'bg-gradient-to-br from-red-500 to-red-600' }}">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform" style="background-color: rgba(255, 255, 255, 0.2) !important;">
+                    @if(Auth::user()->subscription->plan_type === 'trial')
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    @else
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    @endif
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 rounded-full text-white" style="background-color: rgba(255, 255, 255, 0.2) !important;">
+                    {{ Auth::user()->subscription->getPlanName() }}
+                </span>
+            </div>
+            <h3 class="text-2xl font-black text-white mb-1">
+                {{ Auth::user()->subscription->isActive() ? Auth::user()->subscription->daysRemaining() . ' Hari' : 'Expired' }}
+            </h3>
+            <p class="text-sm text-white/90 mb-3">
+                @if(Auth::user()->subscription->isActive())
+                    Sisa Waktu Subscription
+                @else
+                    Subscription Telah Berakhir
+                @endif
+            </p>
+            @if(!Auth::user()->subscription->isActive() || Auth::user()->subscription->daysRemaining() < 7)
+            <a href="{{ route('subscribe') }}?plan=monthly" class="block text-center text-xs font-bold text-white bg-white/20 hover:bg-white/30 px-3 py-2 rounded-lg transition-colors">
+                Perpanjang Sekarang
+            </a>
+            @endif
+        </div>
+        @endif
 
         <!-- Total Produk -->
         <div class="group relative bg-white rounded-xl shadow-sm hover:shadow-md border border-slate-200 p-6 transition-all duration-300">
