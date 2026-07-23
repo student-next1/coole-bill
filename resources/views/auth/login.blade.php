@@ -271,6 +271,16 @@
                     Masuk
                 </button>
 
+                <!-- Sign Up Link -->
+                <div class="text-center mt-6">
+                    <p class="text-slate-600 text-sm">
+                        Belum punya akun? 
+                        <a href="{{ route('register') }}" class="font-semibold text-orange-600 hover:text-orange-700 transition-colors duration-200">
+                            Buat sekarang
+                        </a>
+                    </p>
+                </div>
+
             </form>
 
             <!-- Footer -->
