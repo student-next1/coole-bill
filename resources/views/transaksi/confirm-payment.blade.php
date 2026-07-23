@@ -85,13 +85,12 @@
                id="btnBatal">
                 Batal
             </a>
-            <form action="{{ route('transaksi.store') }}" method="POST" class="flex-1" id="formKonfirmasi">
+            <form action="{{ route('transaksi.confirm') }}" method="POST" class="flex-1" id="formKonfirmasi">
                 @csrf
+                <input type="hidden" name="method" value="kartu_id">
                 <input type="hidden" name="items" value="{{ json_encode($items) }}">
                 <input type="hidden" name="subtotal" value="{{ $subtotal }}">
                 <input type="hidden" name="total" value="{{ $total }}">
-                <input type="hidden" name="metode_pembayaran" value="kartu_id">
-                <input type="hidden" name="nominal_bayar" value="{{ $total }}">
                 <input type="hidden" name="payment_card_id" value="{{ $card->id }}">
                 
                 <button type="submit"
