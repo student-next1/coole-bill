@@ -67,7 +67,7 @@
             <!-- Dropdown Menu -->
             <div 
                 id="userMenu"
-                class="hidden absolute top-full right-0 mt-3 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 opacity-0 scale-95 transition-all duration-100">
+                class="hidden absolute top-full right-0 mt-8 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50 opacity-0 scale-95 transition-all duration-100">
                 
                 <!-- User Info Mobile -->
                 <div class="md:hidden px-4 py-3 border-b border-slate-100 dark:border-slate-700">

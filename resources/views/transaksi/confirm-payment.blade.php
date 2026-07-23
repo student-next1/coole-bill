@@ -95,47 +95,110 @@
                 <input type="hidden" name="payment_card_id" value="{{ $card->id }}">
                 
                 <button type="submit"
-                        class="w-full px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg transition-all duration-200"
+                        class="w-full px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-500 text-white font-bold rounded-lg hover:shadow-lg hover:from-orange-700 hover:to-orange-600 transition-all duration-200 flex items-center justify-center gap-2"
                         id="btnKonfirmasi">
-                    Konfirmasi & Proses Pembayaran
+                    <span id="btnText">Konfirmasi Pembayaran</span>
+                    <span id="btnLoading" class="hidden">
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Memproses...
+                    </span>
                 </button>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Keyboard Shortcuts Script -->
-<script defer>
-    console.log('KEYBOARD SHORTCUTS LOADED');
+<!-- Error Alert (if any) -->
+@if(session('error'))
+<div class="fixed top-4 right-4 z-50 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg max-w-md" role="alert" id="errorAlert">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+        <div class="ml-3">
+            <p class="text-sm font-medium">{{ session('error') }}</p>
+        </div>
+    </div>
+</div>
+<script>
+    setTimeout(function() {
+        const alert = document.getElementById('errorAlert');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 5000);
+</script>
+@endif
+
+<!-- Keyboard Shortcuts & Form Handler Script -->
+<script>
+    console.log('🚀 Payment Confirmation Page Loaded');
     
-    function setupKeyboardShortcuts() {
-        console.log('setupKeyboardShortcuts() called');
-        
-        document.addEventListener('keydown', function(e) {
-            console.log('Key:', e.key, 'Code:', e.code);
-            
-            // Escape key: go back
-            if (e.key === 'Escape') {
-                console.log('ESCAPE PRESSED - going back');
-                window.location.href = '{{ route("transaksi.create") }}';
-                return;
+    const form = document.getElementById('formKonfirmasi');
+    const btnKonfirmasi = document.getElementById('btnKonfirmasi');
+    const btnText = document.getElementById('btnText');
+    const btnLoading = document.getElementById('btnLoading');
+    
+    let isSubmitting = false;
+    
+    // Form submit handler
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (isSubmitting) {
+                e.preventDefault();
+                console.log('⚠️ Already submitting, prevented duplicate');
+                return false;
             }
             
-            // Enter key: submit form
-            if (e.key === 'Enter') {
-                console.log('ENTER PRESSED');
-                const form = document.getElementById('formKonfirmasi');
-                if (form) {
-                    console.log('Form found, submitting...');
-                    form.submit();
-                } else {
-                    console.log('Form NOT found');
-                }
+            console.log('✅ Form submitting...');
+            isSubmitting = true;
+            
+            // Show loading state
+            if (btnText && btnLoading && btnKonfirmasi) {
+                btnText.classList.add('hidden');
+                btnLoading.classList.remove('hidden');
+                btnKonfirmasi.disabled = true;
+                btnKonfirmasi.classList.add('opacity-75', 'cursor-not-allowed');
             }
+            
+            // Allow form to submit
+            return true;
         });
+    } else {
+        console.error('❌ Form not found!');
     }
     
-    // Run immediately
-    setupKeyboardShortcuts();
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Prevent shortcuts if already submitting
+        if (isSubmitting) {
+            return;
+        }
+        
+        // Escape key: go back
+        if (e.key === 'Escape') {
+            console.log('⬅️ ESC pressed - going back');
+            window.location.href = '{{ route("transaksi.create") }}';
+            return;
+        }
+        
+        // Enter key: submit form
+        if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey) {
+            console.log('⏎ ENTER pressed - submitting form');
+            e.preventDefault();
+            if (form && !isSubmitting) {
+                form.submit();
+            }
+        }
+    });
+    
+    console.log('✅ Form handlers attached');
 </script>
 @endsection
