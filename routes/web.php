@@ -20,9 +20,24 @@ route::get('/login',[BerandaController::class,'login'])->name('login');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
-Route::get('/register', function() {
-    return view('auth.register');
+// Subscription routes
+Route::get('/subscribe', [App\Http\Controllers\SubscriptionController::class, 'subscribe'])->name('subscribe');
+Route::post('/subscribe', [App\Http\Controllers\SubscriptionController::class, 'processSubscribe'])->name('subscribe.process');
+Route::post('/subscription/check-status', [App\Http\Controllers\SubscriptionController::class, 'checkStatus'])->name('subscription.check-status');
+
+// Register routes
+Route::get('/register', function(Request $request) {
+    $subscriptionId = $request->query('subscription');
+    $subscription = null;
+    
+    if ($subscriptionId) {
+        $subscription = App\Models\Subscription::find($subscriptionId);
+    }
+    
+    return view('auth.register', compact('subscription'));
 })->name('register');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
 Route::get('/dashboard', [BerandaController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 

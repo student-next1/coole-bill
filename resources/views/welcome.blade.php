@@ -34,6 +34,9 @@
                 <a href="#fitur" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">
                     Fitur
                 </a>
+                <a href="#pricing" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+                    Harga
+                </a>
                 <a href="#keunggulan" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">
                     Keunggulan
                 </a>
@@ -461,6 +464,207 @@
             Dengan interface yang intuitif dan fitur yang lengkap, kami berkomitmen untuk terus berinovasi 
             dan memberikan pengalaman terbaik bagi pengguna kami.
         </p>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-20 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <div class="inline-block px-4 py-2 bg-orange-100 rounded-full text-orange-600 font-bold text-sm mb-4">
+                Harga Terjangkau
+            </div>
+            <h2 class="text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+                Pilih Paket yang Tepat
+                <span class="text-orange-600">untuk Bisnis Anda</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Mulai gratis atau pilih paket yang sesuai kebutuhan bisnis Anda
+            </p>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            
+            <!-- Trial Package -->
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 border-2 border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-lg">
+                <div class="text-center mb-6">
+                    <div class="inline-block px-4 py-2 bg-gray-600 text-white text-sm font-bold rounded-full mb-4">
+                        TRIAL
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2">Gratis 7 Hari</h3>
+                    <div class="flex items-baseline justify-center gap-1">
+                        <span class="text-5xl font-black text-gray-900">Rp 0</span>
+                    </div>
+                    <p class="text-gray-600 mt-2">Perfect untuk trial</p>
+                </div>
+
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Akses penuh 7 hari</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Semua fitur tersedia</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Tanpa kartu kredit</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Support email</span>
+                    </li>
+                </ul>
+
+                <a href="{{ route('register') }}?plan=trial" 
+                   class="block w-full text-center px-6 py-4 bg-gray-700 hover:bg-gray-800 text-white font-bold rounded-xl transition-all duration-200">
+                    Mulai Trial Gratis
+                </a>
+            </div>
+
+            <!-- Monthly Package - POPULAR -->
+            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 border-2 border-orange-500 hover:border-orange-600 transition-all duration-300 hover:shadow-2xl transform hover:-translate-y-2 relative">
+                <!-- Popular Badge -->
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-orange-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                        PALING POPULER
+                    </span>
+                </div>
+
+                <div class="text-center mb-6 mt-4">
+                    <div class="inline-block px-4 py-2 bg-orange-600 text-white text-sm font-bold rounded-full mb-4">
+                        BULANAN
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2">Paket Bulanan</h3>
+                    <div class="flex items-baseline justify-center gap-1">
+                        <span class="text-5xl font-black text-orange-600">Rp 99K</span>
+                    </div>
+                    <p class="text-gray-700 mt-2 font-medium">/ bulan</p>
+                </div>
+
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Akses penuh 30 hari</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Semua fitur premium</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Update rutin gratis</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Support prioritas</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Backup data otomatis</span>
+                    </li>
+                </ul>
+
+                <a href="{{ route('register') }}?plan=monthly" 
+                   class="block w-full text-center px-6 py-4 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl">
+                    Pilih Paket Ini
+                </a>
+            </div>
+
+            <!-- Semester Package - BEST VALUE -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border-2 border-blue-500 hover:border-blue-600 transition-all duration-300 hover:shadow-xl relative">
+                <!-- Best Value Badge -->
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <span class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                        HEMAT Rp 95K
+                    </span>
+                </div>
+
+                <div class="text-center mb-6 mt-4">
+                    <div class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full mb-4">
+                        6 BULAN
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2">Paket Semester</h3>
+                    <div class="flex items-baseline justify-center gap-1">
+                        <span class="text-5xl font-black text-blue-600">Rp 499K</span>
+                    </div>
+                    <p class="text-gray-700 mt-2 font-medium">/ 6 bulan</p>
+                    <p class="text-sm text-green-600 font-bold mt-1">~Rp 83K/bulan</p>
+                </div>
+
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Akses penuh 180 hari</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Semua fitur premium</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Update & fitur baru</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Support VIP 24/7</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700 font-medium">Konsultasi bisnis gratis</span>
+                    </li>
+                </ul>
+
+                <a href="{{ route('register') }}?plan=semester" 
+                   class="block w-full text-center px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all duration-200 shadow-lg">
+                    Pilih Paket Hemat
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Money Back Guarantee -->
+        <div class="mt-16 text-center">
+            <div class="inline-flex items-center gap-3 bg-green-50 border-2 border-green-500 rounded-full px-6 py-3">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <span class="font-bold text-green-800">Garansi 100% Aman · Data Terenkripsi · Support Cepat</span>
+            </div>
+        </div>
+
     </div>
 </section>
 

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'username', 'password', 'role'])]
+#[Fillable(['name', 'email', 'username', 'password', 'role', 'subscription_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -29,6 +29,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relation to subscription
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
+
+    // Check if user has active subscription
+    public function hasActiveSubscription()
+    {
+        return $this->subscription && $this->subscription->isActive();
     }
 
     // Relation to transactions
