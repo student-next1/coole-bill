@@ -54,36 +54,80 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'username' => 'required|string|unique:users,username|max:255',
             'password' => 'required|string|min:6|confirmed',
-            'subscription_id' => 'required|exists:subscriptions,id'
+            'plan' => 'required|in:trial,monthly,semester',
+            'terms' => 'required|accepted'
         ]);
 
-        // Check if subscription is valid
-        $subscription = \App\Models\Subscription::find($validated['subscription_id']);
-        
-        if (!$subscription || ($subscription->status !== 'active' && $subscription->status !== 'pending')) {
-            return back()->with('error', 'Subscription tidak valid atau sudah digunakan.');
+        try {
+            \DB::beginTransaction();
+
+            // Create subscription first
+            $subscription = \App\Models\Subscription::create([
+                'email' => $validated['email'],
+                'plan_type' => $validated['plan'],
+                'status' => $validated['plan'] === 'trial' ? 'active' : 'pending', // Trial aktif langsung, yang lain pending
+                'start_date' => now(),
+                'end_date' => $this->calculateEndDate($validated['plan']),
+                'payment_method' => 'manual',
+                'payment_status' => $validated['plan'] === 'trial' ? 'paid' : 'pending'
+            ]);
+
+            // Create user with ADMIN role
+            $user = \App\Models\User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'username' => $this->generateUsername($validated['email']),
+                'password' => bcrypt($validated['password']),
+                'role' => 'admin', // OTOMATIS ADMIN
+                'subscription_id' => $subscription->id
+            ]);
+
+            \DB::commit();
+
+            // Auto login after register
+            Auth::login($user, true); // true = remember me
+
+            return redirect()->route('dashboard')->with('success', 'Akun Admin berhasil dibuat! Selamat datang di Coole-Bill.');
+            
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal membuat akun: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Calculate subscription end date based on plan
+     */
+    private function calculateEndDate($plan)
+    {
+        switch ($plan) {
+            case 'trial':
+                return now()->addDays(7);
+            case 'monthly':
+                return now()->addDays(30);
+            case 'semester':
+                return now()->addDays(180);
+            default:
+                return now()->addDays(7);
+        }
+    }
+
+    /**
+     * Generate username from email
+     */
+    private function generateUsername($email)
+    {
+        $username = explode('@', $email)[0];
+        $baseUsername = $username;
+        $counter = 1;
+
+        // Check if username exists, if yes add number suffix
+        while (\App\Models\User::where('username', $username)->exists()) {
+            $username = $baseUsername . $counter;
+            $counter++;
         }
 
-        // Check if subscription already has a user
-        if ($subscription->user) {
-            return back()->with('error', 'Subscription ini sudah digunakan oleh akun lain.');
-        }
-
-        // Create user
-        $user = \App\Models\User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'username' => $validated['username'],
-            'password' => bcrypt($validated['password']),
-            'role' => 'kasir',
-            'subscription_id' => $validated['subscription_id']
-        ]);
-
-        // Auto login after register
-        Auth::login($user, true); // true = remember me
-
-        return redirect()->route('dashboard')->with('success', 'Akun berhasil dibuat! Selamat datang di Coole-Bill.');
+        return $username;
     }
 }
