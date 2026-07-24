@@ -87,11 +87,11 @@
             <!-- Store Header -->
             <div class="text-center mb-8 pb-6 border-b-2 border-dotted border-slate-300">
                 <div class="flex items-center justify-center gap-2 mb-3">
-                    <div class="px-3 py-1.5 bg-black rounded flex items-center justify-center">
-                        <span class="text-white font-black text-sm">COOL</span>
+                    <div class="px-3 py-1.5 rounded flex items-center justify-center" style="background-color: #000000 !important;">
+                        <span class="font-black text-sm" style="color: #FFFFFF !important;">COOL</span>
                     </div>
-                    <div class="px-3 py-1.5 bg-orange-600 rounded flex items-center justify-center">
-                        <span class="text-white font-black text-sm">E-BILL</span>
+                    <div class="px-3 py-1.5 rounded flex items-center justify-center" style="background-color: #FFFFFF !important; border: 1px solid #E5E7EB;">
+                        <span class="font-black text-sm" style="color: #EA580C !important;">E-BILL</span>
                     </div>
                 </div>
                 <h2 class="text-2xl font-black text-gray-900">STRUK PEMBAYARAN</h2>

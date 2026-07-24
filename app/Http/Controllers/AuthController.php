@@ -20,7 +20,7 @@ class AuthController extends Controller
         // Attempt login with remember me
         if (Auth::attempt($credential, $remember)) {
 
-            $request->session()->regenerate();
+            $request->session()->regenerate();  
 
             // Check if user has active subscription
             $user = Auth::user();

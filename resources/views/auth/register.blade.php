@@ -18,12 +18,13 @@
                 <!-- Header -->
                 <div class="mb-8">
                     <div class="flex items-center gap-2 mb-6">
-                        <div class="px-3 py-1.5 bg-black rounded">
-                            <span class="text-white font-black text-sm">COOL</span>
+                        <div class="px-3 py-1.5 rounded" style="background-color: #000000 !important;">
+                            <span class="font-black text-sm" style="color: #FFFFFF !important;">COOL</span>
                         </div>
-                        <div class="px-3 py-1.5 bg-orange-600 rounded">
-                            <span class="text-white font-black text-sm">E-BILL</span>
+                        <div class="px-3 py-1.5 rounded" style="background-color: #FFFFFF !important;">
+                            <span class="font-black text-sm" style="color: #EA580C !important;">E-BILL</span>
                         </div>
+                    </div>
                     </div>
                     <h1 class="text-3xl font-black text-slate-800 mb-2">Buat Akun Admin</h1>
                     <p class="text-slate-600">Lengkapi data untuk memulai subscription</p>
